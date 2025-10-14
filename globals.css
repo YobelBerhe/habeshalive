@@ -1,0 +1,267 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Eritrean Flag Colors */
+    --eritrean-blue: 210 100% 37%; /* #0072BC */
+    --eritrean-green: 140 78% 36%; /* #12AD2B */
+    --eritrean-red: 354 95% 51%; /* #E4002B */
+    --gold: 46 100% 59%; /* #FFC72C */
+
+    /* Background Colors */
+    --background: 0 0% 4%; /* #0a0a0a */
+    --foreground: 0 0% 100%; /* white */
+
+    /* Card Colors */
+    --card: 0 0% 10%;
+    --card-foreground: 0 0% 100%;
+
+    /* Primary (Eritrean Blue) */
+    --primary: 210 100% 37%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Secondary (Eritrean Green) */
+    --secondary: 140 78% 36%;
+    --secondary-foreground: 0 0% 100%;
+
+    /* Accent (Gold) */
+    --accent: 46 100% 59%;
+    --accent-foreground: 0 0% 10%;
+
+    /* Destructive (Red) */
+    --destructive: 354 95% 51%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* Borders */
+    --border: 0 0% 20%;
+    --input: 0 0% 20%;
+    --ring: 210 100% 37%;
+
+    /* Muted */
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 60%;
+
+    /* Radius */
+    --radius: 0.5rem;
+
+    /* Custom Shadows */
+    --shadow-glow: 0 0 40px hsl(var(--eritrean-blue) / 0.4);
+    --shadow-card: 0 20px 40px rgba(0, 0, 0, 0.5);
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+@layer utilities {
+  /* Custom gradient text */
+  .gradient-text {
+    @apply bg-gradient-to-r from-[hsl(var(--eritrean-blue))] via-[hsl(var(--eritrean-green))] to-[hsl(var(--gold))] bg-clip-text text-transparent;
+  }
+
+  /* Glassmorphism effect */
+  .glass {
+    @apply bg-white/5 backdrop-blur-xl border border-white/10;
+  }
+
+  /* Hover glow effect */
+  .hover-glow {
+    @apply transition-all duration-300 hover:shadow-2xl;
+  }
+
+  /* Animated gradient background */
+  .animated-gradient {
+    background: linear-gradient(
+      45deg,
+      hsl(var(--eritrean-blue)),
+      hsl(var(--eritrean-green)),
+      hsl(var(--eritrean-red)),
+      hsl(var(--gold))
+    );
+    background-size: 300% 300%;
+    animation: gradient 15s ease infinite;
+  }
+
+  @keyframes gradient {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+  /* Pulse animation for online indicators */
+  @keyframes pulse-glow {
+    0%,
+    100% {
+      opacity: 1;
+      box-shadow: 0 0 10px currentColor;
+    }
+    50% {
+      opacity: 0.8;
+      box-shadow: 0 0 20px currentColor;
+    }
+  }
+
+  .animate-pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+
+  /* Smooth slide-in animation */
+  @keyframes slide-in-right {
+    from {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+
+  .animate-in {
+    animation: slide-in-right 0.3s ease-out;
+  }
+
+  /* Custom scrollbar */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-white/20 rounded-full hover:bg-white/30;
+  }
+
+  /* Responsive text sizes */
+  @media (max-width: 640px) {
+    h1 {
+      @apply text-3xl;
+    }
+    h2 {
+      @apply text-2xl;
+    }
+  }
+}
+
+/* Accordion animations */
+@keyframes accordion-down {
+  from {
+    height: 0;
+  }
+  to {
+    height: var(--radix-accordion-content-height);
+  }
+}
+
+@keyframes accordion-up {
+  from {
+    height: var(--radix-accordion-content-height);
+  }
+  to {
+    height: 0;
+  }
+}
+
+.animate-accordion-down {
+  animation: accordion-down 0.2s ease-out;
+}
+
+.animate-accordion-up {
+  animation: accordion-up 0.2s ease-out;
+}
+
+/* Button hover effects */
+button {
+  @apply transition-all duration-200;
+}
+
+button:active {
+  @apply scale-95;
+}
+
+/* Input focus effects */
+input:focus {
+  @apply outline-none;
+}
+
+/* Smooth transitions for all interactive elements */
+a,
+button,
+[role="button"] {
+  @apply transition-colors duration-200;
+}
+
+/* Custom loading spinner */
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 3s linear infinite;
+}
+
+/* Prevent text selection on buttons */
+button,
+[role="button"] {
+  @apply select-none;
+}
+
+/* Ensure proper contrast */
+.text-shadow {
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+/* Mobile-specific optimizations */
+@media (max-width: 768px) {
+  body {
+    @apply overflow-x-hidden;
+  }
+
+  /* Prevent zoom on input focus */
+  input,
+  textarea,
+  select {
+    font-size: 16px !important;
+  }
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Print styles */
+@media print {
+  header,
+  footer,
+  button {
+    display: none !important;
+  }
+}
