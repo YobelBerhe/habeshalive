@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -6,6 +6,13 @@ import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Mail, Phone, Facebook, Apple, Loader2 } from "lucide-react";
+import PhoneInput from 'react-phone-number-input';
+import 'react-phone-number-input/style.css';
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSlot,
+} from "@/components/ui/input-otp";
 
 interface AuthDialogProps {
   open: boolean;
@@ -13,12 +20,21 @@ interface AuthDialogProps {
 }
 
 export function AuthDialog({ open, onOpenChange }: AuthDialogProps) {
-  const [mode, setMode] = useState<'signin' | 'signup' | 'email' | 'phone'>('signin');
+  const [mode, setMode] = useState<'signin' | 'signup' | 'email' | 'phone' | 'verify-email' | 'verify-phone'>('signin');
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [phone, setPhone] = useState("");
+  const [phone, setPhone] = useState<string>("");
   const [fullName, setFullName] = useState("");
   const [loading, setLoading] = useState(false);
+  const [otp, setOtp] = useState("");
+  const [resendTimer, setResendTimer] = useState(0);
+
+  useEffect(() => {
+    if (resendTimer > 0) {
+      const timer = setTimeout(() => setResendTimer(resendTimer - 1), 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [resendTimer]);
 
   const handleEmailSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -59,8 +75,8 @@ export function AuthDialog({ open, onOpenChange }: AuthDialogProps) {
 
       if (error) throw error;
 
-      toast.success("Account created! You can now sign in.");
-      setMode('signin');
+      toast.success("Verification email sent! Please check your inbox.");
+      setMode('verify-email');
     } catch (error: any) {
       toast.error(error.message || "Failed to sign up");
     } finally {
@@ -68,8 +84,34 @@ export function AuthDialog({ open, onOpenChange }: AuthDialogProps) {
     }
   };
 
+  const resendVerificationEmail = async () => {
+    if (resendTimer > 0) return;
+    
+    setLoading(true);
+    try {
+      const { error } = await supabase.auth.resend({
+        type: 'signup',
+        email,
+      });
+
+      if (error) throw error;
+
+      toast.success("Verification email resent!");
+      setResendTimer(45);
+    } catch (error: any) {
+      toast.error(error.message || "Failed to resend email");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handlePhoneSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!phone) {
+      toast.error("Please enter a valid phone number");
+      return;
+    }
+    
     setLoading(true);
 
     try {
@@ -79,9 +121,58 @@ export function AuthDialog({ open, onOpenChange }: AuthDialogProps) {
 
       if (error) throw error;
 
-      toast.success("Check your phone for the OTP code!");
+      toast.success("OTP sent to your phone!");
+      setMode('verify-phone');
+      setResendTimer(45);
     } catch (error: any) {
       toast.error(error.message || "Failed to send OTP");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleVerifyOTP = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (otp.length !== 6) {
+      toast.error("Please enter a valid 6-digit code");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const { error } = await supabase.auth.verifyOtp({
+        phone,
+        token: otp,
+        type: 'sms',
+      });
+
+      if (error) throw error;
+
+      toast.success("Phone verified successfully!");
+      onOpenChange(false);
+    } catch (error: any) {
+      toast.error(error.message || "Invalid verification code");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const resendPhoneOTP = async () => {
+    if (resendTimer > 0) return;
+    
+    setLoading(true);
+    try {
+      const { error } = await supabase.auth.signInWithOtp({
+        phone,
+      });
+
+      if (error) throw error;
+
+      toast.success("New OTP sent!");
+      setResendTimer(45);
+    } catch (error: any) {
+      toast.error(error.message || "Failed to resend OTP");
     } finally {
       setLoading(false);
     }
@@ -194,17 +285,16 @@ export function AuthDialog({ open, onOpenChange }: AuthDialogProps) {
       <form onSubmit={handlePhoneSignIn} className="space-y-4">
         <div className="space-y-2">
           <Label htmlFor="phone">Phone Number</Label>
-          <Input
-            id="phone"
-            type="tel"
-            placeholder="+1234567890"
+          <PhoneInput
+            international
+            defaultCountry="US"
             value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            required
-            className="bg-black/40 border-white/20"
+            onChange={(value) => setPhone(value || "")}
+            className="flex h-10 w-full rounded-md border border-white/20 bg-black/40 px-3 py-2 text-sm text-white placeholder:text-gray-400"
+            placeholder="Enter phone number"
           />
           <p className="text-xs text-gray-400">
-            Include country code (e.g., +1 for USA)
+            Select your country and enter your phone number
           </p>
         </div>
 
@@ -225,6 +315,113 @@ export function AuthDialog({ open, onOpenChange }: AuthDialogProps) {
         className="w-full text-sm text-gray-400 hover:text-gray-300 mt-4"
       >
         ← Back to all options
+      </button>
+    </div>
+  );
+
+  const renderVerifyEmail = () => (
+    <div className="space-y-4 text-center">
+      <div className="space-y-2">
+        <Mail className="w-16 h-16 mx-auto text-blue-400" />
+        <h3 className="text-lg font-semibold">Check Your Email</h3>
+        <p className="text-sm text-gray-400">
+          We sent a verification link to <span className="text-white font-medium">{email}</span>
+        </p>
+        <p className="text-xs text-gray-500">
+          Click the link in the email to verify your account
+        </p>
+      </div>
+
+      <Button
+        onClick={resendVerificationEmail}
+        variant="outline"
+        className="w-full"
+        disabled={loading || resendTimer > 0}
+      >
+        {loading ? (
+          <>
+            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+            Sending...
+          </>
+        ) : resendTimer > 0 ? (
+          `Resend in ${resendTimer}s`
+        ) : (
+          'Resend Verification Email'
+        )}
+      </Button>
+
+      <button
+        onClick={() => setMode('signin')}
+        className="w-full text-sm text-gray-400 hover:text-gray-300 mt-4"
+      >
+        ← Back to sign in
+      </button>
+    </div>
+  );
+
+  const renderVerifyPhone = () => (
+    <div className="space-y-4">
+      <form onSubmit={handleVerifyOTP} className="space-y-4">
+        <div className="space-y-2 text-center">
+          <Phone className="w-16 h-16 mx-auto text-green-400" />
+          <h3 className="text-lg font-semibold">Enter Verification Code</h3>
+          <p className="text-sm text-gray-400">
+            We sent a 6-digit code to <span className="text-white font-medium">{phone}</span>
+          </p>
+        </div>
+
+        <div className="flex justify-center">
+          <InputOTP
+            maxLength={6}
+            value={otp}
+            onChange={setOtp}
+          >
+            <InputOTPGroup>
+              <InputOTPSlot index={0} className="bg-black/40 border-white/20" />
+              <InputOTPSlot index={1} className="bg-black/40 border-white/20" />
+              <InputOTPSlot index={2} className="bg-black/40 border-white/20" />
+              <InputOTPSlot index={3} className="bg-black/40 border-white/20" />
+              <InputOTPSlot index={4} className="bg-black/40 border-white/20" />
+              <InputOTPSlot index={5} className="bg-black/40 border-white/20" />
+            </InputOTPGroup>
+          </InputOTP>
+        </div>
+
+        <Button type="submit" className="w-full" disabled={loading || otp.length !== 6}>
+          {loading ? (
+            <>
+              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+              Verifying...
+            </>
+          ) : (
+            'Verify Code'
+          )}
+        </Button>
+      </form>
+
+      <Button
+        onClick={resendPhoneOTP}
+        variant="outline"
+        className="w-full"
+        disabled={loading || resendTimer > 0}
+      >
+        {loading ? (
+          <>
+            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+            Sending...
+          </>
+        ) : resendTimer > 0 ? (
+          `Resend in ${resendTimer}s`
+        ) : (
+          'Resend Code'
+        )}
+      </Button>
+
+      <button
+        onClick={() => setMode('phone')}
+        className="w-full text-sm text-gray-400 hover:text-gray-300 mt-4"
+      >
+        ← Change phone number
       </button>
     </div>
   );
@@ -291,7 +488,11 @@ export function AuthDialog({ open, onOpenChange }: AuthDialogProps) {
       <DialogContent className="sm:max-w-md bg-gradient-to-br from-gray-900 to-black border-white/10">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-center bg-gradient-to-r from-green-400 to-yellow-500 bg-clip-text text-transparent">
-            {mode === 'email' || mode === 'signup' 
+            {mode === 'verify-email' 
+              ? 'Verify Your Email'
+              : mode === 'verify-phone'
+              ? 'Verify Your Phone'
+              : mode === 'email' || mode === 'signup' 
               ? 'Sign In with Email' 
               : mode === 'phone' 
               ? 'Sign In with Phone' 
@@ -302,7 +503,15 @@ export function AuthDialog({ open, onOpenChange }: AuthDialogProps) {
           </p>
         </DialogHeader>
 
-        {mode === 'email' || mode === 'signup' ? renderEmailAuth() : mode === 'phone' ? renderPhoneAuth() : renderMainOptions()}
+        {mode === 'verify-email' 
+          ? renderVerifyEmail() 
+          : mode === 'verify-phone' 
+          ? renderVerifyPhone()
+          : mode === 'email' || mode === 'signup' 
+          ? renderEmailAuth() 
+          : mode === 'phone' 
+          ? renderPhoneAuth() 
+          : renderMainOptions()}
       </DialogContent>
     </Dialog>
   );

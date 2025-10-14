@@ -124,3 +124,24 @@ All colors MUST be HSL.
 .animate-scroll-down {
   animation: scroll-down 40s linear infinite;
 }
+
+/* Phone input styling */
+.PhoneInput {
+  @apply w-full;
+}
+
+.PhoneInputInput {
+  @apply flex-1 bg-transparent outline-none text-white placeholder:text-gray-400;
+}
+
+.PhoneInputCountry {
+  @apply mr-2;
+}
+
+.PhoneInputCountrySelect {
+  @apply bg-transparent text-white border-none outline-none cursor-pointer;
+}
+
+.PhoneInputCountrySelectArrow {
+  @apply text-gray-400;
+}
