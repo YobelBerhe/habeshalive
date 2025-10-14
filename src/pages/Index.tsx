@@ -34,44 +34,50 @@ export default function Home() {
   }, []);
 
   // Profile photos for continuous scrolling (6 rows, 3 columns)
-  const column1Photos = [
-    "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=700&fit=crop",
-    "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=700&fit=crop",
-    "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=400&h=700&fit=crop",
-    "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400&h=700&fit=crop",
-    "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=400&h=700&fit=crop",
-    "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=400&h=700&fit=crop",
-  ];
-
-  const column2Photos = [
-    "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=700&fit=crop",
-    "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=700&fit=crop",
-    "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=700&fit=crop",
-    "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=400&h=700&fit=crop",
-    "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=400&h=700&fit=crop",
-    "https://images.unsplash.com/photo-1504257432389-52343af06ae3?w=400&h=700&fit=crop",
-  ];
-
-  const column3Photos = [
-    "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=700&fit=crop",
-    "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400&h=700&fit=crop",
-    "https://images.unsplash.com/photo-1499952127939-9bbf5af6c51c?w=400&h=700&fit=crop",
-    "https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?w=400&h=700&fit=crop",
-    "https://images.unsplash.com/photo-1546961329-78bef0414d7c?w=400&h=700&fit=crop",
-    "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=400&h=700&fit=crop",
+  const profiles = [
+    // Column 1 (scrolls up) - Mix of genders
+    [
+      { name: "Selam", age: 24, image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=700&fit=crop", flag: "🇪🇹", online: true },
+      { name: "Daniel", age: 26, image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=700&fit=crop", flag: "🇺🇸", online: true },
+      { name: "Meron", age: 23, image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=700&fit=crop", flag: "🇪🇷", online: true },
+      { name: "Samuel", age: 27, image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=700&fit=crop", flag: "🇬🇧", online: true },
+      { name: "Rahel", age: 25, image: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400&h=700&fit=crop", flag: "🇪🇹", online: true },
+      { name: "Yonas", age: 28, image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=700&fit=crop", flag: "🇪🇷", online: true },
+    ],
+    // Column 2 (scrolls down) - Mix of genders
+    [
+      { name: "Helen", age: 26, image: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=400&h=700&fit=crop", flag: "🇬🇧", online: true },
+      { name: "Dawit", age: 29, image: "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=400&h=700&fit=crop", flag: "🇺🇸", online: true },
+      { name: "Tsigereda", age: 22, image: "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=400&h=700&fit=crop", flag: "🇪🇹", online: true },
+      { name: "Amanuel", age: 30, image: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=400&h=700&fit=crop", flag: "🇪🇷", online: true },
+      { name: "Liya", age: 24, image: "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=400&h=700&fit=crop", flag: "🇪🇹", online: true },
+      { name: "Henok", age: 31, image: "https://images.unsplash.com/photo-1504257432389-52343af06ae3?w=400&h=700&fit=crop", flag: "🇺🇸", online: true },
+    ],
+    // Column 3 (scrolls up) - Mix of genders
+    [
+      { name: "Bethlehem", age: 23, image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=700&fit=crop", flag: "🇪🇷", online: true },
+      { name: "Aman", age: 28, image: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400&h=700&fit=crop", flag: "🇬🇧", online: true },
+      { name: "Natsinet", age: 25, image: "https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?w=400&h=700&fit=crop", flag: "🇪🇹", online: true },
+      { name: "Bereket", age: 27, image: "https://images.unsplash.com/photo-1499952127939-9bbf5af6c51c?w=400&h=700&fit=crop", flag: "🇪🇷", online: true },
+      { name: "Saron", age: 24, image: "https://images.unsplash.com/photo-1546961329-78bef0414d7c?w=400&h=700&fit=crop", flag: "🇺🇸", online: true },
+      { name: "Elias", age: 29, image: "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=400&h=700&fit=crop", flag: "🇪🇹", online: true },
+    ],
   ];
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white">
       {/* Header */}
       <header className={`fixed top-0 left-0 right-0 z-50 px-4 md:px-6 py-4 transition-all duration-300 ${
-        isScrolled ? 'bg-black/20 backdrop-blur-md md:bg-transparent' : 'bg-black/60 backdrop-blur-sm md:bg-black/60'
-      }`}>
+        isScrolled ? 'md:bg-transparent md:backdrop-blur-none' : 'md:bg-black/60 md:backdrop-blur-sm'
+      } bg-black/60 backdrop-blur-sm`}>
+        {/* Gradient fade at bottom of header */}
+        <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-b from-black/60 via-black/30 to-transparent pointer-events-none" />
+        
         <div className="max-w-7xl mx-auto flex items-center justify-between">
-          {/* Logo */}
+          {/* Logo - Bigger */}
           <div className="flex items-center gap-8">
-            <div className="text-2xl md:text-3xl font-bold tracking-tight">
-              habeshalive
+            <div className="text-3xl md:text-3xl font-bold tracking-tight">
+              habesha
             </div>
             
             {/* Navigation - Desktop */}
@@ -91,22 +97,22 @@ export default function Home() {
             </nav>
           </div>
 
-          {/* Right Side Buttons */}
+          {/* Right Side Buttons - Only Login on mobile */}
           <div className="flex items-center gap-2 md:gap-3">
             <Button
-              className="bg-white text-black hover:bg-gray-100 rounded-full px-4 md:px-6 py-2 md:py-2.5 font-semibold text-sm md:text-base h-auto"
+              className="hidden md:flex items-center bg-white text-black hover:bg-gray-100 rounded-full px-6 py-2.5 font-semibold text-base h-auto"
             >
               <span className="mr-1.5">💎</span>
               Shop
             </Button>
             <Button
-              className="bg-white text-black hover:bg-gray-100 rounded-full px-4 md:px-6 py-2 md:py-2.5 font-semibold text-sm md:text-base h-auto"
+              className="hidden md:flex items-center bg-white text-black hover:bg-gray-100 rounded-full px-6 py-2.5 font-semibold text-base h-auto"
             >
               <span className="mr-1.5">🕐</span>
               History
             </Button>
             <Button
-              className="bg-white text-black hover:bg-gray-100 rounded-full px-4 md:px-6 py-2 md:py-2.5 font-semibold text-sm md:text-base h-auto"
+              className="bg-white text-black hover:bg-gray-100 rounded-full px-6 py-2.5 font-semibold text-base h-auto"
             >
               Log in
             </Button>
@@ -117,17 +123,29 @@ export default function Home() {
       {/* Hero Section with Split Layout */}
       <section className="relative min-h-screen pt-20 pb-8 overflow-hidden">
         {/* Continuous Scrolling Photo Background */}
-        <div className="absolute inset-0 flex gap-2 md:gap-4">
+        <div className="absolute inset-0 flex gap-1 md:gap-3">
           {/* Column 1 - Scrolling Up */}
           <div className="flex-1 overflow-hidden">
             <div className="animate-scroll-up">
-              {[...column1Photos, ...column1Photos].map((photo, index) => (
-                <div key={index} className="mb-2 md:mb-4">
+              {[...profiles[0], ...profiles[0]].map((profile, index) => (
+                <div key={index} className="mb-1 md:mb-3 relative">
                   <img 
-                    src={photo} 
+                    src={profile.image} 
                     alt="" 
-                    className="w-full h-[280px] md:h-[400px] object-cover rounded-lg md:rounded-2xl"
+                    className="w-full h-[300px] md:h-[420px] object-cover rounded-none md:rounded-2xl"
                   />
+                  {/* Online Badge - Upper Left */}
+                  {profile.online && (
+                    <div className="absolute top-2 left-2 bg-black/80 rounded-full px-2 py-0.5 flex items-center gap-1">
+                      <span className="w-1.5 h-1.5 bg-green-600 rounded-full"></span>
+                      <span className="text-[9px] font-bold text-green-600 uppercase tracking-wide">ONLINE</span>
+                    </div>
+                  )}
+                  {/* Flag + Name + Age - Lower Right */}
+                  <div className="absolute bottom-3 right-3 flex items-center gap-1.5">
+                    <span className="text-base">{profile.flag}</span>
+                    <span className="text-white text-sm font-semibold drop-shadow-lg">{profile.name}, {profile.age}</span>
+                  </div>
                 </div>
               ))}
             </div>
@@ -136,13 +154,25 @@ export default function Home() {
           {/* Column 2 - Scrolling Down */}
           <div className="flex-1 overflow-hidden">
             <div className="animate-scroll-down">
-              {[...column2Photos, ...column2Photos].map((photo, index) => (
-                <div key={index} className="mb-2 md:mb-4">
+              {[...profiles[1], ...profiles[1]].map((profile, index) => (
+                <div key={index} className="mb-1 md:mb-3 relative">
                   <img 
-                    src={photo} 
+                    src={profile.image} 
                     alt="" 
-                    className="w-full h-[280px] md:h-[400px] object-cover rounded-lg md:rounded-2xl"
+                    className="w-full h-[300px] md:h-[420px] object-cover rounded-none md:rounded-2xl"
                   />
+                  {/* Online Badge - Upper Left */}
+                  {profile.online && (
+                    <div className="absolute top-2 left-2 bg-black/80 rounded-full px-2 py-0.5 flex items-center gap-1">
+                      <span className="w-1.5 h-1.5 bg-green-600 rounded-full"></span>
+                      <span className="text-[9px] font-bold text-green-600 uppercase tracking-wide">ONLINE</span>
+                    </div>
+                  )}
+                  {/* Flag + Name + Age - Lower Right */}
+                  <div className="absolute bottom-3 right-3 flex items-center gap-1.5">
+                    <span className="text-base">{profile.flag}</span>
+                    <span className="text-white text-sm font-semibold drop-shadow-lg">{profile.name}, {profile.age}</span>
+                  </div>
                 </div>
               ))}
             </div>
@@ -151,18 +181,33 @@ export default function Home() {
           {/* Column 3 - Scrolling Up (Desktop only) */}
           <div className="hidden md:block flex-1 overflow-hidden">
             <div className="animate-scroll-up">
-              {[...column3Photos, ...column3Photos].map((photo, index) => (
-                <div key={index} className="mb-4">
+              {[...profiles[2], ...profiles[2]].map((profile, index) => (
+                <div key={index} className="mb-3 relative">
                   <img 
-                    src={photo} 
+                    src={profile.image} 
                     alt="" 
-                    className="w-full h-[400px] object-cover rounded-2xl"
+                    className="w-full h-[420px] object-cover rounded-2xl"
                   />
+                  {/* Online Badge - Upper Left */}
+                  {profile.online && (
+                    <div className="absolute top-2 left-2 bg-black/80 rounded-full px-2 py-0.5 flex items-center gap-1">
+                      <span className="w-1.5 h-1.5 bg-green-600 rounded-full"></span>
+                      <span className="text-[9px] font-bold text-green-600 uppercase tracking-wide">ONLINE</span>
+                    </div>
+                  )}
+                  {/* Flag + Name + Age - Lower Right */}
+                  <div className="absolute bottom-3 right-3 flex items-center gap-1.5">
+                    <span className="text-base">{profile.flag}</span>
+                    <span className="text-white text-sm font-semibold drop-shadow-lg">{profile.name}, {profile.age}</span>
+                  </div>
                 </div>
               ))}
             </div>
           </div>
         </div>
+        
+        {/* Bottom fade overlay */}
+        <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-black via-black/60 to-transparent pointer-events-none z-10" />
 
         {/* Overlay Content */}
         <div className="relative z-10 max-w-7xl mx-auto px-4 md:px-6">
@@ -244,52 +289,54 @@ export default function Home() {
             <div></div>
           </div>
 
-          {/* Mobile: Stacked Layout */}
-          <div className="md:hidden flex flex-col items-center justify-center min-h-[calc(100vh-120px)] py-8">
-            {/* Filter Buttons */}
-            <div className="flex flex-col gap-3 w-full max-w-sm mb-6">
-              <Button
-                size="lg"
-                className="w-full bg-black/60 backdrop-blur-sm border border-white/20 text-white hover:bg-white/10 rounded-full py-6 text-base font-semibold"
-              >
-                <span className="flex items-center gap-2">
-                  <span className="text-pink-400">⚥</span>
-                  Gender
-                  <ChevronDown className="w-5 h-5" />
-                </span>
-              </Button>
-              <Button
-                size="lg"
-                className="w-full bg-black/60 backdrop-blur-sm border border-white/20 text-white hover:bg-white/10 rounded-full py-6 text-base font-semibold"
-              >
-                <span className="flex items-center gap-2">
-                  <span className="text-green-400">🌍</span>
-                  Country
-                  <ChevronDown className="w-5 h-5" />
-                </span>
-              </Button>
-            </div>
-
-            {/* Start Video Chat Button */}
-            <Button
-              onClick={() => navigate('/video-chat')}
-              size="lg"
-              className="w-full max-w-sm bg-white text-black hover:bg-gray-100 rounded-full px-8 py-7 text-xl font-bold shadow-2xl mb-6"
-            >
-              <Video className="w-7 h-7 mr-3" />
-              Start Video Chat
-            </Button>
-
-            {/* Matching Counter - Below button on mobile */}
-            <div className="flex items-center gap-2 text-white">
-              <div className="relative">
-                <div className="w-2 h-2 bg-green-500 rounded-full" />
-                <div className="absolute inset-0 w-2 h-2 bg-green-500 rounded-full animate-ping" />
+          {/* Mobile: Bottom Fixed Controls */}
+          <div className="md:hidden flex flex-col justify-end min-h-[calc(100vh-100px)]">
+            <div className="px-4 pb-safe">
+              {/* Filter Buttons - Side by Side */}
+              <div className="grid grid-cols-2 gap-3 mb-3">
+                <Button
+                  size="lg"
+                  className="bg-black/70 backdrop-blur-sm border border-white/20 text-white hover:bg-white/10 rounded-full py-5 text-sm font-semibold"
+                >
+                  <span className="flex items-center justify-center gap-1.5">
+                    <span className="text-pink-400">⚥</span>
+                    Gender
+                    <ChevronDown className="w-4 h-4" />
+                  </span>
+                </Button>
+                <Button
+                  size="lg"
+                  className="bg-black/70 backdrop-blur-sm border border-white/20 text-white hover:bg-white/10 rounded-full py-5 text-sm font-semibold"
+                >
+                  <span className="flex items-center justify-center gap-1.5">
+                    <span className="text-green-400">🌍</span>
+                    Country
+                    <ChevronDown className="w-4 h-4" />
+                  </span>
+                </Button>
               </div>
-              <span className="text-xl font-bold tabular-nums">
-                {matchingCount.toLocaleString()}
-              </span>
-              <span className="text-sm text-gray-300">are matching now!</span>
+
+              {/* Start Video Chat Button - Full Width */}
+              <Button
+                onClick={() => navigate('/video-chat')}
+                size="lg"
+                className="w-full bg-white text-black hover:bg-gray-100 rounded-full py-6 text-xl font-bold shadow-2xl mb-2"
+              >
+                <Video className="w-6 h-6 mr-2" />
+                Start Video Chat
+              </Button>
+
+              {/* Matching Counter - Below Start Video Chat, smaller font */}
+              <div className="flex items-center justify-center gap-2 text-white pb-4">
+                <div className="relative">
+                  <div className="w-2 h-2 bg-green-500 rounded-full" />
+                  <div className="absolute inset-0 w-2 h-2 bg-green-500 rounded-full animate-ping" />
+                </div>
+                <span className="text-base font-bold tabular-nums">
+                  {matchingCount.toLocaleString()}
+                </span>
+                <span className="text-xs text-gray-300">are matching now!</span>
+              </div>
             </div>
           </div>
         </div>
@@ -305,16 +352,16 @@ export default function Home() {
       {/* Main Content Section */}
       <section className="py-16 md:py-24 px-4 md:px-6 bg-[#0a0a0a]">
         <div className="max-w-6xl mx-auto text-center">
-          <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold mb-6 leading-tight">
+          <h1 className="text-xl md:text-4xl lg:text-5xl font-bold mb-4 leading-tight whitespace-nowrap overflow-hidden text-ellipsis">
             HabeshaLive Video Chat & Talk to Strangers
           </h1>
-          <h2 className="text-xl md:text-3xl lg:text-4xl font-bold mb-6">
+          <h2 className="text-lg md:text-3xl lg:text-4xl font-bold mb-6 whitespace-nowrap overflow-hidden text-ellipsis">
             Don't Randomly Chat Around!
           </h2>
-          <p className="text-lg md:text-xl text-gray-300 mb-4">
+          <p className="text-base md:text-xl text-gray-300 mb-4">
             Meet Habesha friends and talk to people now!
           </p>
-          <p className="text-lg md:text-xl text-gray-300 leading-relaxed">
+          <p className="text-base md:text-xl text-gray-300 leading-relaxed">
             HabeshaLive is a global video chat platform for meeting Habesha people.
           </p>
         </div>
@@ -352,7 +399,7 @@ export default function Home() {
             </div>
             <h3 className="text-xl md:text-2xl font-bold mb-3 md:mb-4">Cultural Connection</h3>
             <p className="text-gray-400 text-sm md:text-base leading-relaxed">
-              Practice Tigrinya or Amharic. Share culture and celebrate our heritage together.
+              Practice Tigrinya, Amharic. Share culture and celebrate our heritage together.
             </p>
           </div>
         </div>
