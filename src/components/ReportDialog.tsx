@@ -17,7 +17,7 @@ const reportReasons = [
   },
   {
     title: "Underage user",
-    description: "This user appears to be too young to use Azar",
+    description: "This user appears to be too young to use HabeshaLive",
   },
   {
     title: "Inappropriate profile video",

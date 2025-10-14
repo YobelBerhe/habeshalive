@@ -19,6 +19,9 @@ export default function VideoChat() {
   const [isMicOn, setIsMicOn] = useState(true);
   const [isCameraOn, setIsCameraOn] = useState(true);
   const [isFullScreen, setIsFullScreen] = useState(false);
+  const [showChat, setShowChat] = useState(false);
+  const [chatMessage, setChatMessage] = useState("");
+  const [messages, setMessages] = useState<Array<{text: string, sender: 'me' | 'other'}>>([]);
   const [matchedUser] = useState({
     name: "Tal",
     flag: "🇹🇭",
@@ -40,6 +43,19 @@ export default function VideoChat() {
   const handleNext = () => {
     setIsConnected(false);
     setIsMatching(true);
+    setShowChat(false);
+    setMessages([]);
+  };
+
+  const handleSendMessage = () => {
+    if (chatMessage.trim()) {
+      setMessages([...messages, { text: chatMessage, sender: 'me' }]);
+      setChatMessage("");
+      // Simulate other user response
+      setTimeout(() => {
+        setMessages(prev => [...prev, { text: "Thanks for your message!", sender: 'other' }]);
+      }, 1000);
+    }
   };
 
   const handleEndChat = () => {
@@ -113,9 +129,20 @@ export default function VideoChat() {
             {/* Right Video - Matched User */}
             <div className="relative bg-black h-full flex items-center justify-center">
               {isMatching ? (
-                <div className="text-center">
-                  <RotatingGlobe />
-                  <p className="text-xl font-bold mt-6">Finding your next match...</p>
+                <div className="relative w-full h-full flex items-center justify-center">
+                  {/* Blurred profile background */}
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <img
+                      src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop"
+                      alt="Profile"
+                      className="w-64 h-64 rounded-full blur-3xl opacity-20"
+                    />
+                  </div>
+                  {/* Rotating globe */}
+                  <div className="relative z-10 text-center">
+                    <RotatingGlobe />
+                    <p className="text-xl font-bold mt-6">Finding your next match...</p>
+                  </div>
                 </div>
               ) : isConnected ? (
                 <>
@@ -168,12 +195,32 @@ export default function VideoChat() {
           {/* Mobile: Stacked with Toggle */}
           <div className="md:hidden h-full flex flex-col relative">
             {isMatching ? (
-              <div className="flex-1 bg-black flex items-center justify-center">
-                <div className="text-center">
-                  <RotatingGlobe />
-                  <p className="text-xl font-bold mt-6">Finding your next match...</p>
+              <>
+                {/* Matched User Area - with blurred background and globe */}
+                <div className="flex-1 relative bg-black flex items-center justify-center">
+                  {/* Blurred profile background */}
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <img
+                      src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop"
+                      alt="Profile"
+                      className="w-48 h-48 rounded-full blur-3xl opacity-20"
+                    />
+                  </div>
+                  {/* Rotating globe */}
+                  <div className="relative z-10 text-center">
+                    <RotatingGlobe />
+                    <p className="text-xl font-bold mt-6">Finding your next match...</p>
+                  </div>
                 </div>
-              </div>
+                
+                {/* My Camera - stays visible */}
+                <div className="flex-1 relative bg-black flex items-center justify-center border-t border-gray-800">
+                  <div className="text-gray-600 text-center">
+                    <Camera className="w-16 h-16 mx-auto mb-2" />
+                    <p>Your Camera</p>
+                  </div>
+                </div>
+              </>
             ) : isConnected ? (
               <>
                 {!isFullScreen ? (
@@ -315,7 +362,10 @@ export default function VideoChat() {
             {/* Control Buttons */}
             <div className="flex items-center justify-center gap-3 mb-4">
               {/* Message Button */}
-              <button className="w-12 h-12 rounded-full bg-black/60 backdrop-blur-sm border border-white/20 hover:bg-black/80 flex items-center justify-center">
+              <button 
+                onClick={() => setShowChat(!showChat)}
+                className="w-12 h-12 rounded-full bg-black/60 backdrop-blur-sm border border-white/20 hover:bg-black/80 flex items-center justify-center"
+              >
                 <MessageCircle className="w-5 h-5 text-white" />
               </button>
 
@@ -397,6 +447,52 @@ export default function VideoChat() {
           </div>
         </div>
       </div>
+
+      {/* Chat Interface - Mobile */}
+      {showChat && isConnected && (
+        <div className="md:hidden fixed bottom-20 left-4 right-4 bg-black/90 backdrop-blur-lg rounded-2xl p-4 z-30 border border-white/10">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-sm font-semibold text-white">Chat</h3>
+            <button onClick={() => setShowChat(false)} className="text-gray-400 hover:text-white">
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+          
+          {/* Messages */}
+          <div className="space-y-2 mb-3 max-h-32 overflow-y-auto">
+            {messages.map((msg, idx) => (
+              <div
+                key={idx}
+                className={`text-sm px-3 py-2 rounded-lg ${
+                  msg.sender === 'me'
+                    ? 'bg-[#00D9B4] text-black ml-8'
+                    : 'bg-white/10 text-white mr-8'
+                }`}
+              >
+                {msg.text}
+              </div>
+            ))}
+          </div>
+
+          {/* Input */}
+          <div className="flex gap-2">
+            <input
+              type="text"
+              value={chatMessage}
+              onChange={(e) => setChatMessage(e.target.value)}
+              onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+              placeholder="Type a message..."
+              className="flex-1 bg-white/10 text-white placeholder-gray-400 rounded-full px-4 py-2 text-sm border border-white/10 focus:outline-none focus:border-[#00D9B4]"
+            />
+            <button
+              onClick={handleSendMessage}
+              className="bg-[#00D9B4] text-black rounded-full px-4 py-2 text-sm font-medium hover:bg-[#00c9a4]"
+            >
+              Send
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Dialogs */}
       <ReportDialog open={showReportDialog} onOpenChange={setShowReportDialog} />
