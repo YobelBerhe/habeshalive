@@ -8,21 +8,55 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Video, ChevronDown, Users, Shield, Instagram, Facebook, Youtube, Camera, Sparkles, MessageCircle } from "lucide-react";
-import { LoginDialog } from "@/components/LoginDialog";
+import { AuthDialog } from "@/components/AuthDialog";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import type { User, Session } from "@supabase/supabase-js";
+import { toast } from "sonner";
 
 export default function Home() {
   const navigate = useNavigate();
   const [matchingCount, setMatchingCount] = useState(342768);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [showLoginDialog, setShowLoginDialog] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [showAuthDialog, setShowAuthDialog] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
+  const [session, setSession] = useState<Session | null>(null);
 
-  const handleLogin = () => {
-    setShowLoginDialog(false);
-    setIsLoggedIn(true);
-    navigate('/video-chat');
+  // Initialize auth state
+  useEffect(() => {
+    // Set up auth state listener FIRST
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        setSession(session);
+        setUser(session?.user ?? null);
+        
+        if (event === 'SIGNED_IN') {
+          toast.success('Signed in successfully!');
+        }
+      }
+    );
+
+    // THEN check for existing session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+      setUser(session?.user ?? null);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const handleStartVideoChat = () => {
+    if (!user) {
+      setShowAuthDialog(true);
+    } else {
+      navigate('/video-chat');
+    }
+  };
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    toast.success('Signed out successfully');
   };
 
   // Animate the matching counter with flipping effect
@@ -92,7 +126,7 @@ export default function Home() {
             {/* Navigation - Desktop */}
             <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
               <button 
-                onClick={() => navigate('/video-chat')}
+                onClick={handleStartVideoChat}
                 className="text-white hover:text-gray-300 transition-colors"
               >
                 Video Chat
@@ -106,7 +140,7 @@ export default function Home() {
             </nav>
           </div>
 
-          {/* Right Side Buttons - Only Login on mobile */}
+          {/* Right Side Buttons */}
           <div className="flex items-center gap-2 md:gap-3">
             <Button
               className="hidden md:inline-flex items-center gap-1.5 bg-white text-black hover:bg-gray-100 rounded-full px-6 py-2.5 font-semibold text-base h-auto"
@@ -118,12 +152,22 @@ export default function Home() {
             >
               🕐 History
             </Button>
-            <Button
-              onClick={() => setShowLoginDialog(true)}
-              className="bg-white text-black hover:bg-gray-100 rounded-full px-6 py-2.5 font-semibold text-base h-auto"
-            >
-              Log in
-            </Button>
+            {user ? (
+              <Button
+                onClick={handleSignOut}
+                variant="outline"
+                className="border-white/20 text-white hover:bg-white/10 rounded-full px-6 py-2.5 font-semibold text-base h-auto"
+              >
+                Sign Out
+              </Button>
+            ) : (
+              <Button
+                onClick={() => setShowAuthDialog(true)}
+                className="bg-white text-black hover:bg-gray-100 rounded-full px-6 py-2.5 font-semibold text-base h-auto"
+              >
+                Log in
+              </Button>
+            )}
           </div>
         </div>
       </header>
@@ -283,7 +327,7 @@ export default function Home() {
                   </span>
                 </Button>
                 <Button
-                  onClick={() => setShowLoginDialog(true)}
+                  onClick={handleStartVideoChat}
                   size="lg"
                   className="w-full bg-white text-black hover:bg-gray-100 rounded-full py-7 text-xl font-bold shadow-2xl"
                 >
@@ -326,7 +370,7 @@ export default function Home() {
 
               {/* Start Video Chat Button - Full Width */}
               <Button
-                onClick={() => setShowLoginDialog(true)}
+                onClick={handleStartVideoChat}
                 size="lg"
                 className="w-full bg-white text-black hover:bg-gray-100 rounded-full py-6 text-xl font-bold shadow-2xl mb-2"
               >
@@ -538,11 +582,10 @@ export default function Home() {
         </div>
       </footer>
 
-      {/* Login Dialog */}
-      <LoginDialog 
-        open={showLoginDialog} 
-        onOpenChange={setShowLoginDialog}
-        onLogin={handleLogin}
+      {/* Auth Dialog */}
+      <AuthDialog 
+        open={showAuthDialog} 
+        onOpenChange={setShowAuthDialog}
       />
     </div>
   );

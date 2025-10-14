@@ -7,7 +7,7 @@ import {
   Shield, 
   Camera, 
   Video as VideoIcon, 
-  User,
+  User as UserIcon,
   ChevronLeft,
   CheckCircle2,
   ShieldCheck,
@@ -25,7 +25,8 @@ import {
   Droplet,
   Star,
   AlertTriangle,
-  Flag
+  Flag,
+  Loader2
 } from "lucide-react";
 import { RotatingGlobe } from "@/components/RotatingGlobe";
 import { ReportDialog } from "@/components/ReportDialog";
@@ -36,6 +37,8 @@ import { AIContentModeration } from "@/lib/ai-moderation-system";
 import { VideoWatermarkingSystem, ScreenshotDetectionSystem } from "@/lib/watermarking-system";
 import RespectScoreEngine, { type UserScore } from "@/lib/respect-score-system";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+import type { User, Session } from "@supabase/supabase-js";
 
 type OnboardingStep = 'birthday' | 'gender' | 'ethnicity' | 'name' | 'purpose' | 'safety' | 'preferences' | 'complete';
 type ConnectionState = 'onboarding' | 'ready' | 'searching' | 'connected';
@@ -130,6 +133,44 @@ const purposeOptions = [
 
 export default function VideoChat() {
   const navigate = useNavigate();
+  
+  // Authentication state
+  const [user, setUser] = useState<User | null>(null);
+  const [session, setSession] = useState<Session | null>(null);
+  const [authLoading, setAuthLoading] = useState(true);
+
+  // Check authentication
+  useEffect(() => {
+    // Set up auth state listener FIRST
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        setSession(session);
+        setUser(session?.user ?? null);
+        setAuthLoading(false);
+        
+        // Redirect to home if signed out
+        if (!session && event === 'SIGNED_OUT') {
+          navigate('/');
+          toast.error('Please sign in to access video chat');
+        }
+      }
+    );
+
+    // THEN check for existing session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+      setUser(session?.user ?? null);
+      setAuthLoading(false);
+      
+      // Redirect to home if not authenticated
+      if (!session) {
+        navigate('/');
+        toast.error('Please sign in to access video chat');
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, [navigate]);
   
   // Connection & Onboarding
   const [connectionState, setConnectionState] = useState<ConnectionState>('onboarding');
@@ -434,8 +475,29 @@ export default function VideoChat() {
     watermarkingRef.current?.stop();
     screenshotDetectionRef.current?.stop();
     
-    navigate('/');
+    // Sign out and return to home
+    supabase.auth.signOut().then(() => {
+      navigate('/');
+      toast.success('Signed out successfully');
+    });
   };
+
+  // Show loading while checking auth
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 flex items-center justify-center">
+        <div className="text-center space-y-4">
+          <Loader2 className="w-12 h-12 animate-spin mx-auto text-blue-400" />
+          <p className="text-white text-lg">Verifying authentication...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Don't render if not authenticated
+  if (!user || !session) {
+    return null;
+  }
 
   const handleOpenManageAccount = () => {
     setShowSettingsDialog(false);
@@ -1143,7 +1205,7 @@ export default function VideoChat() {
                   onClick={() => setShowSettingsDialog(true)}
                   className="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center hover:bg-gray-600"
                 >
-                  <User className="w-5 h-5" />
+                  <UserIcon className="w-5 h-5" />
                 </button>
               </div>
             </div>
