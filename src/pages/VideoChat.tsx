@@ -51,10 +51,6 @@ export default function VideoChat() {
     if (chatMessage.trim()) {
       setMessages([...messages, { text: chatMessage, sender: 'me' }]);
       setChatMessage("");
-      // Simulate other user response
-      setTimeout(() => {
-        setMessages(prev => [...prev, { text: "Thanks for your message!", sender: 'other' }]);
-      }, 1000);
     }
   };
 
@@ -129,14 +125,10 @@ export default function VideoChat() {
             {/* Right Video - Matched User */}
             <div className="relative bg-black h-full flex items-center justify-center">
               {isMatching ? (
-                <div className="relative w-full h-full flex items-center justify-center">
+                <div className="relative w-full h-full flex items-center justify-center bg-gradient-radial from-white/10 via-transparent to-transparent">
                   {/* Blurred profile background */}
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <img
-                      src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop"
-                      alt="Profile"
-                      className="w-64 h-64 rounded-full blur-3xl opacity-20"
-                    />
+                  <div className="absolute inset-0 flex items-center justify-center overflow-hidden">
+                    <div className="w-96 h-96 rounded-full bg-white/30 blur-[100px]"></div>
                   </div>
                   {/* Rotating globe */}
                   <div className="relative z-10 text-center">
@@ -199,12 +191,8 @@ export default function VideoChat() {
                 {/* Matched User Area - with blurred background and globe */}
                 <div className="flex-1 relative bg-black flex items-center justify-center">
                   {/* Blurred profile background */}
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <img
-                      src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop"
-                      alt="Profile"
-                      className="w-48 h-48 rounded-full blur-3xl opacity-20"
-                    />
+                  <div className="absolute inset-0 flex items-center justify-center overflow-hidden">
+                    <div className="w-64 h-64 rounded-full bg-white/30 blur-[80px]"></div>
                   </div>
                   {/* Rotating globe */}
                   <div className="relative z-10 text-center">
@@ -448,10 +436,10 @@ export default function VideoChat() {
         </div>
       </div>
 
-      {/* Chat Interface - Mobile */}
+      {/* Chat Interface - Mobile - Slides from right */}
       {showChat && isConnected && (
-        <div className="md:hidden fixed bottom-20 left-4 right-4 bg-black/90 backdrop-blur-lg rounded-2xl p-4 z-30 border border-white/10">
-          <div className="flex items-center justify-between mb-3">
+        <div className="md:hidden fixed top-0 right-0 bottom-0 w-64 bg-black/95 backdrop-blur-lg p-4 z-30 border-l border-white/10 animate-slide-in-right flex flex-col">
+          <div className="flex items-center justify-between mb-4">
             <h3 className="text-sm font-semibold text-white">Chat</h3>
             <button onClick={() => setShowChat(false)} className="text-gray-400 hover:text-white">
               <X className="w-5 h-5" />
@@ -459,30 +447,28 @@ export default function VideoChat() {
           </div>
           
           {/* Messages */}
-          <div className="space-y-2 mb-3 max-h-32 overflow-y-auto">
+          <div className="flex-1 space-y-2 mb-3 overflow-y-auto">
             {messages.map((msg, idx) => (
               <div
                 key={idx}
-                className={`text-sm px-3 py-2 rounded-lg ${
-                  msg.sender === 'me'
-                    ? 'bg-[#00D9B4] text-black ml-8'
-                    : 'bg-white/10 text-white mr-8'
-                }`}
+                className={`flex ${msg.sender === 'me' ? 'justify-end' : 'justify-start'}`}
               >
-                {msg.text}
+                <span className="text-sm text-white px-3 py-1.5 rounded-full bg-black/60 backdrop-blur-sm inline-block max-w-[80%]">
+                  {msg.text}
+                </span>
               </div>
             ))}
           </div>
 
           {/* Input */}
-          <div className="flex gap-2">
+          <div className="flex flex-col gap-2">
             <input
               type="text"
               value={chatMessage}
               onChange={(e) => setChatMessage(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
               placeholder="Type a message..."
-              className="flex-1 bg-white/10 text-white placeholder-gray-400 rounded-full px-4 py-2 text-sm border border-white/10 focus:outline-none focus:border-[#00D9B4]"
+              className="w-full bg-white/10 text-white placeholder-gray-400 rounded-full px-4 py-2 text-sm border border-white/10 focus:outline-none focus:border-[#00D9B4]"
             />
             <button
               onClick={handleSendMessage}
