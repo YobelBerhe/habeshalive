@@ -9,7 +9,6 @@ import {
 } from "@/components/ui/accordion";
 import { Video, ChevronDown, Users, Shield, Instagram, Facebook, Youtube, Camera, Sparkles, MessageCircle } from "lucide-react";
 import { LoginDialog } from "@/components/LoginDialog";
-import { useState as useLoginState } from "react";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -17,6 +16,14 @@ export default function Home() {
   const navigate = useNavigate();
   const [matchingCount, setMatchingCount] = useState(342768);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [showLoginDialog, setShowLoginDialog] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const handleLogin = () => {
+    setShowLoginDialog(false);
+    setIsLoggedIn(true);
+    navigate('/video-chat');
+  };
 
   // Animate the matching counter with flipping effect
   useEffect(() => {
@@ -102,18 +109,17 @@ export default function Home() {
           {/* Right Side Buttons - Only Login on mobile */}
           <div className="flex items-center gap-2 md:gap-3">
             <Button
-              className="hidden md:flex items-center bg-white text-black hover:bg-gray-100 rounded-full px-6 py-2.5 font-semibold text-base h-auto"
+              className="hidden md:inline-flex items-center gap-1.5 bg-white text-black hover:bg-gray-100 rounded-full px-6 py-2.5 font-semibold text-base h-auto"
             >
-              <span className="mr-1.5">💎</span>
-              Shop
+              💎 Shop
             </Button>
             <Button
-              className="hidden md:flex items-center bg-white text-black hover:bg-gray-100 rounded-full px-6 py-2.5 font-semibold text-base h-auto"
+              className="hidden md:inline-flex items-center gap-1.5 bg-white text-black hover:bg-gray-100 rounded-full px-6 py-2.5 font-semibold text-base h-auto"
             >
-              <span className="mr-1.5">🕐</span>
-              History
+              🕐 History
             </Button>
             <Button
+              onClick={() => setShowLoginDialog(true)}
               className="bg-white text-black hover:bg-gray-100 rounded-full px-6 py-2.5 font-semibold text-base h-auto"
             >
               Log in
@@ -277,7 +283,7 @@ export default function Home() {
                   </span>
                 </Button>
                 <Button
-                  onClick={() => navigate('/video-chat')}
+                  onClick={() => setShowLoginDialog(true)}
                   size="lg"
                   className="w-full bg-white text-black hover:bg-gray-100 rounded-full py-7 text-xl font-bold shadow-2xl"
                 >
@@ -320,7 +326,7 @@ export default function Home() {
 
               {/* Start Video Chat Button - Full Width */}
               <Button
-                onClick={() => navigate('/video-chat')}
+                onClick={() => setShowLoginDialog(true)}
                 size="lg"
                 className="w-full bg-white text-black hover:bg-gray-100 rounded-full py-6 text-xl font-bold shadow-2xl mb-2"
               >
@@ -531,6 +537,13 @@ export default function Home() {
           </div>
         </div>
       </footer>
+
+      {/* Login Dialog */}
+      <LoginDialog 
+        open={showLoginDialog} 
+        onOpenChange={setShowLoginDialog}
+        onLogin={handleLogin}
+      />
     </div>
   );
 }

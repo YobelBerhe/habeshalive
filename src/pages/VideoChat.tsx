@@ -16,14 +16,12 @@ export default function VideoChat() {
   const [showProfileDialog, setShowProfileDialog] = useState(false);
   const [showSettingsDialog, setShowSettingsDialog] = useState(false);
   const [showManageAccountDialog, setShowManageAccountDialog] = useState(false);
-  const [message, setMessage] = useState("");
-  const [quickMessages] = useState(["hello", "hi"]);
   const [isMicOn, setIsMicOn] = useState(true);
   const [isCameraOn, setIsCameraOn] = useState(true);
-  const [matchedUser, setMatchedUser] = useState({
-    name: "El",
-    flag: "🇩🇪",
-    country: "Germany",
+  const [matchedUser] = useState({
+    name: "Tal",
+    flag: "🇹🇭",
+    country: "Thailand",
     online: true
   });
 
@@ -158,32 +156,6 @@ export default function VideoChat() {
                   <VideoIcon className="w-16 h-16 mx-auto mb-2" />
                   <p>Matched User Video</p>
                 </div>
-
-                {/* Chat Messages - Mobile */}
-                <div className="md:hidden absolute bottom-24 left-4 right-4 space-y-2 z-10">
-                  {quickMessages.map((msg, i) => (
-                    <div key={i} className="bg-gray-800/80 backdrop-blur-sm rounded-2xl px-4 py-2 max-w-xs">
-                      <span className="flex items-center gap-2">
-                        <User className="w-4 h-4" />
-                        {msg}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Message Input - Mobile Bottom */}
-                <div className="md:hidden absolute bottom-20 left-4 right-4 z-10">
-                  <div className="bg-gray-800/90 backdrop-blur-sm rounded-full px-4 py-3 flex items-center gap-2">
-                    <User className="w-5 h-5 text-gray-400" />
-                    <input
-                      type="text"
-                      value={message}
-                      onChange={(e) => setMessage(e.target.value)}
-                      placeholder="Enter your message"
-                      className="flex-1 bg-transparent border-none outline-none text-white placeholder-gray-400"
-                    />
-                  </div>
-                </div>
               </>
             ) : null}
           </div>
@@ -204,7 +176,7 @@ export default function VideoChat() {
         <div className="max-w-4xl mx-auto">
           {/* Safety Message */}
           <p className="text-center text-sm mb-4 text-gray-400">
-            Azar cares about your safety. Check out our{" "}
+            HabeshaLive cares about your safety. Check out our{" "}
             <a href="#" className="text-[#00D9B4] hover:underline">
               Community Guidelines
             </a>{" "}
@@ -218,36 +190,6 @@ export default function VideoChat() {
               <MessageCircle className="w-6 h-6" />
             </button>
 
-            {/* Camera Toggle */}
-            <button
-              onClick={() => setIsCameraOn(!isCameraOn)}
-              className={`w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center ${
-                isCameraOn ? 'bg-gray-800 hover:bg-gray-700' : 'bg-red-600 hover:bg-red-700'
-              }`}
-            >
-              <Camera className="w-6 h-6" />
-            </button>
-
-            {/* Mic Toggle */}
-            <button
-              onClick={() => setIsMicOn(!isMicOn)}
-              className={`w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center ${
-                isMicOn ? 'bg-gray-800 hover:bg-gray-700' : 'bg-red-600 hover:bg-red-700'
-              }`}
-            >
-              <Mic className="w-6 h-6" />
-            </button>
-
-            {/* Filter Button */}
-            <button className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-gray-800 hover:bg-gray-700 flex items-center justify-center">
-              <span className="text-2xl">🎭</span>
-            </button>
-
-            {/* Emoji Button */}
-            <button className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-gray-800 hover:bg-gray-700 flex items-center justify-center">
-              <span className="text-2xl">😊</span>
-            </button>
-
             {/* Next Button */}
             <Button
               onClick={handleNext}
@@ -255,6 +197,11 @@ export default function VideoChat() {
             >
               Next →
             </Button>
+
+            {/* Filter Button */}
+            <button className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-gray-800 hover:bg-gray-700 flex items-center justify-center">
+              <span className="text-2xl">🎭</span>
+            </button>
           </div>
 
           {/* ESC hint */}
