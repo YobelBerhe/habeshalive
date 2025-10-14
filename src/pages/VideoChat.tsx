@@ -14,7 +14,13 @@ import {
   Ban,
   Users,
   Lock,
-  AlertCircle
+  AlertCircle,
+  BookOpen,
+  Heart,
+  Globe,
+  Briefcase,
+  GraduationCap,
+  Coffee
 } from "lucide-react";
 import { RotatingGlobe } from "@/components/RotatingGlobe";
 import { ReportDialog } from "@/components/ReportDialog";
@@ -22,9 +28,10 @@ import { EditProfileDialog } from "@/components/EditProfileDialog";
 import { SettingsDialog } from "@/components/SettingsDialog";
 import { ManageAccountDialog } from "@/components/ManageAccountDialog";
 
-type OnboardingStep = 'birthday' | 'gender' | 'ethnicity' | 'name' | 'safety' | 'preferences' | 'complete';
+type OnboardingStep = 'birthday' | 'gender' | 'ethnicity' | 'name' | 'purpose' | 'safety' | 'preferences' | 'complete';
 type ConnectionState = 'onboarding' | 'ready' | 'searching' | 'connected';
 type MatchingMode = 'both' | 'same-gender-only' | 'opposite-only';
+type Purpose = 'language-practice' | 'friendship' | 'cultural-exchange' | 'diaspora-connect' | 'business-networking' | 'just-chat';
 
 interface Partner {
   name: string;
@@ -35,17 +42,71 @@ interface Partner {
   flag: string;
   country: string;
   online: boolean;
+  purpose: Purpose;
+  languages: string[];
+  interests: string[];
 }
 
 const mockPartners: Partner[] = [
-  { name: "Sara", age: 24, city: "Los Angeles", image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=600&fit=crop", gender: 'female', flag: "🇺🇸", country: "USA", online: true },
-  { name: "Daniel", age: 26, city: "London", image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=600&fit=crop", gender: 'male', flag: "🇬🇧", country: "UK", online: true },
-  { name: "Meron", age: 23, city: "Toronto", image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=600&fit=crop", gender: 'female', flag: "🇨🇦", country: "Canada", online: true },
-  { name: "Samuel", age: 27, city: "Dubai", image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=600&fit=crop", gender: 'male', flag: "🇦🇪", country: "UAE", online: true },
-  { name: "Rahel", age: 25, city: "Addis Ababa", image: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400&h=600&fit=crop", gender: 'female', flag: "🇪🇹", country: "Ethiopia", online: true },
-  { name: "Yonas", age: 28, city: "Asmara", image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=600&fit=crop", gender: 'male', flag: "🇪🇷", country: "Eritrea", online: true },
-  { name: "Selam", age: 22, city: "Seattle", image: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400&h=600&fit=crop", gender: 'female', flag: "🇺🇸", country: "USA", online: true },
-  { name: "Dawit", age: 29, city: "Stockholm", image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=600&fit=crop", gender: 'male', flag: "🇸🇪", country: "Sweden", online: true },
+  { name: "Sara", age: 24, city: "Los Angeles", image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=600&fit=crop", gender: 'female', flag: "🇺🇸", country: "USA", online: true, purpose: 'language-practice', languages: ['Tigrinya', 'English'], interests: ['Teaching', 'Culture'] },
+  { name: "Daniel", age: 26, city: "London", image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=600&fit=crop", gender: 'male', flag: "🇬🇧", country: "UK", online: true, purpose: 'business-networking', languages: ['Amharic', 'English'], interests: ['Tech', 'Startups'] },
+  { name: "Meron", age: 23, city: "Toronto", image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=600&fit=crop", gender: 'female', flag: "🇨🇦", country: "Canada", online: true, purpose: 'cultural-exchange', languages: ['Tigrinya', 'French'], interests: ['Music', 'Coffee Ceremony'] },
+  { name: "Samuel", age: 27, city: "Dubai", image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=600&fit=crop", gender: 'male', flag: "🇦🇪", country: "UAE", online: true, purpose: 'friendship', languages: ['Amharic', 'Arabic'], interests: ['Sports', 'Travel'] },
+  { name: "Rahel", age: 25, city: "Addis Ababa", image: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400&h=600&fit=crop", gender: 'female', flag: "🇪🇹", country: "Ethiopia", online: true, purpose: 'diaspora-connect', languages: ['Amharic', 'English'], interests: ['Culture', 'History'] },
+  { name: "Yonas", age: 28, city: "Asmara", image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=600&fit=crop", gender: 'male', flag: "🇪🇷", country: "Eritrea", online: true, purpose: 'just-chat', languages: ['Tigrinya'], interests: ['Photography', 'Art'] },
+  { name: "Selam", age: 22, city: "Seattle", image: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400&h=600&fit=crop", gender: 'female', flag: "🇺🇸", country: "USA", online: true, purpose: 'language-practice', languages: ['Tigrinya', 'English'], interests: ['Learning', 'Travel'] },
+  { name: "Dawit", age: 29, city: "Stockholm", image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=600&fit=crop", gender: 'male', flag: "🇸🇪", country: "Sweden", online: true, purpose: 'friendship', languages: ['Amharic', 'Swedish'], interests: ['Music', 'Tech'] },
+];
+
+const purposeOptions = [
+  {
+    id: 'language-practice',
+    icon: BookOpen,
+    title: 'Language Practice',
+    description: 'Learn or teach Tigrinya, Amharic, Oromo',
+    color: 'from-blue-600 to-cyan-600',
+    benefits: ['Native speakers', 'Patient teachers', 'Real conversations']
+  },
+  {
+    id: 'friendship',
+    icon: Heart,
+    title: 'Make Friends',
+    description: 'Connect with Habesha people worldwide',
+    color: 'from-pink-600 to-rose-600',
+    benefits: ['Long-term connections', 'Similar interests', 'Community building']
+  },
+  {
+    id: 'cultural-exchange',
+    icon: Globe,
+    title: 'Cultural Exchange',
+    description: 'Share traditions, food, music, stories',
+    color: 'from-green-600 to-emerald-600',
+    benefits: ['Learn customs', 'Share traditions', 'Coffee ceremony']
+  },
+  {
+    id: 'diaspora-connect',
+    icon: Coffee,
+    title: 'Diaspora Connect',
+    description: 'Connect homeland with diaspora',
+    color: 'from-yellow-600 to-orange-600',
+    benefits: ['Bridge cultures', 'Stay connected', 'Learn roots']
+  },
+  {
+    id: 'business-networking',
+    icon: Briefcase,
+    title: 'Business Network',
+    description: 'Professional connections & opportunities',
+    color: 'from-purple-600 to-indigo-600',
+    benefits: ['Career growth', 'Find partners', 'Share knowledge']
+  },
+  {
+    id: 'just-chat',
+    icon: MessageCircle,
+    title: 'Just Chat',
+    description: 'Casual conversations, no pressure',
+    color: 'from-gray-600 to-slate-600',
+    benefits: ['Relaxed vibe', 'Random topics', 'Fun times']
+  }
 ];
 
 export default function VideoChat() {
@@ -61,6 +122,8 @@ export default function VideoChat() {
   const [userGender, setUserGender] = useState<'male' | 'female' | 'non-binary'>('female');
   const [ethnicity, setEthnicity] = useState('');
   const [firstName, setFirstName] = useState('');
+  const [userPurpose, setUserPurpose] = useState<Purpose>('language-practice');
+  const [showPurposeInfo, setShowPurposeInfo] = useState(false);
   
   // Matching Preferences - THE STAR FEATURE! 🌟
   const [matchingMode, setMatchingMode] = useState<MatchingMode>('same-gender-only');
@@ -81,17 +144,30 @@ export default function VideoChat() {
   const [showSettingsDialog, setShowSettingsDialog] = useState(false);
   const [showManageAccountDialog, setShowManageAccountDialog] = useState(false);
 
-  // Smart Matching Algorithm - Filters based on gender preference
+  // Smart Matching Algorithm - Filters based on gender preference AND purpose
   const findMatch = () => {
     let availablePartners = [...mockPartners];
     
+    // Filter by gender preference
     if (matchingMode === 'same-gender-only') {
       availablePartners = availablePartners.filter(p => p.gender === userGender);
     } else if (matchingMode === 'opposite-only') {
       availablePartners = availablePartners.filter(p => p.gender !== userGender);
     }
     
+    // PRIORITIZE same purpose, but allow others if no exact match
+    const samePurposePartners = availablePartners.filter(p => p.purpose === userPurpose);
+    
+    if (samePurposePartners.length > 0) {
+      return samePurposePartners[Math.floor(Math.random() * samePurposePartners.length)];
+    }
+    
+    // Fallback to any available partner
     return availablePartners[Math.floor(Math.random() * availablePartners.length)];
+  };
+
+  const getCurrentPurposeInfo = () => {
+    return purposeOptions.find(p => p.id === userPurpose);
   };
 
   const completeOnboarding = () => {
@@ -366,7 +442,7 @@ export default function VideoChat() {
             </div>
             
             <Button 
-              onClick={() => setOnboardingStep('safety')}
+              onClick={() => setOnboardingStep('purpose')}
               disabled={!firstName}
               className="w-full bg-gray-700 hover:bg-gray-600 text-white rounded-full py-6 text-lg disabled:opacity-50"
             >
@@ -375,11 +451,118 @@ export default function VideoChat() {
           </div>
         )}
 
+        {/* 🌟 PURPOSE SELECTION MODAL - THE GAME CHANGER! 🌟 */}
+        {onboardingStep === 'purpose' && (
+          <div className="bg-[#2a2a2a] rounded-3xl p-8 max-w-2xl w-full relative my-8">
+            <button 
+              onClick={() => setOnboardingStep('purpose')}
+              className="absolute top-6 left-6 text-white hover:text-gray-300"
+            >
+              <ChevronLeft className="w-6 h-6" />
+            </button>
+            <button 
+              onClick={() => navigate('/')}
+              className="absolute top-6 right-6 text-white hover:text-gray-300"
+            >
+              <X className="w-6 h-6" />
+            </button>
+            
+            <h2 className="text-3xl font-bold text-white mb-3">What brings you here?</h2>
+            <p className="text-gray-400 mb-6">Choose your main purpose - we'll match you with like-minded people</p>
+            
+            {/* Info Banner */}
+            <div className="bg-blue-500/10 border border-blue-500/30 rounded-xl p-4 mb-6">
+              <div className="flex items-start gap-3">
+                <GraduationCap className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
+                <div className="text-sm">
+                  <p className="text-blue-300 font-semibold mb-1">Smart Matching</p>
+                  <p className="text-gray-400">
+                    We'll connect you with people who share your purpose for better conversations!
+                  </p>
+                </div>
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8 max-h-96 overflow-y-auto">
+              {purposeOptions.map((purpose) => {
+                const Icon = purpose.icon;
+                const isSelected = userPurpose === purpose.id;
+                
+                return (
+                  <button
+                    key={purpose.id}
+                    onClick={() => setUserPurpose(purpose.id as Purpose)}
+                    className={`p-5 rounded-2xl text-left transition-all ${
+                      isSelected
+                        ? `bg-gradient-to-br ${purpose.color} text-white border-2 border-white/30 scale-105`
+                        : 'bg-gray-800 text-gray-400 hover:bg-gray-750 border-2 border-transparent'
+                    }`}
+                  >
+                    <div className="flex items-start gap-3 mb-3">
+                      <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${
+                        isSelected ? 'bg-white/20' : 'bg-gray-700'
+                      }`}>
+                        <Icon className="w-5 h-5" />
+                      </div>
+                      <div className="flex-1">
+                        <div className="font-bold text-base mb-1">{purpose.title}</div>
+                        <div className={`text-xs ${isSelected ? 'text-white/80' : 'text-gray-500'}`}>
+                          {purpose.description}
+                        </div>
+                      </div>
+                      {isSelected && (
+                        <CheckCircle2 className="w-5 h-5 flex-shrink-0" />
+                      )}
+                    </div>
+                    
+                    {isSelected && (
+                      <div className="space-y-1 mt-3 pt-3 border-t border-white/10">
+                        {purpose.benefits.map((benefit, idx) => (
+                          <div key={idx} className="flex items-center gap-2 text-xs text-white/90">
+                            <div className="w-1 h-1 rounded-full bg-white/60" />
+                            {benefit}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+
+            <button
+              onClick={() => setShowPurposeInfo(!showPurposeInfo)}
+              className="w-full text-left mb-4"
+            >
+              <div className="flex items-center gap-2 text-blue-400 text-sm hover:text-blue-300">
+                <AlertCircle className="w-4 h-4" />
+                <span className="underline">How does purpose matching work?</span>
+              </div>
+            </button>
+
+            {showPurposeInfo && (
+              <div className="bg-gray-800/50 rounded-xl p-4 mb-6 text-sm text-gray-300 space-y-2">
+                <p>• <strong>Better Conversations:</strong> Match with people who want the same thing</p>
+                <p>• <strong>Clear Expectations:</strong> Everyone knows why they're here</p>
+                <p>• <strong>Higher Quality:</strong> More meaningful connections, less time wasted</p>
+                <p>• <strong>Flexible:</strong> You can change your purpose anytime in settings</p>
+              </div>
+            )}
+            
+            <Button 
+              onClick={() => setOnboardingStep('safety')}
+              className="w-full bg-green-500 hover:bg-green-600 text-black rounded-full py-6 text-lg font-bold"
+            >
+              Continue with {getCurrentPurposeInfo()?.title}
+            </Button>
+          </div>
+        )}
+
         {/* Safety Modal */}
         {onboardingStep === 'safety' && (
           <div className="bg-[#2a2a2a] rounded-3xl p-8 max-w-md w-full relative">
             <button 
-              onClick={() => setOnboardingStep('name')}
+              onClick={() => setOnboardingStep('purpose')}
               className="absolute top-6 left-6 text-white hover:text-gray-300"
             >
               <ChevronLeft className="w-6 h-6" />
@@ -626,8 +809,21 @@ export default function VideoChat() {
                     Meet Habesha people worldwide. Practice language, share culture, make friends.
                   </p>
                   
+                  {/* Show Current Purpose */}
+                  {getCurrentPurposeInfo() && (
+                    <div className={`inline-flex items-center gap-2 bg-gradient-to-br ${getCurrentPurposeInfo()!.color} rounded-full px-4 py-2 mt-4`}>
+                      {(() => {
+                        const Icon = getCurrentPurposeInfo()!.icon;
+                        return <Icon className="w-4 h-4 text-white" />;
+                      })()}
+                      <span className="text-sm font-semibold text-white">
+                        {getCurrentPurposeInfo()!.title}
+                      </span>
+                    </div>
+                  )}
+                  
                   {/* Show Current Matching Preference */}
-                  <div className="inline-flex items-center gap-2 bg-green-500/20 border border-green-500/30 rounded-full px-4 py-2 mt-4">
+                  <div className="inline-flex items-center gap-2 bg-green-500/20 border border-green-500/30 rounded-full px-4 py-2">
                     <Lock className="w-4 h-4 text-green-400" />
                     <span className="text-sm font-semibold text-green-300">
                       {matchingMode === 'same-gender-only' 
@@ -716,6 +912,11 @@ export default function VideoChat() {
                                 ? `${userGender === 'male' ? 'women' : 'men'} only`
                                 : 'all genders'}
                             </p>
+                            {getCurrentPurposeInfo() && (
+                              <p className="text-sm text-gray-400 mt-1">
+                                Purpose: {getCurrentPurposeInfo()!.title}
+                              </p>
+                            )}
                           </div>
                         </div>
                       ) : connectionState === 'connected' && partner ? (
@@ -744,6 +945,17 @@ export default function VideoChat() {
                             <div className="absolute top-4 right-20 flex items-center gap-2 bg-green-500/20 border border-green-500/30 rounded-full px-3 py-1.5 z-10">
                               <Lock className="w-4 h-4 text-green-400" />
                               <span className="text-xs font-semibold text-green-300">SAME GENDER</span>
+                            </div>
+                          )}
+
+                          {/* Purpose Badge */}
+                          {partner.purpose && purposeOptions.find(p => p.id === partner.purpose) && (
+                            <div className={`absolute ${matchingMode === 'same-gender-only' ? 'top-16' : 'top-4'} right-20 flex items-center gap-2 bg-gradient-to-r ${purposeOptions.find(p => p.id === partner.purpose)!.color} rounded-full px-3 py-1.5 z-10`}>
+                              {(() => {
+                                const Icon = purposeOptions.find(p => p.id === partner.purpose)!.icon;
+                                return <Icon className="w-3.5 h-3.5 text-white" />;
+                              })()}
+                              <span className="text-xs font-semibold text-white">{purposeOptions.find(p => p.id === partner.purpose)!.title.toUpperCase()}</span>
                             </div>
                           )}
 
@@ -784,6 +996,11 @@ export default function VideoChat() {
                                 ? 'Opposite gender only'
                                 : 'All genders'}
                             </p>
+                            {getCurrentPurposeInfo() && (
+                              <p className="text-sm text-gray-400 mt-1">
+                                Purpose: {getCurrentPurposeInfo()!.title}
+                              </p>
+                            )}
                           </div>
                         </div>
                         
@@ -825,6 +1042,17 @@ export default function VideoChat() {
                                 <div className="absolute top-16 left-4 flex items-center gap-1.5 bg-green-500/20 border border-green-500/30 rounded-full px-2 py-1 z-10">
                                   <Lock className="w-3 h-3 text-green-400" />
                                   <span className="text-xs font-semibold text-green-300">SAME GENDER</span>
+                                </div>
+                              )}
+
+                              {/* Purpose Badge */}
+                              {partner.purpose && purposeOptions.find(p => p.id === partner.purpose) && (
+                                <div className={`absolute ${matchingMode === 'same-gender-only' ? 'top-24' : 'top-16'} left-4 flex items-center gap-1.5 bg-gradient-to-r ${purposeOptions.find(p => p.id === partner.purpose)!.color} rounded-full px-2 py-1 z-10`}>
+                                  {(() => {
+                                    const Icon = purposeOptions.find(p => p.id === partner.purpose)!.icon;
+                                    return <Icon className="w-3 h-3 text-white" />;
+                                  })()}
+                                  <span className="text-xs font-semibold text-white">{purposeOptions.find(p => p.id === partner.purpose)!.title.toUpperCase()}</span>
                                 </div>
                               )}
 
