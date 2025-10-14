@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { 
@@ -32,6 +32,10 @@ import { ReportDialog } from "@/components/ReportDialog";
 import { EditProfileDialog } from "@/components/EditProfileDialog";
 import { SettingsDialog } from "@/components/SettingsDialog";
 import { ManageAccountDialog } from "@/components/ManageAccountDialog";
+import { AIContentModeration } from "@/lib/ai-moderation-system";
+import { VideoWatermarkingSystem, ScreenshotDetectionSystem } from "@/lib/watermarking-system";
+import RespectScoreEngine, { type UserScore } from "@/lib/respect-score-system";
+import { toast } from "sonner";
 
 type OnboardingStep = 'birthday' | 'gender' | 'ethnicity' | 'name' | 'purpose' | 'safety' | 'preferences' | 'complete';
 type ConnectionState = 'onboarding' | 'ready' | 'searching' | 'connected';
@@ -159,6 +163,16 @@ export default function VideoChat() {
   const [showReportModal, setShowReportModal] = useState(false);
   const [reportReason, setReportReason] = useState('');
   
+  // 🤖 AI SYSTEMS INSTANCES
+  const aiModerationRef = useRef<AIContentModeration | null>(null);
+  const watermarkingRef = useRef<VideoWatermarkingSystem | null>(null);
+  const screenshotDetectionRef = useRef<ScreenshotDetectionSystem | null>(null);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const [aiInitialized, setAiInitialized] = useState(false);
+  const [aiInitializing, setAiInitializing] = useState(false);
+  const callStartTimeRef = useRef<number | null>(null);
+  
   // Video Controls
   const [isFullScreen, setIsFullScreen] = useState(false);
   
@@ -173,57 +187,165 @@ export default function VideoChat() {
   const [showSettingsDialog, setShowSettingsDialog] = useState(false);
   const [showManageAccountDialog, setShowManageAccountDialog] = useState(false);
 
-  // 🤖 AI CONTENT MODERATION (Simulated)
+  // 🤖 AI SYSTEM INITIALIZATION
   useEffect(() => {
-    if (connectionState === 'connected' && safetyFeatures.aiBlur) {
-      const interval = setInterval(() => {
-        // Simulate AI detection (in production, this would be real AI)
-        const randomCheck = Math.random();
+    const initializeAI = async () => {
+      if (aiInitializing || aiInitialized) return;
+      
+      setAiInitializing(true);
+      console.log('🤖 Initializing AI systems...');
+      
+      try {
+        // Initialize AI moderation
+        aiModerationRef.current = new AIContentModeration();
+        await aiModerationRef.current.initialize();
         
-        if (randomCheck < 0.05) { // 5% chance of detecting something
-          setAiDetectedIssue(true);
-          setBlurLevel(80);
-          
-          // Auto-recover after 3 seconds
-          setTimeout(() => {
-            setAiDetectedIssue(false);
-            setBlurLevel(0);
-          }, 3000);
-        }
-      }, 5000); // Check every 5 seconds
-      
-      return () => clearInterval(interval);
-    }
-  }, [connectionState, safetyFeatures.aiBlur]);
-
-  // 🛡️ SCREENSHOT DETECTION (Simulated)
-  useEffect(() => {
-    if (!safetyFeatures.screenshotWatermark) return;
-
-    const detectScreenshot = () => {
-      console.log('⚠️ Screenshot attempt detected!');
-      console.log('🔒 Watermark ID:', watermarkId);
-      
-      // In production:
-      // - Send alert to backend
-      // - Log the incident
-      // - Reduce respect score if repeated
-      // - Notify partner
-    };
-
-    // Listen for screenshot events
-    const handleVisibility = () => {
-      if (document.hidden && connectionState === 'connected') {
-        detectScreenshot();
+        setAiInitialized(true);
+        console.log('✅ AI systems ready!');
+        toast.success('AI Safety Systems Active', {
+          description: 'Real-time content moderation enabled'
+        });
+      } catch (error) {
+        console.error('❌ Failed to initialize AI:', error);
+        toast.error('AI systems initialization failed', {
+          description: 'Safety features may be limited'
+        });
+      } finally {
+        setAiInitializing(false);
       }
     };
+    
+    initializeAI();
+  }, []);
 
-    document.addEventListener('visibilitychange', handleVisibility);
+  // 🤖 AI CONTENT MODERATION (Real Implementation)
+  useEffect(() => {
+    if (connectionState !== 'connected' || !safetyFeatures.aiBlur || !aiInitialized) return;
+    if (!aiModerationRef.current || !videoRef.current) return;
+    
+    const interval = setInterval(async () => {
+      try {
+        const result = await aiModerationRef.current!.analyzeFrame(videoRef.current!);
+        
+        if (!result.safe) {
+          console.warn('⚠️ AI detected violations:', result.violations);
+          setAiDetectedIssue(true);
+          setBlurLevel(result.blurLevel);
+          
+          // Handle based on severity
+          switch (result.action) {
+            case 'warn':
+              toast.warning('Content Warning', {
+                description: result.violations[0]?.details || 'Please review your video'
+              });
+              break;
+              
+            case 'blur':
+              // Blur is applied via state
+              setTimeout(() => {
+                setAiDetectedIssue(false);
+                setBlurLevel(0);
+              }, 3000);
+              break;
+              
+            case 'disconnect':
+              toast.error('Safety Violation Detected', {
+                description: 'Call ended for safety reasons'
+              });
+              
+              // Update respect score
+              const mockUserScore: UserScore = {
+                userId: 'current-user',
+                currentScore: userRespectScore,
+                history: [],
+                totalCalls: 0,
+                completedCalls: 0,
+                skippedCalls: 0,
+                reportsReceived: 0,
+                reportsConfirmed: 0,
+                complimentsReceived: 0,
+                averageCallDuration: 0,
+                accountAge: 1,
+                verified: false,
+                badges: [],
+                tier: 'perfect'
+              };
+              
+              let updatedScore = mockUserScore;
+              result.violations.forEach(v => {
+                updatedScore = RespectScoreEngine.processAIViolation(
+                  updatedScore,
+                  v.type as any,
+                  v.severity
+                );
+              });
+              
+              setUserRespectScore(updatedScore.currentScore);
+              
+              // End call after 1 second
+              setTimeout(() => {
+                endCall();
+              }, 1000);
+              break;
+          }
+        } else if (aiDetectedIssue) {
+          setAiDetectedIssue(false);
+          setBlurLevel(0);
+        }
+      } catch (error) {
+        console.error('AI moderation error:', error);
+      }
+    }, 200); // Check every 200ms (5 FPS)
+    
+    return () => clearInterval(interval);
+  }, [connectionState, safetyFeatures.aiBlur, aiInitialized, aiDetectedIssue, userRespectScore]);
 
+  // 🛡️ WATERMARKING SYSTEM
+  useEffect(() => {
+    if (connectionState !== 'connected' || !safetyFeatures.screenshotWatermark) return;
+    
+    const userId = 'current-user-' + Math.random().toString(36).substr(2, 9);
+    const partnerId = partner?.name || 'partner';
+    const sessionId = watermarkId;
+    
+    // Initialize watermarking
+    watermarkingRef.current = new VideoWatermarkingSystem(userId, partnerId, sessionId);
+    watermarkingRef.current.start();
+    
+    // Initialize screenshot detection
+    screenshotDetectionRef.current = new ScreenshotDetectionSystem(
+      userId,
+      partnerId,
+      sessionId,
+      {
+        onAttempt: (attempt) => {
+          console.warn('⚠️ Screenshot attempt detected!', attempt);
+          toast.warning('Screenshot Detected', {
+            description: 'All frames are watermarked for security'
+          });
+          
+          // Temporary blur
+          setBlurLevel(60);
+          setTimeout(() => setBlurLevel(0), 3000);
+        },
+        onMultipleAttempts: (count) => {
+          console.error('🚨 Multiple screenshot attempts:', count);
+          toast.error('Multiple Screenshot Attempts', {
+            description: 'This is being reported. Your respect score may be affected.'
+          });
+          
+          // Reduce respect score
+          setUserRespectScore(prev => Math.max(0, prev - 10));
+        }
+      }
+    );
+    screenshotDetectionRef.current.start();
+    
     return () => {
-      document.removeEventListener('visibilitychange', handleVisibility);
+      watermarkingRef.current?.stop();
+      screenshotDetectionRef.current?.stop();
     };
-  }, [connectionState, safetyFeatures.screenshotWatermark, watermarkId]);
+  }, [connectionState, safetyFeatures.screenshotWatermark, partner, watermarkId]);
 
   // Smart Matching Algorithm - Filters based on gender preference AND purpose
   const findMatch = () => {
@@ -253,6 +375,8 @@ export default function VideoChat() {
 
   const startMatching = () => {
     setConnectionState('searching');
+    callStartTimeRef.current = Date.now();
+    
     setTimeout(() => {
       const matchedPartner = findMatch();
       setPartner(matchedPartner);
@@ -261,15 +385,40 @@ export default function VideoChat() {
   };
 
   const handleNext = () => {
+    // Update respect score for completed call
+    if (callStartTimeRef.current) {
+      const callDuration = Math.floor((Date.now() - callStartTimeRef.current) / 1000);
+      
+      // Simulate respect score update
+      if (callDuration >= 30) {
+        // Only count if call was longer than 30 seconds
+        setUserRespectScore(prev => Math.min(100, prev + 2));
+        toast.success('Call completed!', {
+          description: `+2 Respect Score (${callDuration}s call)`
+        });
+      }
+    }
+    
+    // Reset AI states
+    setAiDetectedIssue(false);
+    setBlurLevel(0);
+    
     setConnectionState('searching');
     setShowChat(false);
     setMessages([]);
     setPartner(null);
+    
     setTimeout(() => {
       const matchedPartner = findMatch();
       setPartner(matchedPartner);
       setConnectionState('connected');
+      callStartTimeRef.current = Date.now();
     }, 2500);
+  };
+  
+  const endCall = () => {
+    // Same as handleNext but can be called internally
+    handleNext();
   };
 
   const handleSendMessage = () => {
@@ -280,6 +429,11 @@ export default function VideoChat() {
   };
 
   const handleEndChat = () => {
+    // Cleanup AI systems
+    aiModerationRef.current?.reset();
+    watermarkingRef.current?.stop();
+    screenshotDetectionRef.current?.stop();
+    
     navigate('/');
   };
 
@@ -1194,9 +1348,29 @@ export default function VideoChat() {
                           </button>
 
                           {/* Video Placeholder */}
-                          <div className="text-gray-600 text-center">
+                          <div className="text-gray-600 text-center relative">
+                            {/* Hidden video element for AI analysis */}
+                            <video
+                              ref={videoRef}
+                              className="hidden"
+                              autoPlay
+                              playsInline
+                              muted
+                            />
+                            {/* Hidden canvas for watermarking */}
+                            <canvas
+                              ref={canvasRef}
+                              className="hidden"
+                            />
+                            
                             <VideoIcon className="w-16 h-16 mx-auto mb-2" />
                             <p>Matched User Video</p>
+                            
+                            {aiInitializing && (
+                              <div className="mt-4 text-sm text-blue-400 animate-pulse">
+                                🤖 Loading AI Safety Systems...
+                              </div>
+                            )}
                           </div>
                         </>
                       ) : null}
