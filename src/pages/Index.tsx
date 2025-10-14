@@ -71,7 +71,7 @@ export default function Home() {
         isScrolled ? 'md:bg-transparent md:backdrop-blur-none' : 'md:bg-black/60 md:backdrop-blur-sm'
       }`}>
         {/* Gradient fade shadow from top */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/30 to-transparent pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/90 via-black/50 to-transparent pointer-events-none" />
         
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           {/* Logo - Bigger */}
