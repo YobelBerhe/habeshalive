@@ -68,6 +68,13 @@ export function AuthDialog({ open, onOpenChange }: AuthDialogProps) {
         options: {
           data: {
             full_name: fullName,
+            username: email.split('@')[0],
+            first_name: fullName || 'User',
+            birthday: { month: 1, day: 1, year: 2000 },
+            age: 24,
+            gender: 'non-binary',
+            ethnicity: 'habesha',
+            purpose: 'friendship',
           },
           emailRedirectTo: `${window.location.origin}/`,
         },

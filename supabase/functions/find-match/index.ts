@@ -1,4 +1,4 @@
-// Smart matching algorithm with respect score filtering
+import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.0'
 
 const corsHeaders = {
@@ -6,14 +6,12 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
-Deno.serve(async (req) => {
-  // Handle CORS
+serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders })
   }
 
   try {
-    // Initialize Supabase client
     const supabaseClient = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_ANON_KEY') ?? '',
@@ -24,23 +22,18 @@ Deno.serve(async (req) => {
       }
     )
 
-    // Get current user
     const {
       data: { user },
       error: userError,
     } = await supabaseClient.auth.getUser()
 
     if (userError || !user) {
-      console.error('Auth error:', userError)
       return new Response(JSON.stringify({ error: 'Unauthorized' }), {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         status: 401,
       })
     }
 
-    console.log('Finding match for user:', user.id)
-
-    // Get user's profile
     const { data: userProfile, error: profileError } = await supabaseClient
       .from('profiles')
       .select('*')
@@ -48,18 +41,9 @@ Deno.serve(async (req) => {
       .single()
 
     if (profileError) {
-      console.error('Profile error:', profileError)
       throw profileError
     }
 
-    console.log('User profile:', { 
-      gender: userProfile.gender, 
-      purpose: userProfile.purpose,
-      matching_mode: userProfile.matching_mode,
-      respect_score: userProfile.respect_score 
-    })
-
-    // Check if user can match
     if (userProfile.banned) {
       return new Response(
         JSON.stringify({ error: 'Your account is banned' }),
@@ -70,12 +54,12 @@ Deno.serve(async (req) => {
       )
     }
 
-    if (userProfile.respect_score < 85) {
+    if ((userProfile.respect_score || 100) < 85) {
       return new Response(
         JSON.stringify({
           error: 'Your respect score is too low to match',
-          currentScore: userProfile.respect_score,
           minimumScore: 85,
+          currentScore: userProfile.respect_score || 100,
         }),
         {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -84,32 +68,27 @@ Deno.serve(async (req) => {
       )
     }
 
-    // Build query for matching
-    let query = supabaseClient
-      .from('profiles')
-      .select('*')
-      .eq('active', true)
-      .eq('banned', false)
-      .gte('respect_score', 85)
-      .neq('id', user.id)
-
-    // Apply gender filter
+    let genderFilter: any = {}
     if (userProfile.matching_mode === 'same-gender-only') {
-      query = query.eq('gender', userProfile.gender)
+      genderFilter = { gender: userProfile.gender }
     } else if (userProfile.matching_mode === 'opposite-only') {
-      query = query.neq('gender', userProfile.gender)
+      genderFilter = { gender: userProfile.gender === 'male' ? 'female' : 'male' }
     }
 
-    // STEP 1: Try same purpose first
-    console.log('Searching for matches with same purpose...')
-    let { data: matches } = await query
-      .eq('purpose', userProfile.purpose)
+    let { data: matches } = await supabaseClient
+      .from('profiles')
+      .select('*')
+      .match({
+        purpose: userProfile.purpose,
+        active: true,
+        banned: false,
+        ...genderFilter,
+      })
+      .gte('respect_score', 85)
+      .neq('id', user.id)
       .order('respect_score', { ascending: false })
       .limit(10)
 
-    console.log('Found matches with same purpose:', matches?.length || 0)
-
-    // STEP 2: Filter by online status
     if (matches && matches.length > 0) {
       const { data: onlineUsers } = await supabaseClient
         .from('online_users')
@@ -120,34 +99,24 @@ Deno.serve(async (req) => {
       if (onlineUsers && onlineUsers.length > 0) {
         const onlineIds = onlineUsers.map(u => u.user_id)
         matches = matches.filter(m => onlineIds.includes(m.id))
-        console.log('Online matches with same purpose:', matches.length)
       } else {
         matches = []
       }
     }
 
-    // STEP 3: Try any purpose if no matches
     if (!matches || matches.length === 0) {
-      console.log('Searching for matches with any purpose...')
-      query = supabaseClient
+      let { data: anyMatches } = await supabaseClient
         .from('profiles')
         .select('*')
-        .eq('active', true)
-        .eq('banned', false)
+        .match({
+          active: true,
+          banned: false,
+          ...genderFilter,
+        })
         .gte('respect_score', 85)
         .neq('id', user.id)
-
-      if (userProfile.matching_mode === 'same-gender-only') {
-        query = query.eq('gender', userProfile.gender)
-      } else if (userProfile.matching_mode === 'opposite-only') {
-        query = query.neq('gender', userProfile.gender)
-      }
-
-      const { data: anyMatches } = await query
         .order('respect_score', { ascending: false })
         .limit(10)
-
-      console.log('Found matches with any purpose:', anyMatches?.length || 0)
 
       if (anyMatches && anyMatches.length > 0) {
         const { data: onlineUsers } = await supabaseClient
@@ -159,14 +128,11 @@ Deno.serve(async (req) => {
         if (onlineUsers && onlineUsers.length > 0) {
           const onlineIds = onlineUsers.map(u => u.user_id)
           matches = anyMatches.filter(m => onlineIds.includes(m.id))
-          console.log('Online matches with any purpose:', matches.length)
         }
       }
     }
 
-    // No matches found
     if (!matches || matches.length === 0) {
-      console.log('No matches available')
       return new Response(
         JSON.stringify({
           error: 'No matches found',
@@ -179,11 +145,7 @@ Deno.serve(async (req) => {
       )
     }
 
-    // Pick random match from top candidates
     const partner = matches[Math.floor(Math.random() * Math.min(matches.length, 3))]
-    console.log('Selected partner:', partner.id)
-
-    // Create video session
     const sessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
 
     const { data: session, error: sessionError } = await supabaseClient
@@ -200,13 +162,9 @@ Deno.serve(async (req) => {
       .single()
 
     if (sessionError) {
-      console.error('Session creation error:', sessionError)
       throw sessionError
     }
 
-    console.log('Session created:', session.id)
-
-    // Update both users to 'in-call' status
     await supabaseClient
       .from('online_users')
       .upsert([
@@ -214,7 +172,6 @@ Deno.serve(async (req) => {
         { user_id: partner.id, status: 'in-call', current_session_id: session.id },
       ])
 
-    // Return match
     return new Response(
       JSON.stringify({
         success: true,
@@ -243,10 +200,9 @@ Deno.serve(async (req) => {
       }
     )
   } catch (error) {
-    console.error('Error in find-match:', error)
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred'
+    console.error('Find match error:', error)
     return new Response(
-      JSON.stringify({ error: errorMessage }),
+      JSON.stringify({ error: error instanceof Error ? error.message : 'An error occurred' }),
       {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         status: 500,
