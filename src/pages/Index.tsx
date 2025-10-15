@@ -407,74 +407,72 @@ export default function Home() {
           </div>
 
           {/* Mobile: Bottom Fixed Controls */}
-          <div className="md:hidden flex flex-col justify-end min-h-[calc(100vh-160px)]">
-            <div className="px-4 pb-6">
-              {/* Filter Buttons - Side by Side */}
-              <div className="grid grid-cols-2 gap-3 mb-3">
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button
-                      size="lg"
-                      className="bg-black/70 backdrop-blur-sm border border-white/20 text-white hover:bg-white/10 rounded-full py-5 text-sm font-semibold"
-                    >
-                      <span className="flex items-center justify-center gap-1.5">
-                        <span className="text-pink-400">⚥</span>
-                        Gender
-                        <ChevronDown className="w-4 h-4" />
-                      </span>
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className="w-40 bg-gray-900 border-gray-700">
-                    <DropdownMenuItem onClick={() => toast.info('💎 Use tokens to filter by Male')}>
-                      Male
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => toast.info('💎 Use tokens to filter by Female')}>
-                      Female
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => toast.info('💎 Use tokens to filter by Non-binary')}>
-                      Non-binary
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-                <Button
-                  onClick={() => setShowRegionalDialog(true)}
-                  size="lg"
-                  className="bg-black/70 backdrop-blur-sm border border-white/20 text-white hover:bg-white/10 rounded-full py-5 text-sm font-semibold"
-                >
-                  <span className="flex items-center justify-center gap-1.5">
-                    <span className="text-green-400">🌍</span>
-                    Country
-                    <ChevronDown className="w-4 h-4" />
-                  </span>
-                </Button>
-              </div>
-
-              {/* Start Video Chat Button - Full Width */}
+          <div className="md:hidden fixed inset-x-0 bottom-0 z-20 px-4 pb-safe pt-3 bg-gradient-to-t from-background/95 via-background/70 to-transparent backdrop-blur">
+            {/* Filter Buttons - Side by Side */}
+            <div className="grid grid-cols-2 gap-3 mb-3">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    size="lg"
+                    className="bg-black/70 backdrop-blur-sm border border-white/20 text-white hover:bg-white/10 rounded-full py-5 text-sm font-semibold"
+                  >
+                    <span className="flex items-center justify-center gap-1.5">
+                      <span className="text-pink-400">⚥</span>
+                      Gender
+                      <ChevronDown className="w-4 h-4" />
+                    </span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-40 bg-gray-900 border-gray-700">
+                  <DropdownMenuItem onClick={() => toast.info('💎 Use tokens to filter by Male')}>
+                    Male
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => toast.info('💎 Use tokens to filter by Female')}>
+                    Female
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => toast.info('💎 Use tokens to filter by Non-binary')}>
+                    Non-binary
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
               <Button
-                onClick={handleStartVideoChat}
+                onClick={() => setShowRegionalDialog(true)}
                 size="lg"
-                className="w-full bg-white text-black hover:bg-gray-100 rounded-full py-6 text-xl font-bold shadow-2xl mb-2"
+                className="bg-black/70 backdrop-blur-sm border border-white/20 text-white hover:bg-white/10 rounded-full py-5 text-sm font-semibold"
               >
-                <Video className="w-6 h-6 mr-2" />
-                Start Video Chat
+                <span className="flex items-center justify-center gap-1.5">
+                  <span className="text-green-400">🌍</span>
+                  Country
+                  <ChevronDown className="w-4 h-4" />
+                </span>
               </Button>
+            </div>
 
-              {/* Matching Counter - Below Start Video Chat, smaller font */}
-              <div className="text-center pb-4">
-                <div className="flex items-center justify-center gap-2 text-white mb-1">
-                  <div className="relative">
-                    <div className="w-2 h-2 bg-green-500 rounded-full" />
-                    <div className="absolute inset-0 w-2 h-2 bg-green-500 rounded-full animate-ping" />
-                  </div>
-                  <span className="text-base font-bold tabular-nums">
-                    {matchingCount.toLocaleString()}
-                  </span>
-                  <span className="text-xs text-gray-300">are matching now!</span>
+            {/* Start Video Chat Button - Full Width */}
+            <Button
+              onClick={handleStartVideoChat}
+              size="lg"
+              className="w-full bg-white text-black hover:bg-gray-100 rounded-full py-6 text-xl font-bold shadow-2xl mb-2"
+            >
+              <Video className="w-6 h-6 mr-2" />
+              Start Video Chat
+            </Button>
+
+            {/* Matching Counter - Below Start Video Chat, smaller font */}
+            <div className="text-center pb-2">
+              <div className="flex items-center justify-center gap-2 text-white mb-1">
+                <div className="relative">
+                  <div className="w-2 h-2 bg-green-500 rounded-full" />
+                  <div className="absolute inset-0 w-2 h-2 bg-green-500 rounded-full animate-ping" />
                 </div>
-                <p className="text-xs text-gray-500">
-                  All images of models are used for illustrative purposes only.
-                </p>
+                <span className="text-base font-bold tabular-nums">
+                  {matchingCount.toLocaleString()}
+                </span>
+                <span className="text-xs text-gray-300">are matching now!</span>
               </div>
+              <p className="text-xs text-gray-500">
+                All images of models are used for illustrative purposes only.
+              </p>
             </div>
           </div>
         </div>
