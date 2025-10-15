@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Video, ChevronDown, Users, Shield, Instagram, Facebook, Youtube, Camera, Sparkles, MessageCircle, User as UserIcon, Edit, MoreHorizontal, Mail, LogOut } from "lucide-react";
 import { AuthDialog } from "@/components/AuthDialog";
+import { RegionalPreferenceDialog } from "@/components/RegionalPreferenceDialog";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -27,6 +28,7 @@ export default function Home() {
   const [matchingCount, setMatchingCount] = useState(342768);
   const [isScrolled, setIsScrolled] = useState(false);
   const [showAuthDialog, setShowAuthDialog] = useState(false);
+  const [showRegionalDialog, setShowRegionalDialog] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
 
@@ -378,37 +380,17 @@ export default function Home() {
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button
-                      size="lg"
-                      className="w-full bg-black/60 backdrop-blur-sm border border-white/20 text-white hover:bg-white/10 rounded-full py-6 text-lg font-semibold"
-                    >
-                      <span className="flex items-center gap-2">
-                        <span className="text-green-400">🌍</span>
-                        Country
-                        <ChevronDown className="w-5 h-5" />
-                      </span>
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className="w-56 bg-gray-900 border-gray-700 max-h-[300px] overflow-y-auto">
-                    <DropdownMenuItem onClick={() => toast.info('💎 Use tokens to filter by Ethiopia')}>
-                      🇪🇹 Ethiopia
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => toast.info('💎 Use tokens to filter by Eritrea')}>
-                      🇪🇷 Eritrea
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => toast.info('💎 Use tokens to filter by USA')}>
-                      🇺🇸 USA
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => toast.info('💎 Use tokens to filter by UK')}>
-                      🇬🇧 UK
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => toast.info('💎 Use tokens to filter by Canada')}>
-                      🇨🇦 Canada
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                <Button
+                  onClick={() => setShowRegionalDialog(true)}
+                  size="lg"
+                  className="w-full bg-black/60 backdrop-blur-sm border border-white/20 text-white hover:bg-white/10 rounded-full py-6 text-lg font-semibold"
+                >
+                  <span className="flex items-center gap-2">
+                    <span className="text-green-400">🌍</span>
+                    Country
+                    <ChevronDown className="w-5 h-5" />
+                  </span>
+                </Button>
                 <Button
                   onClick={handleStartVideoChat}
                   size="lg"
@@ -454,37 +436,17 @@ export default function Home() {
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button
-                      size="lg"
-                      className="bg-black/70 backdrop-blur-sm border border-white/20 text-white hover:bg-white/10 rounded-full py-5 text-sm font-semibold"
-                    >
-                      <span className="flex items-center justify-center gap-1.5">
-                        <span className="text-green-400">🌍</span>
-                        Country
-                        <ChevronDown className="w-4 h-4" />
-                      </span>
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className="w-40 bg-gray-900 border-gray-700 max-h-[250px] overflow-y-auto">
-                    <DropdownMenuItem onClick={() => toast.info('💎 Use tokens to filter by Ethiopia')}>
-                      🇪🇹 Ethiopia
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => toast.info('💎 Use tokens to filter by Eritrea')}>
-                      🇪🇷 Eritrea
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => toast.info('💎 Use tokens to filter by USA')}>
-                      🇺🇸 USA
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => toast.info('💎 Use tokens to filter by UK')}>
-                      🇬🇧 UK
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => toast.info('💎 Use tokens to filter by Canada')}>
-                      🇨🇦 Canada
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                <Button
+                  onClick={() => setShowRegionalDialog(true)}
+                  size="lg"
+                  className="bg-black/70 backdrop-blur-sm border border-white/20 text-white hover:bg-white/10 rounded-full py-5 text-sm font-semibold"
+                >
+                  <span className="flex items-center justify-center gap-1.5">
+                    <span className="text-green-400">🌍</span>
+                    Country
+                    <ChevronDown className="w-4 h-4" />
+                  </span>
+                </Button>
               </div>
 
               {/* Start Video Chat Button - Full Width */}
@@ -710,6 +672,12 @@ export default function Home() {
       <AuthDialog 
         open={showAuthDialog} 
         onOpenChange={setShowAuthDialog}
+      />
+      
+      {/* Regional Preference Dialog */}
+      <RegionalPreferenceDialog 
+        open={showRegionalDialog} 
+        onOpenChange={setShowRegionalDialog} 
       />
     </div>
   );
