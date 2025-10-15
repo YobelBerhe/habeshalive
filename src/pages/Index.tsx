@@ -335,7 +335,7 @@ export default function Home() {
               </div>
 
               {/* Animated Counter */}
-              <div className="mb-8">
+              <div className="mb-4">
                 <div className="flex items-center gap-2 text-white">
                   <div className="relative">
                     <div className="w-3 h-3 bg-green-500 rounded-full" />
@@ -346,11 +346,15 @@ export default function Home() {
                   </span>
                   <span className="text-xl text-gray-300">are matching now!</span>
                 </div>
+                <p className="text-xs text-gray-500 mt-2">
+                  All images of models are used for illustrative purposes only.
+                </p>
               </div>
 
               {/* Bottom Buttons */}
               <div className="space-y-4">
                 <Button
+                  onClick={() => toast.info('💎 Use tokens to filter by gender')}
                   size="lg"
                   className="w-full bg-black/60 backdrop-blur-sm border border-white/20 text-white hover:bg-white/10 rounded-full py-6 text-lg font-semibold"
                 >
@@ -361,6 +365,7 @@ export default function Home() {
                   </span>
                 </Button>
                 <Button
+                  onClick={() => toast.info('💎 Use tokens to filter by country')}
                   size="lg"
                   className="w-full bg-black/60 backdrop-blur-sm border border-white/20 text-white hover:bg-white/10 rounded-full py-6 text-lg font-semibold"
                 >
@@ -391,6 +396,7 @@ export default function Home() {
               {/* Filter Buttons - Side by Side */}
               <div className="grid grid-cols-2 gap-3 mb-3">
                 <Button
+                  onClick={() => toast.info('💎 Use tokens to filter by gender')}
                   size="lg"
                   className="bg-black/70 backdrop-blur-sm border border-white/20 text-white hover:bg-white/10 rounded-full py-5 text-sm font-semibold"
                 >
@@ -401,6 +407,7 @@ export default function Home() {
                   </span>
                 </Button>
                 <Button
+                  onClick={() => toast.info('💎 Use tokens to filter by country')}
                   size="lg"
                   className="bg-black/70 backdrop-blur-sm border border-white/20 text-white hover:bg-white/10 rounded-full py-5 text-sm font-semibold"
                 >
@@ -423,38 +430,37 @@ export default function Home() {
               </Button>
 
               {/* Matching Counter - Below Start Video Chat, smaller font */}
-              <div className="flex items-center justify-center gap-2 text-white pb-4">
-                <div className="relative">
-                  <div className="w-2 h-2 bg-green-500 rounded-full" />
-                  <div className="absolute inset-0 w-2 h-2 bg-green-500 rounded-full animate-ping" />
+              <div className="text-center pb-4">
+                <div className="flex items-center justify-center gap-2 text-white mb-1">
+                  <div className="relative">
+                    <div className="w-2 h-2 bg-green-500 rounded-full" />
+                    <div className="absolute inset-0 w-2 h-2 bg-green-500 rounded-full animate-ping" />
+                  </div>
+                  <span className="text-base font-bold tabular-nums">
+                    {matchingCount.toLocaleString()}
+                  </span>
+                  <span className="text-xs text-gray-300">are matching now!</span>
                 </div>
-                <span className="text-base font-bold tabular-nums">
-                  {matchingCount.toLocaleString()}
-                </span>
-                <span className="text-xs text-gray-300">are matching now!</span>
+                <p className="text-xs text-gray-500">
+                  All images of models are used for illustrative purposes only.
+                </p>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Bottom Disclaimer */}
-        <div className="absolute bottom-4 left-0 right-0 z-10">
-          <p className="text-xs text-gray-500 text-center px-4">
-            All images are of models and are used for illustrative purposes only.
-          </p>
-        </div>
       </section>
 
       {/* Main Content Section */}
-      <section className="py-16 md:py-24 px-4 md:px-6 bg-[#0a0a0a]">
+      <section className="py-8 md:py-12 px-4 md:px-6 bg-[#0a0a0a]">
         <div className="max-w-6xl mx-auto text-center">
-          <h1 className="text-xl md:text-4xl lg:text-5xl font-bold mb-4 leading-tight whitespace-nowrap overflow-hidden text-ellipsis">
-            HabeshaLive Video Chat & Talk to Strangers
+          <h1 className="text-xl md:text-4xl lg:text-5xl font-bold mb-3 leading-tight whitespace-nowrap overflow-hidden text-ellipsis">
+            HabeshaLive Video Chat & Talk
           </h1>
-          <h2 className="text-lg md:text-3xl lg:text-4xl font-bold mb-6 whitespace-nowrap overflow-hidden text-ellipsis">
+          <h2 className="text-lg md:text-3xl lg:text-4xl font-bold mb-4 whitespace-nowrap overflow-hidden text-ellipsis">
             Don't Randomly Chat Around!
           </h2>
-          <p className="text-base md:text-xl text-gray-300 mb-4">
+          <p className="text-base md:text-xl text-gray-300 mb-3">
             Meet Habesha friends and talk to people now!
           </p>
           <p className="text-base md:text-xl text-gray-300 leading-relaxed">
@@ -468,10 +474,12 @@ export default function Home() {
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
           {/* Feature 1 */}
           <div className="border border-gray-800 rounded-3xl p-6 md:p-8 bg-[#0f0f0f] hover:border-gray-700 transition-all hover:scale-105">
-            <div className="bg-white rounded-2xl p-3 md:p-4 w-14 h-14 md:w-16 md:h-16 flex items-center justify-center mb-4 md:mb-6">
-              <Video className="w-7 h-7 md:w-8 md:h-8 text-black" />
+            <div className="flex items-center gap-3 mb-3">
+              <div className="bg-white rounded-2xl p-3 md:p-4 w-14 h-14 md:w-16 md:h-16 flex items-center justify-center flex-shrink-0">
+                <Video className="w-7 h-7 md:w-8 md:h-8 text-black" />
+              </div>
+              <h3 className="text-xl md:text-2xl font-bold">HD Video Chat</h3>
             </div>
-            <h3 className="text-xl md:text-2xl font-bold mb-3 md:mb-4">HD Video Chat</h3>
             <p className="text-gray-400 text-sm md:text-base leading-relaxed">
               Experience instant connection with Habesha people nearby and around the world. Crystal clear quality!
             </p>
@@ -479,10 +487,12 @@ export default function Home() {
 
           {/* Feature 2 */}
           <div className="border border-gray-800 rounded-3xl p-6 md:p-8 bg-[#0f0f0f] hover:border-gray-700 transition-all hover:scale-105">
-            <div className="bg-white rounded-2xl p-3 md:p-4 w-14 h-14 md:w-16 md:h-16 flex items-center justify-center mb-4 md:mb-6">
-              <Shield className="w-7 h-7 md:w-8 md:h-8 text-black" />
+            <div className="flex items-center gap-3 mb-3">
+              <div className="bg-white rounded-2xl p-3 md:p-4 w-14 h-14 md:w-16 md:h-16 flex items-center justify-center flex-shrink-0">
+                <Shield className="w-7 h-7 md:w-8 md:h-8 text-black" />
+              </div>
+              <h3 className="text-xl md:text-2xl font-bold">Safe & Secure</h3>
             </div>
-            <h3 className="text-xl md:text-2xl font-bold mb-3 md:mb-4">Safe & Secure</h3>
             <p className="text-gray-400 text-sm md:text-base leading-relaxed">
               AI moderation, same-gender options, and cultural sensitivity. Built for our community values.
             </p>
@@ -490,10 +500,12 @@ export default function Home() {
 
           {/* Feature 3 */}
           <div className="border border-gray-800 rounded-3xl p-6 md:p-8 bg-[#0f0f0f] hover:border-gray-700 transition-all hover:scale-105">
-            <div className="bg-white rounded-2xl p-3 md:p-4 w-14 h-14 md:w-16 md:h-16 flex items-center justify-center mb-4 md:mb-6">
-              <Users className="w-7 h-7 md:w-8 md:h-8 text-black" />
+            <div className="flex items-center gap-3 mb-3">
+              <div className="bg-white rounded-2xl p-3 md:p-4 w-14 h-14 md:w-16 md:h-16 flex items-center justify-center flex-shrink-0">
+                <Users className="w-7 h-7 md:w-8 md:h-8 text-black" />
+              </div>
+              <h3 className="text-xl md:text-2xl font-bold">Cultural Connection</h3>
             </div>
-            <h3 className="text-xl md:text-2xl font-bold mb-3 md:mb-4">Cultural Connection</h3>
             <p className="text-gray-400 text-sm md:text-base leading-relaxed">
               Practice Tigrinya, Amharic. Share culture and celebrate our heritage together.
             </p>
