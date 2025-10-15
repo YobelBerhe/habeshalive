@@ -548,17 +548,54 @@ export default function VideoChat() {
             <p className="text-gray-400 mb-8">Tell us your age and we'll help you meet people you'd vibe with.</p>
             
             <div className="grid grid-cols-3 gap-4 mb-8">
-              <div className="text-center">
-                <div className="text-gray-500 text-sm mb-2">Month</div>
-                <div className="text-white text-2xl font-bold">{birthday.month}</div>
+              <div>
+                <div className="text-gray-500 text-sm mb-2 text-center">Month</div>
+                <select
+                  value={birthday.month.toString().padStart(2, '0')}
+                  onChange={(e) => setBirthday({ ...birthday, month: parseInt(e.target.value) })}
+                  className="w-full bg-gray-800 text-white rounded-lg px-3 py-3 text-center focus:outline-none focus:ring-2 focus:ring-green-500"
+                >
+                  <option value="01">Jan</option>
+                  <option value="02">Feb</option>
+                  <option value="03">Mar</option>
+                  <option value="04">Apr</option>
+                  <option value="05">May</option>
+                  <option value="06">Jun</option>
+                  <option value="07">Jul</option>
+                  <option value="08">Aug</option>
+                  <option value="09">Sep</option>
+                  <option value="10">Oct</option>
+                  <option value="11">Nov</option>
+                  <option value="12">Dec</option>
+                </select>
               </div>
-              <div className="text-center">
-                <div className="text-gray-500 text-sm mb-2">Day</div>
-                <div className="text-white text-2xl font-bold">{birthday.day}</div>
+              <div>
+                <div className="text-gray-500 text-sm mb-2 text-center">Day</div>
+                <select
+                  value={birthday.day.toString().padStart(2, '0')}
+                  onChange={(e) => setBirthday({ ...birthday, day: parseInt(e.target.value) })}
+                  className="w-full bg-gray-800 text-white rounded-lg px-3 py-3 text-center focus:outline-none focus:ring-2 focus:ring-green-500"
+                >
+                  {Array.from({ length: 31 }, (_, i) => i + 1).map(day => (
+                    <option key={day} value={day.toString().padStart(2, '0')}>
+                      {day}
+                    </option>
+                  ))}
+                </select>
               </div>
-              <div className="text-center">
-                <div className="text-gray-500 text-sm mb-2">Year</div>
-                <div className="text-white text-2xl font-bold">{birthday.year}</div>
+              <div>
+                <div className="text-gray-500 text-sm mb-2 text-center">Year</div>
+                <select
+                  value={birthday.year.toString()}
+                  onChange={(e) => setBirthday({ ...birthday, year: parseInt(e.target.value) })}
+                  className="w-full bg-gray-800 text-white rounded-lg px-3 py-3 text-center focus:outline-none focus:ring-2 focus:ring-green-500"
+                >
+                  {Array.from({ length: 83 }, (_, i) => 2006 - i).map(year => (
+                    <option key={year} value={year.toString()}>
+                      {year}
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
             
@@ -566,7 +603,7 @@ export default function VideoChat() {
               onClick={() => setOnboardingStep('gender')}
               className="w-full bg-gray-700 hover:bg-gray-600 text-white rounded-full py-6 text-lg"
             >
-              Enter your birthday
+              Continue
             </Button>
           </div>
         )}
@@ -663,49 +700,45 @@ export default function VideoChat() {
             <h2 className="text-3xl font-bold text-white mb-3">What's your ethnicity?</h2>
             <p className="text-gray-400 mb-8 text-sm">Ethnicity is not displayed on the profile.</p>
             
-            <div className="space-y-4 mb-8 max-h-96 overflow-y-auto">
+            <div className="space-y-4 mb-8">
               <button
-                onClick={() => setEthnicity('habesha')}
+                onClick={() => setEthnicity('eritrean-habesha')}
                 className={`w-full p-6 rounded-2xl text-lg font-semibold transition-all ${
-                  ethnicity === 'habesha' 
-                    ? 'bg-gradient-to-r from-green-600 to-yellow-600 text-white border-2 border-red-500' 
+                  ethnicity === 'eritrean-habesha' 
+                    ? 'bg-gray-700 text-white border-2 border-gray-500' 
+                    : 'bg-gray-800 text-gray-400 hover:bg-gray-750'
+                }`}
+              >
+                <div className="flex items-center justify-center gap-3">
+                  <span className="text-2xl">🇪🇷</span>
+                  Eritrean Habesha
+                </div>
+              </button>
+              <button
+                onClick={() => setEthnicity('ethiopian-habesha')}
+                className={`w-full p-6 rounded-2xl text-lg font-semibold transition-all ${
+                  ethnicity === 'ethiopian-habesha' 
+                    ? 'bg-gray-700 text-white border-2 border-gray-500' 
+                    : 'bg-gray-800 text-gray-400 hover:bg-gray-750'
+                }`}
+              >
+                <div className="flex items-center justify-center gap-3">
+                  <span className="text-2xl">🇪🇹</span>
+                  Ethiopian Habesha
+                </div>
+              </button>
+              <button
+                onClick={() => setEthnicity('mixed-habesha')}
+                className={`w-full p-6 rounded-2xl text-lg font-semibold transition-all ${
+                  ethnicity === 'mixed-habesha' 
+                    ? 'bg-gray-700 text-white border-2 border-gray-500' 
                     : 'bg-gray-800 text-gray-400 hover:bg-gray-750'
                 }`}
               >
                 <div className="flex items-center justify-center gap-3">
                   <span className="text-2xl">🇪🇹🇪🇷</span>
-                  Habesha (Ethiopian/Eritrean)
+                  Mixed Habesha
                 </div>
-              </button>
-              <button
-                onClick={() => setEthnicity('black-african')}
-                className={`w-full p-6 rounded-2xl text-lg font-semibold transition-all ${
-                  ethnicity === 'black-african' 
-                    ? 'bg-gray-700 text-white' 
-                    : 'bg-gray-800 text-gray-400 hover:bg-gray-750'
-                }`}
-              >
-                Black/African American
-              </button>
-              <button
-                onClick={() => setEthnicity('hispanic')}
-                className={`w-full p-6 rounded-2xl text-lg font-semibold transition-all ${
-                  ethnicity === 'hispanic' 
-                    ? 'bg-gray-700 text-white' 
-                    : 'bg-gray-800 text-gray-400 hover:bg-gray-750'
-                }`}
-              >
-                Hispanic/Latino
-              </button>
-              <button
-                onClick={() => setEthnicity('middle-eastern')}
-                className={`w-full p-6 rounded-2xl text-lg font-semibold transition-all ${
-                  ethnicity === 'middle-eastern' 
-                    ? 'bg-gray-700 text-white' 
-                    : 'bg-gray-800 text-gray-400 hover:bg-gray-750'
-                }`}
-              >
-                Middle Eastern/North African
               </button>
             </div>
             
@@ -765,7 +798,7 @@ export default function VideoChat() {
 
         {/* 🌟 PURPOSE SELECTION MODAL - THE GAME CHANGER! 🌟 */}
         {onboardingStep === 'purpose' && (
-          <div className="bg-[#2a2a2a] rounded-3xl p-8 max-w-2xl w-full relative my-8">
+          <div className="bg-[#2a2a2a] rounded-3xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto relative my-8">
             <button 
               onClick={() => setOnboardingStep('purpose')}
               className="absolute top-6 left-6 text-white hover:text-gray-300"
@@ -795,7 +828,7 @@ export default function VideoChat() {
               </div>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8 max-h-96 overflow-y-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
               {purposeOptions.map((purpose) => {
                 const Icon = purpose.icon;
                 const isSelected = userPurpose === purpose.id;
@@ -865,22 +898,22 @@ export default function VideoChat() {
               onClick={() => setOnboardingStep('safety')}
               className="w-full bg-green-500 hover:bg-green-600 text-black rounded-full py-6 text-lg font-bold"
             >
-              Continue with {getCurrentPurposeInfo()?.title}
+              Continue
             </Button>
           </div>
         )}
 
         {/* 🛡️ ENHANCED SAFETY MODAL - WITH ALL 4 FEATURES! */}
         {onboardingStep === 'safety' && (
-          <div className="bg-[#2a2a2a] rounded-3xl p-8 max-w-2xl w-full relative my-8">
+          <div className="bg-[#2a2a2a] rounded-3xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto relative my-8">
             <button 
               onClick={() => setOnboardingStep('purpose')}
-              className="absolute top-6 left-6 text-white hover:text-gray-300"
+              className="absolute top-6 left-6 text-white hover:text-gray-300 z-10"
             >
               <ChevronLeft className="w-6 h-6" />
             </button>
             
-            <h2 className="text-3xl font-bold text-white mb-3">Your Safety is Our Priority! 🛡️</h2>
+            <h2 className="text-3xl font-bold text-white mb-3 pr-8">Your Safety is Our Priority! 🛡️</h2>
             <p className="text-gray-400 mb-8">
               HabeshLive uses <span className="text-green-400 font-bold">cutting-edge AI technology</span> to keep you safe
             </p>
