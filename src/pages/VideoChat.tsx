@@ -736,7 +736,7 @@ export default function VideoChat() {
                 }`}
               >
                 <div className="flex items-center justify-center gap-3">
-                  <span className="text-2xl">🇪🇹🇪🇷</span>
+                  <span className="text-2xl">🌍</span>
                   Mixed Habesha
                 </div>
               </button>

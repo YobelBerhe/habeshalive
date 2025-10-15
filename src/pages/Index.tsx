@@ -353,28 +353,62 @@ export default function Home() {
 
               {/* Bottom Buttons */}
               <div className="space-y-4">
-                <Button
-                  onClick={() => toast.info('💎 Use tokens to filter by gender')}
-                  size="lg"
-                  className="w-full bg-black/60 backdrop-blur-sm border border-white/20 text-white hover:bg-white/10 rounded-full py-6 text-lg font-semibold"
-                >
-                  <span className="flex items-center gap-2">
-                    <span className="text-pink-400">⚥</span>
-                    Gender
-                    <ChevronDown className="w-5 h-5" />
-                  </span>
-                </Button>
-                <Button
-                  onClick={() => toast.info('💎 Use tokens to filter by country')}
-                  size="lg"
-                  className="w-full bg-black/60 backdrop-blur-sm border border-white/20 text-white hover:bg-white/10 rounded-full py-6 text-lg font-semibold"
-                >
-                  <span className="flex items-center gap-2">
-                    <span className="text-green-400">🌍</span>
-                    Country
-                    <ChevronDown className="w-5 h-5" />
-                  </span>
-                </Button>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      size="lg"
+                      className="w-full bg-black/60 backdrop-blur-sm border border-white/20 text-white hover:bg-white/10 rounded-full py-6 text-lg font-semibold"
+                    >
+                      <span className="flex items-center gap-2">
+                        <span className="text-pink-400">⚥</span>
+                        Gender
+                        <ChevronDown className="w-5 h-5" />
+                      </span>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="w-56 bg-gray-900 border-gray-700">
+                    <DropdownMenuItem onClick={() => toast.info('💎 Use tokens to filter by Male')}>
+                      Male
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => toast.info('💎 Use tokens to filter by Female')}>
+                      Female
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => toast.info('💎 Use tokens to filter by Non-binary')}>
+                      Non-binary
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      size="lg"
+                      className="w-full bg-black/60 backdrop-blur-sm border border-white/20 text-white hover:bg-white/10 rounded-full py-6 text-lg font-semibold"
+                    >
+                      <span className="flex items-center gap-2">
+                        <span className="text-green-400">🌍</span>
+                        Country
+                        <ChevronDown className="w-5 h-5" />
+                      </span>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="w-56 bg-gray-900 border-gray-700 max-h-[300px] overflow-y-auto">
+                    <DropdownMenuItem onClick={() => toast.info('💎 Use tokens to filter by Ethiopia')}>
+                      🇪🇹 Ethiopia
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => toast.info('💎 Use tokens to filter by Eritrea')}>
+                      🇪🇷 Eritrea
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => toast.info('💎 Use tokens to filter by USA')}>
+                      🇺🇸 USA
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => toast.info('💎 Use tokens to filter by UK')}>
+                      🇬🇧 UK
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => toast.info('💎 Use tokens to filter by Canada')}>
+                      🇨🇦 Canada
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
                 <Button
                   onClick={handleStartVideoChat}
                   size="lg"
@@ -395,28 +429,62 @@ export default function Home() {
             <div className="px-4 pb-safe">
               {/* Filter Buttons - Side by Side */}
               <div className="grid grid-cols-2 gap-3 mb-3">
-                <Button
-                  onClick={() => toast.info('💎 Use tokens to filter by gender')}
-                  size="lg"
-                  className="bg-black/70 backdrop-blur-sm border border-white/20 text-white hover:bg-white/10 rounded-full py-5 text-sm font-semibold"
-                >
-                  <span className="flex items-center justify-center gap-1.5">
-                    <span className="text-pink-400">⚥</span>
-                    Gender
-                    <ChevronDown className="w-4 h-4" />
-                  </span>
-                </Button>
-                <Button
-                  onClick={() => toast.info('💎 Use tokens to filter by country')}
-                  size="lg"
-                  className="bg-black/70 backdrop-blur-sm border border-white/20 text-white hover:bg-white/10 rounded-full py-5 text-sm font-semibold"
-                >
-                  <span className="flex items-center justify-center gap-1.5">
-                    <span className="text-green-400">🌍</span>
-                    Country
-                    <ChevronDown className="w-4 h-4" />
-                  </span>
-                </Button>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      size="lg"
+                      className="bg-black/70 backdrop-blur-sm border border-white/20 text-white hover:bg-white/10 rounded-full py-5 text-sm font-semibold"
+                    >
+                      <span className="flex items-center justify-center gap-1.5">
+                        <span className="text-pink-400">⚥</span>
+                        Gender
+                        <ChevronDown className="w-4 h-4" />
+                      </span>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="w-40 bg-gray-900 border-gray-700">
+                    <DropdownMenuItem onClick={() => toast.info('💎 Use tokens to filter by Male')}>
+                      Male
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => toast.info('💎 Use tokens to filter by Female')}>
+                      Female
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => toast.info('💎 Use tokens to filter by Non-binary')}>
+                      Non-binary
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      size="lg"
+                      className="bg-black/70 backdrop-blur-sm border border-white/20 text-white hover:bg-white/10 rounded-full py-5 text-sm font-semibold"
+                    >
+                      <span className="flex items-center justify-center gap-1.5">
+                        <span className="text-green-400">🌍</span>
+                        Country
+                        <ChevronDown className="w-4 h-4" />
+                      </span>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="w-40 bg-gray-900 border-gray-700 max-h-[250px] overflow-y-auto">
+                    <DropdownMenuItem onClick={() => toast.info('💎 Use tokens to filter by Ethiopia')}>
+                      🇪🇹 Ethiopia
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => toast.info('💎 Use tokens to filter by Eritrea')}>
+                      🇪🇷 Eritrea
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => toast.info('💎 Use tokens to filter by USA')}>
+                      🇺🇸 USA
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => toast.info('💎 Use tokens to filter by UK')}>
+                      🇬🇧 UK
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => toast.info('💎 Use tokens to filter by Canada')}>
+                      🇨🇦 Canada
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
 
               {/* Start Video Chat Button - Full Width */}
