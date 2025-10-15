@@ -407,8 +407,8 @@ export default function Home() {
           </div>
 
           {/* Mobile: Bottom Fixed Controls */}
-          <div className="md:hidden flex flex-col justify-end min-h-[calc(100vh-220px)]">
-            <div className="px-4 pb-safe">
+          <div className="md:hidden flex flex-col justify-end min-h-[calc(100vh-160px)]">
+            <div className="px-4 pb-6">
               {/* Filter Buttons - Side by Side */}
               <div className="grid grid-cols-2 gap-3 mb-3">
                 <DropdownMenu>
