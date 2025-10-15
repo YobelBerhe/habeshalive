@@ -1070,7 +1070,7 @@ export default function VideoChat() {
 
         {/* 🌟 SAME-GENDER MATCHING PREFERENCE MODAL - THE STAR! 🌟 */}
         {onboardingStep === 'preferences' && (
-          <div className="bg-[#2a2a2a] rounded-3xl p-8 max-w-md w-full relative">
+          <div className="bg-[#2a2a2a] rounded-3xl p-8 max-w-md w-full max-h-[90vh] overflow-y-auto relative my-8">
             <h2 className="text-3xl font-bold text-white mb-3">Who would you like to match with?</h2>
             <p className="text-gray-400 mb-2">Select your preference for safety and comfort</p>
             
