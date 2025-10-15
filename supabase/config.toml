@@ -1,1 +1,16 @@
 project_id = "mxgrjauyxhxjfbocmlcv"
+
+[functions.find-match]
+verify_jwt = true
+
+[functions.end-call]
+verify_jwt = true
+
+[functions.submit-report]
+verify_jwt = true
+
+[functions.log-violation]
+verify_jwt = true
+
+[functions.update-status]
+verify_jwt = true
