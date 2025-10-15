@@ -1,6 +1,5 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Camera, ChevronRight } from "lucide-react";
 import { useState } from "react";
@@ -16,7 +15,7 @@ export function EditProfileDialog({ open, onOpenChange }: EditProfileDialogProps
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-[#1a1a1a] text-white border-gray-800 max-w-md">
+      <DialogContent className="bg-background text-foreground border-border max-w-md max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-xl font-bold">Edit Profile</DialogTitle>
         </DialogHeader>
@@ -25,16 +24,16 @@ export function EditProfileDialog({ open, onOpenChange }: EditProfileDialogProps
           {/* Profile Picture */}
           <div className="flex justify-center">
             <div className="relative">
-              <div className="w-24 h-24 rounded-full bg-gray-700 flex items-center justify-center">
-                <div className="w-16 h-16 rounded-full bg-gray-600" />
+              <div className="w-24 h-24 rounded-full bg-muted flex items-center justify-center">
+                <div className="w-16 h-16 rounded-full bg-muted-foreground/20" />
               </div>
-              <button className="absolute bottom-0 right-0 w-8 h-8 bg-white rounded-full flex items-center justify-center">
+              <button className="absolute bottom-0 right-0 w-8 h-8 bg-white rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors">
                 <Camera className="w-4 h-4 text-black" />
               </button>
             </div>
           </div>
           
-          <p className="text-xs text-gray-400 text-center">
+          <p className="text-xs text-muted-foreground text-center leading-relaxed">
             Please do not share inappropriate content or personal information
             <br />
             (such as phone number or address) on your profile. All uploads are
@@ -49,19 +48,19 @@ export function EditProfileDialog({ open, onOpenChange }: EditProfileDialogProps
               placeholder="Share a little something about yourself."
               value={aboutMe}
               onChange={(e) => setAboutMe(e.target.value)}
-              className="bg-[#2a2a2a] border-gray-700 text-white resize-none h-24"
+              className="bg-muted border-border text-foreground resize-none h-24"
               maxLength={250}
             />
-            <div className="text-right text-sm text-gray-400 mt-1">250</div>
+            <div className="text-right text-sm text-muted-foreground mt-1">250</div>
           </div>
 
           {/* Hashtag */}
           <div>
             <label className="text-sm font-medium mb-2 block">Hashtag</label>
             <div className="flex items-center gap-2">
-              <span className="text-gray-400">#</span>
-              <div className="flex-1 bg-[#2a2a2a] border border-gray-700 rounded-md px-3 py-2">
-                <span className="bg-gray-700 text-white px-3 py-1 rounded-full text-sm">
+              <span className="text-muted-foreground">#</span>
+              <div className="flex-1 bg-muted border border-border rounded-md px-3 py-2">
+                <span className="bg-muted-foreground/20 text-foreground px-3 py-1 rounded-full text-sm">
                   {hashtag}
                 </span>
               </div>
@@ -71,23 +70,23 @@ export function EditProfileDialog({ open, onOpenChange }: EditProfileDialogProps
           {/* My Info */}
           <div>
             <label className="text-sm font-medium mb-2 block">My Info</label>
-            <button className="w-full bg-[#2a2a2a] border border-gray-700 rounded-lg p-4 flex items-center justify-between hover:bg-[#333]">
+            <button className="w-full bg-muted border border-border rounded-lg p-4 flex items-center justify-between hover:bg-muted/70 transition-colors">
               <div className="flex items-center gap-3">
-                <span className="text-gray-400">👤</span>
+                <span className="text-muted-foreground">👤</span>
                 <span>gift</span>
               </div>
-              <ChevronRight className="w-5 h-5 text-gray-400" />
+              <ChevronRight className="w-5 h-5 text-muted-foreground" />
             </button>
           </div>
 
           {/* Language */}
-          <button className="w-full bg-[#2a2a2a] border border-gray-700 rounded-lg p-4 flex items-center gap-3 hover:bg-[#333]">
-            <span className="text-gray-400">🌐</span>
+          <button className="w-full bg-muted border border-border rounded-lg p-4 flex items-center gap-3 hover:bg-muted/70 transition-colors">
+            <span className="text-muted-foreground">🌐</span>
             <span>English</span>
           </button>
 
           {/* Complete Button */}
-          <Button className="w-full bg-[#00D9B4] hover:bg-[#00c9a4] text-black font-medium py-6 text-lg rounded-xl">
+          <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-medium py-6 text-lg rounded-xl">
             Complete
           </Button>
         </div>

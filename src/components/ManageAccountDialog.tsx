@@ -10,10 +10,10 @@ interface ManageAccountDialogProps {
 export function ManageAccountDialog({ open, onOpenChange, onBack }: ManageAccountDialogProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-[#1a1a1a] text-white border-gray-800 max-w-md">
+      <DialogContent className="bg-background text-foreground border-border max-w-md">
         <DialogHeader>
           <div className="flex items-center gap-2">
-            <button onClick={onBack} className="hover:bg-gray-800 p-1 rounded">
+            <button onClick={onBack} className="hover:bg-muted p-1 rounded transition-colors">
               <ChevronLeft className="w-5 h-5" />
             </button>
             <DialogTitle className="text-xl font-bold">Manage account</DialogTitle>
@@ -21,14 +21,14 @@ export function ManageAccountDialog({ open, onOpenChange, onBack }: ManageAccoun
         </DialogHeader>
         
         <div className="space-y-2 py-4">
-          <button className="w-full bg-[#2a2a2a] border border-gray-700 rounded-lg p-4 flex items-center justify-between hover:bg-[#333]">
+          <button className="w-full bg-muted border border-border rounded-lg p-4 flex items-center justify-between hover:bg-muted/70 transition-colors">
             <span>Delete Account</span>
-            <ChevronRight className="w-5 h-5 text-gray-400" />
+            <ChevronRight className="w-5 h-5 text-muted-foreground" />
           </button>
           
-          <button className="w-full bg-[#2a2a2a] border border-gray-700 rounded-lg p-4 flex items-center justify-between hover:bg-[#333]">
+          <button className="w-full bg-muted border border-border rounded-lg p-4 flex items-center justify-between hover:bg-muted/70 transition-colors">
             <span>My Azar Data Request</span>
-            <ChevronRight className="w-5 h-5 text-gray-400" />
+            <ChevronRight className="w-5 h-5 text-muted-foreground" />
           </button>
         </div>
       </DialogContent>
