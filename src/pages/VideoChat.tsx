@@ -36,6 +36,7 @@ import { ManageAccountDialog } from "@/components/ManageAccountDialog";
 import { AIContentModeration } from "@/lib/ai-moderation-system";
 import { VideoWatermarkingSystem, ScreenshotDetectionSystem } from "@/lib/watermarking-system";
 import RespectScoreEngine, { type UserScore } from "@/lib/respect-score-system";
+import { webrtcService } from "@/lib/webrtc-service";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import type { User, Session } from "@supabase/supabase-js";
@@ -213,6 +214,11 @@ export default function VideoChat() {
   const [aiInitialized, setAiInitialized] = useState(false);
   const [aiInitializing, setAiInitializing] = useState(false);
   const callStartTimeRef = useRef<number | null>(null);
+  
+  // WebRTC video refs
+  const localVideoRef = useRef<HTMLVideoElement | null>(null);
+  const remoteVideoRef = useRef<HTMLVideoElement | null>(null);
+  const [webrtcConnected, setWebrtcConnected] = useState(false);
   
   // Video Controls
   const [isFullScreen, setIsFullScreen] = useState(false);
@@ -414,14 +420,79 @@ export default function VideoChat() {
     setConnectionState('ready');
   };
 
-  const startMatching = () => {
+  const startMatching = async () => {
     setConnectionState('searching');
     callStartTimeRef.current = Date.now();
     
-    setTimeout(() => {
+    setTimeout(async () => {
       const matchedPartner = findMatch();
       setPartner(matchedPartner);
       setConnectionState('connected');
+      
+      // Initialize WebRTC for real video connection
+      if (user && matchedPartner) {
+        try {
+          const sessionId = `session-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+          const isInitiator = Math.random() > 0.5; // Randomly assign initiator
+          
+          await webrtcService.initialize(
+            sessionId,
+            user.id,
+            matchedPartner.name, // Using name as partner ID for mock
+            isInitiator,
+            
+            // On remote stream received
+            (remoteStream) => {
+              console.log('🎥 Remote stream received!');
+              if (remoteVideoRef.current) {
+                remoteVideoRef.current.srcObject = remoteStream;
+              }
+              setWebrtcConnected(true);
+              toast.success('Video Connected!', {
+                description: 'You can now see each other'
+              });
+            },
+            
+            // On connection state change
+            (state) => {
+              console.log('🔄 WebRTC connection state:', state);
+              if (state === 'connected') {
+                setWebrtcConnected(true);
+              } else if (state === 'failed' || state === 'disconnected') {
+                setWebrtcConnected(false);
+                toast.error('Connection Lost', {
+                  description: 'Video connection was interrupted'
+                });
+              }
+            },
+            
+            // On error
+            (error) => {
+              console.error('WebRTC error:', error);
+              toast.error('Connection Error', {
+                description: error.message
+              });
+            }
+          );
+          
+          // Set local stream to video element
+          const localStream = webrtcService.getLocalStream();
+          if (localVideoRef.current && localStream) {
+            localVideoRef.current.srcObject = localStream;
+          }
+          
+          // Also set to the AI monitoring ref
+          if (videoRef.current && localStream) {
+            videoRef.current.srcObject = localStream;
+          }
+          
+        } catch (error: any) {
+          console.error('Error initializing WebRTC:', error);
+          toast.error('Video Setup Failed', {
+            description: 'Could not access camera/microphone'
+          });
+        }
+      }
     }, 2500);
   };
 
@@ -440,6 +511,10 @@ export default function VideoChat() {
       }
     }
     
+    // Cleanup WebRTC
+    webrtcService.cleanup();
+    setWebrtcConnected(false);
+    
     // Reset AI states
     setAiDetectedIssue(false);
     setBlurLevel(0);
@@ -449,11 +524,50 @@ export default function VideoChat() {
     setMessages([]);
     setPartner(null);
     
-    setTimeout(() => {
+    setTimeout(async () => {
       const matchedPartner = findMatch();
       setPartner(matchedPartner);
       setConnectionState('connected');
       callStartTimeRef.current = Date.now();
+      
+      // Initialize WebRTC for new call
+      if (user && matchedPartner) {
+        try {
+          const sessionId = `session-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+          const isInitiator = Math.random() > 0.5;
+          
+          await webrtcService.initialize(
+            sessionId,
+            user.id,
+            matchedPartner.name,
+            isInitiator,
+            (remoteStream) => {
+              if (remoteVideoRef.current) {
+                remoteVideoRef.current.srcObject = remoteStream;
+              }
+              setWebrtcConnected(true);
+            },
+            (state) => {
+              if (state === 'connected') {
+                setWebrtcConnected(true);
+              }
+            },
+            (error) => {
+              console.error('WebRTC error:', error);
+            }
+          );
+          
+          const localStream = webrtcService.getLocalStream();
+          if (localVideoRef.current && localStream) {
+            localVideoRef.current.srcObject = localStream;
+          }
+          if (videoRef.current && localStream) {
+            videoRef.current.srcObject = localStream;
+          }
+        } catch (error) {
+          console.error('Error restarting WebRTC:', error);
+        }
+      }
     }, 2500);
   };
   
@@ -470,6 +584,10 @@ export default function VideoChat() {
   };
 
   const handleEndChat = () => {
+    // Cleanup WebRTC
+    webrtcService.cleanup();
+    setWebrtcConnected(false);
+    
     // Cleanup AI systems
     aiModerationRef.current?.reset();
     watermarkingRef.current?.stop();
@@ -1443,30 +1561,48 @@ export default function VideoChat() {
                           </button>
 
                           {/* Video Placeholder */}
-                          <div className="text-gray-600 text-center relative">
-                            {/* Hidden video element for AI analysis */}
-                            <video
-                              ref={videoRef}
-                              className="hidden"
-                              autoPlay
-                              playsInline
-                              muted
-                            />
-                            {/* Hidden canvas for watermarking */}
-                            <canvas
-                              ref={canvasRef}
-                              className="hidden"
-                            />
-                            
-                            <VideoIcon className="w-16 h-16 mx-auto mb-2" />
-                            <p>Matched User Video</p>
-                            
-                            {aiInitializing && (
-                              <div className="mt-4 text-sm text-blue-400 animate-pulse">
-                                🤖 Loading AI Safety Systems...
+                          <video
+                            ref={remoteVideoRef}
+                            autoPlay
+                            playsInline
+                            className="w-full h-full object-cover"
+                            style={{ filter: blurLevel > 0 ? `blur(${blurLevel}px)` : 'none' }}
+                          />
+                          
+                          {/* Hidden video element for AI analysis */}
+                          <video
+                            ref={videoRef}
+                            className="hidden"
+                            autoPlay
+                            playsInline
+                            muted
+                          />
+                          {/* Hidden canvas for watermarking */}
+                          <canvas
+                            ref={canvasRef}
+                            className="hidden"
+                          />
+                          
+                          {!webrtcConnected && (
+                            <div className="absolute inset-0 flex items-center justify-center text-gray-600 text-center bg-black/70">
+                              <div>
+                                <VideoIcon className="w-16 h-16 mx-auto mb-2 animate-pulse" />
+                                <p>Connecting video...</p>
+                                {aiInitializing && (
+                                  <div className="mt-4 text-sm text-blue-400 animate-pulse">
+                                    🤖 Loading AI Safety Systems...
+                                  </div>
+                                )}
                               </div>
-                            )}
-                          </div>
+                            </div>
+                          )}
+                          
+                          {/* AI Blur Overlay */}
+                          {blurLevel > 0 && (
+                            <div className="absolute top-20 left-1/2 transform -translate-x-1/2 bg-red-500/90 text-white px-4 py-2 rounded-full z-20">
+                              ⚠️ Content Warning Detected
+                            </div>
+                          )}
                         </>
                       ) : null}
                     </div>
@@ -1501,9 +1637,18 @@ export default function VideoChat() {
                         
                         {/* My Camera - stays visible */}
                         <div className="flex-1 relative bg-black flex items-center justify-center border-t border-gray-800">
-                          <div className="text-gray-600 text-center">
-                            <Camera className="w-16 h-16 mx-auto mb-2" />
-                            <p>Your Camera</p>
+                          <video
+                            ref={localVideoRef}
+                            autoPlay
+                            playsInline
+                            muted
+                            className="w-full h-full object-cover"
+                          />
+                          <div className={`absolute inset-0 ${!webrtcConnected ? 'flex' : 'hidden'} items-center justify-center text-gray-600 text-center bg-black/70`}>
+                            <div>
+                              <Camera className="w-16 h-16 mx-auto mb-2" />
+                              <p>Your Camera</p>
+                            </div>
                           </div>
                         </div>
                       </>
@@ -1571,17 +1716,42 @@ export default function VideoChat() {
                               </button>
 
                               {/* Video Placeholder */}
-                              <div className="text-gray-600 text-center">
-                                <VideoIcon className="w-16 h-16 mx-auto mb-2" />
-                                <p>Matched User Video</p>
-                              </div>
+                              <video
+                                ref={remoteVideoRef}
+                                autoPlay
+                                playsInline
+                                className="w-full h-full object-cover"
+                                style={{ filter: blurLevel > 0 ? `blur(${blurLevel}px)` : 'none' }}
+                              />
+                              {!webrtcConnected && (
+                                <div className="absolute inset-0 flex items-center justify-center text-gray-600 text-center bg-black/70">
+                                  <div>
+                                    <VideoIcon className="w-16 h-16 mx-auto mb-2 animate-pulse" />
+                                    <p>Connecting...</p>
+                                  </div>
+                                </div>
+                              )}
+                              {blurLevel > 0 && (
+                                <div className="absolute top-20 left-1/2 transform -translate-x-1/2 bg-red-500/90 text-white px-3 py-1.5 rounded-full z-20 text-sm">
+                                  ⚠️ Warning
+                                </div>
+                              )}
                             </div>
 
                             {/* My Camera - Bottom Half */}
                             <div className="flex-1 relative bg-black flex items-center justify-center border-t border-gray-800">
-                              <div className="text-gray-600 text-center">
-                                <Camera className="w-16 h-16 mx-auto mb-2" />
-                                <p>Your Camera</p>
+                              <video
+                                ref={localVideoRef}
+                                autoPlay
+                                playsInline
+                                muted
+                                className="w-full h-full object-cover"
+                              />
+                              <div className={`absolute inset-0 ${!webrtcConnected ? 'flex' : 'hidden'} items-center justify-center text-gray-600 text-center bg-black/70`}>
+                                <div>
+                                  <Camera className="w-16 h-16 mx-auto mb-2" />
+                                  <p>Your Camera</p>
+                                </div>
                               </div>
                             </div>
                           </>
@@ -1636,16 +1806,31 @@ export default function VideoChat() {
                               </button>
 
                               {/* Video Placeholder */}
-                              <div className="text-gray-600 text-center">
-                                <VideoIcon className="w-16 h-16 mx-auto mb-2" />
-                                <p>Matched User Video</p>
-                              </div>
+                              <video
+                                ref={remoteVideoRef}
+                                autoPlay
+                                playsInline
+                                className="w-full h-full object-cover"
+                                style={{ filter: blurLevel > 0 ? `blur(${blurLevel}px)` : 'none' }}
+                              />
+                              {!webrtcConnected && (
+                                <div className="absolute inset-0 flex items-center justify-center text-gray-600 text-center bg-black/70">
+                                  <div>
+                                    <VideoIcon className="w-16 h-16 mx-auto mb-2 animate-pulse" />
+                                    <p>Connecting...</p>
+                                  </div>
+                                </div>
+                              )}
 
                               {/* My Camera - PIP */}
                               <div className="absolute top-16 right-4 w-24 h-32 bg-black rounded-lg overflow-hidden border-2 border-gray-700 z-10">
-                                <div className="w-full h-full flex items-center justify-center text-gray-600 text-xs">
-                                  You
-                                </div>
+                                <video
+                                  ref={localVideoRef}
+                                  autoPlay
+                                  playsInline
+                                  muted
+                                  className="w-full h-full object-cover"
+                                />
                               </div>
                             </div>
                           </>
