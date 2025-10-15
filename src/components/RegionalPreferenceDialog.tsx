@@ -98,6 +98,7 @@ export function RegionalPreferenceDialog({
   const userCountry = "USA"; // This would be detected from user's location
 
   const handleSave = () => {
+    // Check if paid features are selected
     if (selectedPreference === "country" && sameCountryEnabled) {
       toast.info("💎 Use tokens to enable same-country matching");
       return;
@@ -106,7 +107,9 @@ export function RegionalPreferenceDialog({
       toast.info(`💎 Use tokens to match with ${selectedCountry}`);
       return;
     }
-    toast.success("Regional preference saved!");
+    
+    // Balanced and Global are free, just save
+    toast.success("Preference saved!");
     onOpenChange(false);
   };
 
