@@ -7,7 +7,14 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Video, ChevronDown, Users, Shield, Instagram, Facebook, Youtube, Camera, Sparkles, MessageCircle } from "lucide-react";
+import { 
+  DropdownMenu, 
+  DropdownMenuContent, 
+  DropdownMenuItem, 
+  DropdownMenuSeparator, 
+  DropdownMenuTrigger 
+} from "@/components/ui/dropdown-menu";
+import { Video, ChevronDown, Users, Shield, Instagram, Facebook, Youtube, Camera, Sparkles, MessageCircle, User as UserIcon, Edit, MoreHorizontal, Mail, LogOut } from "lucide-react";
 import { AuthDialog } from "@/components/AuthDialog";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
@@ -153,13 +160,50 @@ export default function Home() {
               🕐 History
             </Button>
             {user ? (
-              <Button
-                onClick={handleSignOut}
-                variant="outline"
-                className="border-white/20 text-white hover:bg-white/10 rounded-full px-6 py-2.5 font-semibold text-base h-auto"
-              >
-                Sign Out
-              </Button>
+              <>
+                <Button
+                  className="bg-white text-black hover:bg-gray-100 rounded-full px-6 py-2.5 font-semibold text-base h-auto"
+                >
+                  Sign Out
+                </Button>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      size="icon"
+                      className="bg-white text-black hover:bg-gray-100 rounded-full w-11 h-11"
+                    >
+                      <UserIcon className="h-5 w-5" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-56">
+                    <div className="flex items-center gap-0 px-2 py-2">
+                      <UserIcon className="h-5 w-5" />
+                      <span className="font-semibold">{user.email?.split('@')[0]}</span>
+                    </div>
+                    <div className="px-2 py-1 text-sm text-muted-foreground">
+                      🌍 Country flag
+                    </div>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem>
+                      <Edit className="mr-2 h-4 w-4" />
+                      Edit Profile
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <MoreHorizontal className="mr-2 h-4 w-4" />
+                      More
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <Mail className="mr-2 h-4 w-4" />
+                      Contact Us
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={handleSignOut}>
+                      <LogOut className="mr-2 h-4 w-4" />
+                      Log Out
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </>
             ) : (
               <Button
                 onClick={() => setShowAuthDialog(true)}
