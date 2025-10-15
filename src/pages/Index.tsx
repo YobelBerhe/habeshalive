@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import {
   Accordion,
@@ -9,15 +11,12 @@ import {
   DropdownMenu, 
   DropdownMenuContent, 
   DropdownMenuItem, 
+  DropdownMenuSeparator, 
   DropdownMenuTrigger 
 } from "@/components/ui/dropdown-menu";
-import { Video, ChevronDown, Users, Shield, Instagram, Facebook, Youtube, Camera, Sparkles, MessageCircle } from "lucide-react";
+import { Video, ChevronDown, Users, Shield, Instagram, Facebook, Youtube, Camera, Sparkles, MessageCircle, User as UserIcon, Edit, MoreHorizontal, Mail, LogOut } from "lucide-react";
 import { AuthDialog } from "@/components/AuthDialog";
 import { RegionalPreferenceDialog } from "@/components/RegionalPreferenceDialog";
-import { EditProfileDialog } from "@/components/EditProfileDialog";
-import { SettingsDialog } from "@/components/SettingsDialog";
-import { ManageAccountDialog } from "@/components/ManageAccountDialog";
-import { ProfileMenu } from "@/components/ProfileMenu";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -30,9 +29,6 @@ export default function Home() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [showAuthDialog, setShowAuthDialog] = useState(false);
   const [showRegionalDialog, setShowRegionalDialog] = useState(false);
-  const [showEditProfileDialog, setShowEditProfileDialog] = useState(false);
-  const [showSettingsDialog, setShowSettingsDialog] = useState(false);
-  const [showManageAccountDialog, setShowManageAccountDialog] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
 
@@ -166,12 +162,50 @@ export default function Home() {
               🕐 History
             </Button>
             {user ? (
-              <ProfileMenu
-                user={user}
-                onEditProfile={() => setShowEditProfileDialog(true)}
-                onMore={() => setShowSettingsDialog(true)}
-                onSignOut={handleSignOut}
-              />
+              <>
+                <Button
+                  className="bg-white text-black hover:bg-gray-100 rounded-full px-6 py-2.5 font-semibold text-base h-auto"
+                >
+                  Sign Out
+                </Button>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      size="icon"
+                      className="bg-white text-black hover:bg-gray-100 rounded-full w-11 h-11"
+                    >
+                      <UserIcon className="h-5 w-5" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-56">
+                    <div className="flex items-center gap-0 px-2 py-2">
+                      <UserIcon className="h-5 w-5" />
+                      <span className="font-semibold">{user.email?.split('@')[0]}</span>
+                    </div>
+                    <div className="px-2 py-1 text-sm text-muted-foreground">
+                      🌍 Country flag
+                    </div>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem>
+                      <Edit className="mr-2 h-4 w-4" />
+                      Edit Profile
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <MoreHorizontal className="mr-2 h-4 w-4" />
+                      More
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <Mail className="mr-2 h-4 w-4" />
+                      Contact Us
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={handleSignOut}>
+                      <LogOut className="mr-2 h-4 w-4" />
+                      Log Out
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </>
             ) : (
               <Button
                 onClick={() => setShowAuthDialog(true)}
@@ -644,32 +678,6 @@ export default function Home() {
       <RegionalPreferenceDialog 
         open={showRegionalDialog} 
         onOpenChange={setShowRegionalDialog} 
-      />
-
-      {/* Edit Profile Dialog */}
-      <EditProfileDialog 
-        open={showEditProfileDialog} 
-        onOpenChange={setShowEditProfileDialog}
-      />
-
-      {/* Settings Dialog (More) */}
-      <SettingsDialog 
-        open={showSettingsDialog} 
-        onOpenChange={setShowSettingsDialog}
-        onManageAccount={() => {
-          setShowSettingsDialog(false);
-          setShowManageAccountDialog(true);
-        }}
-      />
-
-      {/* Manage Account Dialog */}
-      <ManageAccountDialog 
-        open={showManageAccountDialog} 
-        onOpenChange={setShowManageAccountDialog}
-        onBack={() => {
-          setShowManageAccountDialog(false);
-          setShowSettingsDialog(true);
-        }}
       />
     </div>
   );

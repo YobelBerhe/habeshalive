@@ -16,7 +16,7 @@ export function SettingsDialog({ open, onOpenChange, onManageAccount }: Settings
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-background text-foreground border-border max-w-md max-h-[90vh] overflow-y-auto">
+      <DialogContent className="bg-[#1a1a1a] text-white border-gray-800 max-w-md max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-xl font-bold">More</DialogTitle>
         </DialogHeader>
@@ -24,28 +24,28 @@ export function SettingsDialog({ open, onOpenChange, onManageAccount }: Settings
         <div className="space-y-6 py-4">
           {/* Account & Security */}
           <div>
-            <h3 className="text-muted-foreground text-sm font-medium mb-3">Account & Security</h3>
-            <button className="w-full bg-muted border border-border rounded-lg p-4 flex items-center justify-between hover:bg-muted/70 transition-colors mb-2">
+            <h3 className="text-gray-400 text-sm font-medium mb-3">Account & Security</h3>
+            <button className="w-full bg-[#2a2a2a] border border-gray-700 rounded-lg p-4 flex items-center justify-between hover:bg-[#333] mb-2">
               <span>Email</span>
               <div className="flex items-center gap-2">
-                <span className="text-muted-foreground text-sm">giftloopsllc@gmail.com</span>
-                <ChevronRight className="w-5 h-5 text-muted-foreground" />
+                <span className="text-gray-400 text-sm">giftloopsllc@gmail.com</span>
+                <ChevronRight className="w-5 h-5 text-gray-400" />
               </div>
             </button>
             
             <button
               onClick={onManageAccount}
-              className="w-full bg-muted border border-border rounded-lg p-4 flex items-center justify-between hover:bg-muted/70 transition-colors"
+              className="w-full bg-[#2a2a2a] border border-gray-700 rounded-lg p-4 flex items-center justify-between hover:bg-[#333]"
             >
               <span>Manage account</span>
-              <ChevronRight className="w-5 h-5 text-muted-foreground" />
+              <ChevronRight className="w-5 h-5 text-gray-400" />
             </button>
           </div>
 
           {/* Notification */}
           <div>
-            <h3 className="text-muted-foreground text-sm font-medium mb-3">Notification</h3>
-            <div className="bg-muted border border-border rounded-lg p-4 flex items-center justify-between">
+            <h3 className="text-gray-400 text-sm font-medium mb-3">Notification</h3>
+            <div className="bg-[#2a2a2a] border border-gray-700 rounded-lg p-4 flex items-center justify-between">
               <span>Marketing Notifications</span>
               <Switch
                 checked={marketingNotifications}
@@ -56,9 +56,9 @@ export function SettingsDialog({ open, onOpenChange, onManageAccount }: Settings
 
           {/* Preferences */}
           <div>
-            <h3 className="text-muted-foreground text-sm font-medium mb-3">Preferences</h3>
+            <h3 className="text-gray-400 text-sm font-medium mb-3">Preferences</h3>
             <div className="space-y-2">
-              <div className="bg-muted border border-border rounded-lg p-4 flex items-center justify-between">
+              <div className="bg-[#2a2a2a] border border-gray-700 rounded-lg p-4 flex items-center justify-between">
                 <span>Hide gender from your profile</span>
                 <Switch
                   checked={hideGender}
@@ -66,7 +66,7 @@ export function SettingsDialog({ open, onOpenChange, onManageAccount }: Settings
                 />
               </div>
               
-              <div className="bg-muted border border-border rounded-lg p-4 flex items-center justify-between">
+              <div className="bg-[#2a2a2a] border border-gray-700 rounded-lg p-4 flex items-center justify-between">
                 <span>Show my profile on partner services</span>
                 <Switch
                   checked={showPartnerProfile}
@@ -78,21 +78,21 @@ export function SettingsDialog({ open, onOpenChange, onManageAccount }: Settings
 
           {/* Services */}
           <div>
-            <h3 className="text-muted-foreground text-sm font-medium mb-3">Services</h3>
+            <h3 className="text-gray-400 text-sm font-medium mb-3">Services</h3>
             <div className="space-y-2">
-              <button className="w-full bg-muted border border-border rounded-lg p-4 flex items-center justify-between hover:bg-muted/70 transition-colors">
+              <button className="w-full bg-[#2a2a2a] border border-gray-700 rounded-lg p-4 flex items-center justify-between hover:bg-[#333]">
                 <span>Azar Creator Program</span>
-                <ChevronRight className="w-5 h-5 text-muted-foreground" />
+                <ChevronRight className="w-5 h-5 text-gray-400" />
               </button>
               
-              <button className="w-full bg-muted border border-border rounded-lg p-4 flex items-center justify-between hover:bg-muted/70 transition-colors">
+              <button className="w-full bg-[#2a2a2a] border border-gray-700 rounded-lg p-4 flex items-center justify-between hover:bg-[#333]">
                 <span>Privacy Preference Center</span>
-                <ChevronRight className="w-5 h-5 text-muted-foreground" />
+                <ChevronRight className="w-5 h-5 text-gray-400" />
               </button>
               
-              <button className="w-full bg-muted border border-border rounded-lg p-4 flex items-center justify-between hover:bg-muted/70 transition-colors">
+              <button className="w-full bg-[#2a2a2a] border border-gray-700 rounded-lg p-4 flex items-center justify-between hover:bg-[#333]">
                 <span>Help</span>
-                <ChevronRight className="w-5 h-5 text-muted-foreground" />
+                <ChevronRight className="w-5 h-5 text-gray-400" />
               </button>
             </div>
           </div>
