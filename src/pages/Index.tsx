@@ -303,7 +303,7 @@ export default function Home() {
         </div>
         
         {/* Bottom fade overlay */}
-        <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-black via-black/60 to-transparent pointer-events-none z-10" />
+        <div className="absolute bottom-0 left-0 right-0 h-64 bg-gradient-to-t from-black via-black/80 to-transparent pointer-events-none z-10" />
 
         {/* Overlay Content */}
         <div className="relative z-10 max-w-7xl mx-auto px-4 md:px-6">
@@ -386,7 +386,7 @@ export default function Home() {
           </div>
 
           {/* Mobile: Bottom Fixed Controls */}
-          <div className="md:hidden flex flex-col justify-end min-h-[calc(100vh-100px)]">
+          <div className="md:hidden flex flex-col justify-end min-h-[calc(100vh-220px)]">
             <div className="px-4 pb-safe">
               {/* Filter Buttons - Side by Side */}
               <div className="grid grid-cols-2 gap-3 mb-3">
