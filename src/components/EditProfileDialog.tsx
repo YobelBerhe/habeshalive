@@ -1,10 +1,19 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Camera, ChevronRight, Globe } from "lucide-react";
-import { useState } from "react";
+import { Camera, Globe } from "lucide-react";
+import { useState, useEffect } from "react";
 import { HashtagSelector } from "./HashtagSelector";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface EditProfileDialogProps {
   open: boolean;
@@ -13,7 +22,67 @@ interface EditProfileDialogProps {
 
 export function EditProfileDialog({ open, onOpenChange }: EditProfileDialogProps) {
   const [aboutMe, setAboutMe] = useState("");
-  const [selectedHashtags, setSelectedHashtags] = useState<string[]>(["hi"]);
+  const [selectedHashtags, setSelectedHashtags] = useState<string[]>([]);
+  const [username, setUsername] = useState("");
+  const [avatarUrl, setAvatarUrl] = useState("");
+  const [language, setLanguage] = useState("english");
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (open) {
+      loadProfile();
+    }
+  }, [open]);
+
+  const loadProfile = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', user.id)
+        .single();
+
+      if (error) throw error;
+
+      if (data) {
+        setUsername(data.username || '');
+        setAvatarUrl(data.avatar_url || '');
+        setAboutMe(''); // Add bio field to database if needed
+        setSelectedHashtags(data.interests || []);
+      }
+    } catch (error) {
+      console.error('Error loading profile:', error);
+    }
+  };
+
+  const handleSave = async () => {
+    try {
+      setLoading(true);
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { error } = await supabase
+        .from('profiles')
+        .update({
+          interests: selectedHashtags,
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', user.id);
+
+      if (error) throw error;
+
+      toast.success("Profile updated successfully!");
+      onOpenChange(false);
+    } catch (error: any) {
+      console.error('Error updating profile:', error);
+      toast.error(error.message || "Failed to update profile");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -27,9 +96,9 @@ export function EditProfileDialog({ open, onOpenChange }: EditProfileDialogProps
           <div className="flex justify-center">
             <div className="relative group">
               <Avatar className="w-28 h-28 border-4 border-[#00D9B4]/30 group-hover:border-[#00D9B4] transition-colors">
-                <AvatarImage src="" />
+                <AvatarImage src={avatarUrl} />
                 <AvatarFallback className="bg-gradient-to-br from-[#00D9B4] to-[#00a085] text-black text-3xl font-bold">
-                  G
+                  {username[0]?.toUpperCase() || 'U'}
                 </AvatarFallback>
               </Avatar>
               <button className="absolute bottom-0 right-0 w-10 h-10 bg-[#00D9B4] hover:bg-[#00c9a4] rounded-full flex items-center justify-center shadow-lg transition-colors">
@@ -59,37 +128,59 @@ export function EditProfileDialog({ open, onOpenChange }: EditProfileDialogProps
             <div className="text-right text-sm text-gray-400 mt-1">{aboutMe.length}/250</div>
           </div>
 
-          {/* Hashtags */}
+          {/* Hashtags - ALL 10 CATEGORIES */}
           <div>
-            <label className="text-sm font-medium mb-2 block">Hashtags</label>
+            <label className="text-sm font-medium mb-2 block">
+              Hashtags
+              <span className="text-gray-400 ml-2">(Select up to 10)</span>
+            </label>
             <HashtagSelector
               selectedTags={selectedHashtags}
               onTagsChange={setSelectedHashtags}
               maxTags={10}
             />
+            <p className="text-xs text-gray-500 mt-2">
+              💡 Choose hashtags that represent you! This helps match with like-minded people.
+            </p>
           </div>
 
-          {/* My Info */}
+          {/* Username Display */}
           <div>
             <label className="text-sm font-medium mb-2 block">My Info</label>
-            <button className="w-full bg-[#2a2a2a] border border-gray-700 rounded-lg p-4 flex items-center justify-between hover:bg-[#333]">
+            <div className="w-full bg-[#2a2a2a] border border-gray-700 rounded-lg p-4 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <span className="text-gray-400">👤</span>
-                <span>gift</span>
+                <span className="text-2xl">👤</span>
+                <span>{username}</span>
               </div>
-              <ChevronRight className="w-5 h-5 text-gray-400" />
-            </button>
+            </div>
           </div>
 
-          {/* Language */}
-          <button className="w-full bg-[#2a2a2a] border border-gray-700 rounded-lg p-4 flex items-center gap-3 hover:bg-[#333]">
-            <span className="text-gray-400">🌐</span>
-            <span>English</span>
-          </button>
+          {/* Language Selector */}
+          <div>
+            <label className="text-sm font-medium mb-2 block">Language Preference</label>
+            <Select value={language} onValueChange={setLanguage}>
+              <SelectTrigger className="w-full bg-[#2a2a2a] border-gray-700 text-white">
+                <Globe className="w-4 h-4 mr-2" />
+                <SelectValue placeholder="Select language" />
+              </SelectTrigger>
+              <SelectContent className="bg-[#2a2a2a] border-gray-700 text-white">
+                <SelectItem value="english">🇬🇧 English (Default)</SelectItem>
+                <SelectItem value="tigrinya">🇪🇷 ትግርኛ (Tigrinya)</SelectItem>
+                <SelectItem value="amharic">🇪🇹 አማርኛ (Amharic)</SelectItem>
+              </SelectContent>
+            </Select>
+            <p className="text-xs text-gray-500 mt-2">
+              Select your preferred language for the interface
+            </p>
+          </div>
 
-          {/* Complete Button */}
-          <Button className="w-full bg-[#00D9B4] hover:bg-[#00c9a4] text-black font-medium py-6 text-lg rounded-xl">
-            Complete
+          {/* Save Button */}
+          <Button
+            onClick={handleSave}
+            disabled={loading}
+            className="w-full bg-[#00D9B4] hover:bg-[#00c9a4] text-black font-medium py-6 text-lg rounded-xl"
+          >
+            {loading ? 'Saving...' : 'Complete'}
           </Button>
         </div>
       </DialogContent>
