@@ -219,156 +219,49 @@ export default function Home() {
       </header>
 
       {/* Hero Section with Split Layout */}
-      <section className="relative min-h-screen pt-20 pb-8 overflow-hidden">
-        {/* Continuous Scrolling Photo Background */}
-        <div className="absolute inset-0 flex gap-1 md:gap-3">
-          {/* Column 1 - Scrolling Up */}
-          <div className="flex-1 overflow-hidden">
-            <div className="animate-scroll-up">
-              {[...profiles[0], ...profiles[0]].map((profile, index) => (
-                <div key={index} className="mb-1 md:mb-3 relative">
-                  <img 
-                    src={profile.image} 
-                    alt="" 
-                    className="w-full h-[300px] md:h-[420px] object-cover rounded-none md:rounded-2xl"
-                  />
-                  {/* Online Badge - Upper Left */}
-                  {profile.online && (
-                    <div className="absolute top-2 left-2 bg-black/80 rounded-full px-2 py-0.5 flex items-center gap-1">
-                      <span className="w-1.5 h-1.5 bg-green-600 rounded-full"></span>
-                      <span className="text-[9px] font-bold text-green-600 uppercase tracking-wide">ONLINE</span>
-                    </div>
-                  )}
-                  {/* Flag + Name + Age - Lower Right */}
-                  <div className="absolute bottom-3 right-3 flex items-center gap-1.5">
-                    <span className="text-base">{profile.flag}</span>
-                    <span className="text-white text-sm font-semibold drop-shadow-lg">{profile.name}, {profile.age}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Column 2 - Scrolling Down */}
-          <div className="flex-1 overflow-hidden">
-            <div className="animate-scroll-down">
-              {[...profiles[1], ...profiles[1]].map((profile, index) => (
-                <div key={index} className="mb-1 md:mb-3 relative">
-                  <img 
-                    src={profile.image} 
-                    alt="" 
-                    className="w-full h-[300px] md:h-[420px] object-cover rounded-none md:rounded-2xl"
-                  />
-                  {/* Online Badge - Upper Left */}
-                  {profile.online && (
-                    <div className="absolute top-2 left-2 bg-black/80 rounded-full px-2 py-0.5 flex items-center gap-1">
-                      <span className="w-1.5 h-1.5 bg-green-600 rounded-full"></span>
-                      <span className="text-[9px] font-bold text-green-600 uppercase tracking-wide">ONLINE</span>
-                    </div>
-                  )}
-                  {/* Flag + Name + Age - Lower Right */}
-                  <div className="absolute bottom-3 right-3 flex items-center gap-1.5">
-                    <span className="text-base">{profile.flag}</span>
-                    <span className="text-white text-sm font-semibold drop-shadow-lg">{profile.name}, {profile.age}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Column 3 - Scrolling Up (Desktop only) */}
-          <div className="hidden md:block flex-1 overflow-hidden">
-            <div className="animate-scroll-up">
-              {[...profiles[2], ...profiles[2]].map((profile, index) => (
-                <div key={index} className="mb-3 relative">
-                  <img 
-                    src={profile.image} 
-                    alt="" 
-                    className="w-full h-[420px] object-cover rounded-2xl"
-                  />
-                  {/* Online Badge - Upper Left */}
-                  {profile.online && (
-                    <div className="absolute top-2 left-2 bg-black/80 rounded-full px-2 py-0.5 flex items-center gap-1">
-                      <span className="w-1.5 h-1.5 bg-green-600 rounded-full"></span>
-                      <span className="text-[9px] font-bold text-green-600 uppercase tracking-wide">ONLINE</span>
-                    </div>
-                  )}
-                  {/* Flag + Name + Age - Lower Right */}
-                  <div className="absolute bottom-3 right-3 flex items-center gap-1.5">
-                    <span className="text-base">{profile.flag}</span>
-                    <span className="text-white text-sm font-semibold drop-shadow-lg">{profile.name}, {profile.age}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-        
-        {/* Bottom fade overlay */}
-        <div className="absolute bottom-0 left-0 right-0 h-64 bg-gradient-to-t from-black via-black/80 to-transparent pointer-events-none z-10" />
-
-        {/* Overlay Content */}
-        <div className="relative z-10 max-w-7xl mx-auto px-4 md:px-6">
-          {/* Desktop: Split Layout */}
-          <div className="hidden md:grid md:grid-cols-2 gap-8 min-h-[calc(100vh-120px)] items-center">
-            {/* Left Side - Controls */}
-            <div className="relative bg-black/40 backdrop-blur-xl rounded-3xl p-12 border border-white/10 flex flex-col justify-between min-h-[600px]">
-              {/* Top Buttons */}
-              <div className="flex flex-col gap-4 mb-8">
-                <button className="flex items-center gap-3 text-white hover:bg-white/10 rounded-2xl p-4 transition-all">
-                  <Camera className="w-6 h-6" />
-                  <span className="text-lg font-medium">Video Chat</span>
-                </button>
-                <button className="flex items-center gap-3 text-white hover:bg-white/10 rounded-2xl p-4 transition-all">
-                  <Sparkles className="w-6 h-6" />
-                  <span className="text-lg font-medium">Discover</span>
-                </button>
-                <button className="flex items-center gap-3 text-white hover:bg-white/10 rounded-2xl p-4 transition-all">
-                  <MessageCircle className="w-6 h-6" />
-                  <span className="text-lg font-medium">Messages</span>
-                </button>
+      <section className="relative min-h-screen pt-20 overflow-hidden">
+        {/* Desktop: Split View - Left Controls, Right Photos */}
+        <div className="hidden md:grid md:grid-cols-2 min-h-screen">
+          {/* LEFT SIDE - Controls Panel */}
+          <div className="relative bg-black flex flex-col justify-end p-12">
+            {/* Large Faded "habesha" Text - Center */}
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+              <div className="text-[140px] font-bold text-white/5 leading-none select-none">
+                habesha
               </div>
+            </div>
 
-              {/* Center - Large Faint Text */}
-              <div className="flex-1 flex items-center justify-center">
-                <div className="text-[120px] font-bold text-white/5 leading-none">
-                  habesha
+            {/* Animated Counter - Above Buttons */}
+            <div className="mb-8 relative z-10">
+              <div className="flex items-center gap-3 text-white mb-2">
+                <div className="relative">
+                  <div className="w-3 h-3 bg-green-500 rounded-full" />
+                  <div className="absolute inset-0 w-3 h-3 bg-green-500 rounded-full animate-ping" />
                 </div>
+                <span className="text-3xl font-bold tabular-nums">
+                  {matchingCount.toLocaleString()}
+                </span>
+                <span className="text-lg text-gray-300">are matching now!</span>
               </div>
+            </div>
 
-              {/* Animated Counter */}
-              <div className="mb-4">
-                <div className="flex items-center gap-2 text-white">
-                  <div className="relative">
-                    <div className="w-3 h-3 bg-green-500 rounded-full" />
-                    <div className="absolute inset-0 w-3 h-3 bg-green-500 rounded-full animate-ping" />
-                  </div>
-                  <span className="text-4xl font-bold tabular-nums">
-                    {matchingCount.toLocaleString()}
-                  </span>
-                  <span className="text-xl text-gray-300">are matching now!</span>
-                </div>
-                <p className="text-xs text-gray-500 mt-2">
-                  All images of models are used for illustrative purposes only.
-                </p>
-              </div>
-
-              {/* Bottom Buttons */}
-              <div className="space-y-4">
+            {/* Bottom Buttons - Stacked */}
+            <div className="space-y-3 relative z-10">
+              <div className="grid grid-cols-2 gap-3">
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button
                       size="lg"
-                      className="w-full bg-black/60 backdrop-blur-sm border border-white/20 text-white hover:bg-white/10 rounded-full py-6 text-lg font-semibold"
+                      className="w-full bg-[#2a2a2a] hover:bg-[#333] text-white rounded-full py-6 text-base font-semibold border-0"
                     >
-                      <span className="flex items-center gap-2">
+                      <span className="flex items-center justify-center gap-2">
                         <span className="text-pink-400">⚥</span>
                         Gender
-                        <ChevronDown className="w-5 h-5" />
+                        <ChevronDown className="w-4 h-4" />
                       </span>
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent className="w-56 bg-gray-900 border-gray-700">
+                  <DropdownMenuContent className="w-48 bg-gray-900 border-gray-700">
                     <DropdownMenuItem onClick={() => toast.info('💎 Use tokens to filter by Male')}>
                       Male
                     </DropdownMenuItem>
@@ -380,34 +273,175 @@ export default function Home() {
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
+                
                 <Button
                   onClick={() => setShowRegionalDialog(true)}
                   size="lg"
-                  className="w-full bg-black/60 backdrop-blur-sm border border-white/20 text-white hover:bg-white/10 rounded-full py-6 text-lg font-semibold"
+                  className="w-full bg-[#2a2a2a] hover:bg-[#333] text-white rounded-full py-6 text-base font-semibold border-0"
                 >
-                  <span className="flex items-center gap-2">
+                  <span className="flex items-center justify-center gap-2">
                     <span className="text-green-400">🌍</span>
                     Country
-                    <ChevronDown className="w-5 h-5" />
+                    <ChevronDown className="w-4 h-4" />
                   </span>
                 </Button>
-                <Button
-                  onClick={handleStartVideoChat}
-                  size="lg"
-                  className="w-full bg-white text-black hover:bg-gray-100 rounded-full py-7 text-xl font-bold shadow-2xl"
-                >
-                  <Video className="w-7 h-7 mr-3" />
-                  Start Video Chat
-                </Button>
+              </div>
+              
+              <Button
+                onClick={handleStartVideoChat}
+                size="lg"
+                className="w-full bg-white text-black hover:bg-gray-100 rounded-full py-7 text-xl font-bold shadow-2xl border-0"
+              >
+                <Video className="w-6 h-6 mr-2" />
+                Start Video Chat
+              </Button>
+              
+              <p className="text-xs text-gray-500 text-center mt-2">
+                All images of models are used for illustrative purposes only.
+              </p>
+            </div>
+          </div>
+
+          {/* RIGHT SIDE - 3 Column Scrolling Photos */}
+          <div className="relative bg-black flex gap-3 p-0">
+            {/* Column 1 - Scrolling Up */}
+            <div className="flex-1 overflow-hidden">
+              <div className="animate-scroll-up">
+                {[...profiles[0], ...profiles[0]].map((profile, index) => (
+                  <div key={index} className="mb-3 relative">
+                    <img 
+                      src={profile.image} 
+                      alt="" 
+                      className="w-full h-[420px] object-cover rounded-2xl"
+                    />
+                    {profile.online && (
+                      <div className="absolute top-3 left-3 bg-black/80 rounded-full px-2.5 py-1 flex items-center gap-1.5">
+                        <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+                        <span className="text-[10px] font-bold text-green-500 uppercase tracking-wide">ONLINE</span>
+                      </div>
+                    )}
+                    <div className="absolute bottom-3 left-3 flex items-center gap-2">
+                      <span className="text-lg">{profile.flag}</span>
+                      <span className="text-white text-base font-semibold drop-shadow-lg">{profile.name}, {profile.age}</span>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
 
-            {/* Right Side - Photo Carousel (visible through transparent area) */}
-            <div></div>
-          </div>
+            {/* Column 2 - Scrolling Down */}
+            <div className="flex-1 overflow-hidden">
+              <div className="animate-scroll-down">
+                {[...profiles[1], ...profiles[1]].map((profile, index) => (
+                  <div key={index} className="mb-3 relative">
+                    <img 
+                      src={profile.image} 
+                      alt="" 
+                      className="w-full h-[420px] object-cover rounded-2xl"
+                    />
+                    {profile.online && (
+                      <div className="absolute top-3 left-3 bg-black/80 rounded-full px-2.5 py-1 flex items-center gap-1.5">
+                        <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+                        <span className="text-[10px] font-bold text-green-500 uppercase tracking-wide">ONLINE</span>
+                      </div>
+                    )}
+                    <div className="absolute bottom-3 left-3 flex items-center gap-2">
+                      <span className="text-lg">{profile.flag}</span>
+                      <span className="text-white text-base font-semibold drop-shadow-lg">{profile.name}, {profile.age}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
 
-          {/* Mobile: Bottom Fixed Controls */}
-          <div className="md:hidden fixed inset-x-0 bottom-0 z-20 px-4 pb-safe pt-3 bg-gradient-to-t from-background/95 via-background/70 to-transparent backdrop-blur">
+            {/* Column 3 - Scrolling Up */}
+            <div className="flex-1 overflow-hidden">
+              <div className="animate-scroll-up">
+                {[...profiles[2], ...profiles[2]].map((profile, index) => (
+                  <div key={index} className="mb-3 relative">
+                    <img 
+                      src={profile.image} 
+                      alt="" 
+                      className="w-full h-[420px] object-cover rounded-2xl"
+                    />
+                    {profile.online && (
+                      <div className="absolute top-3 left-3 bg-black/80 rounded-full px-2.5 py-1 flex items-center gap-1.5">
+                        <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+                        <span className="text-[10px] font-bold text-green-500 uppercase tracking-wide">ONLINE</span>
+                      </div>
+                    )}
+                    <div className="absolute bottom-3 left-3 flex items-center gap-2">
+                      <span className="text-lg">{profile.flag}</span>
+                      <span className="text-white text-base font-semibold drop-shadow-lg">{profile.name}, {profile.age}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Mobile: Original Stacked Layout with Photos Background */}
+        <div className="md:hidden relative min-h-screen">
+          {/* Continuous Scrolling Photo Background */}
+          <div className="absolute inset-0 flex gap-1">
+            {/* Column 1 - Scrolling Up */}
+            <div className="flex-1 overflow-hidden">
+              <div className="animate-scroll-up">
+                {[...profiles[0], ...profiles[0]].map((profile, index) => (
+                  <div key={index} className="mb-1 relative">
+                    <img 
+                      src={profile.image} 
+                      alt="" 
+                      className="w-full h-[300px] object-cover"
+                    />
+                    {profile.online && (
+                      <div className="absolute top-2 left-2 bg-black/80 rounded-full px-2 py-0.5 flex items-center gap-1">
+                        <span className="w-1.5 h-1.5 bg-green-600 rounded-full"></span>
+                        <span className="text-[9px] font-bold text-green-600 uppercase tracking-wide">ONLINE</span>
+                      </div>
+                    )}
+                    <div className="absolute bottom-3 right-3 flex items-center gap-1.5">
+                      <span className="text-base">{profile.flag}</span>
+                      <span className="text-white text-sm font-semibold drop-shadow-lg">{profile.name}, {profile.age}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Column 2 - Scrolling Down */}
+            <div className="flex-1 overflow-hidden">
+              <div className="animate-scroll-down">
+                {[...profiles[1], ...profiles[1]].map((profile, index) => (
+                  <div key={index} className="mb-1 relative">
+                    <img 
+                      src={profile.image} 
+                      alt="" 
+                      className="w-full h-[300px] object-cover"
+                    />
+                    {profile.online && (
+                      <div className="absolute top-2 left-2 bg-black/80 rounded-full px-2 py-0.5 flex items-center gap-1">
+                        <span className="w-1.5 h-1.5 bg-green-600 rounded-full"></span>
+                        <span className="text-[9px] font-bold text-green-600 uppercase tracking-wide">ONLINE</span>
+                      </div>
+                    )}
+                    <div className="absolute bottom-3 right-3 flex items-center gap-1.5">
+                      <span className="text-base">{profile.flag}</span>
+                      <span className="text-white text-sm font-semibold drop-shadow-lg">{profile.name}, {profile.age}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+          
+          {/* Bottom fade overlay */}
+          <div className="absolute bottom-0 left-0 right-0 h-64 bg-gradient-to-t from-black via-black/80 to-transparent pointer-events-none z-10" />
+
+
+          {/* Mobile Controls - Fixed at Bottom */}
+          <div className="fixed inset-x-0 bottom-0 z-20 px-4 pb-safe pt-3 bg-gradient-to-t from-background/95 via-background/70 to-transparent backdrop-blur">
             {/* Filter Buttons - Side by Side */}
             <div className="grid grid-cols-2 gap-3 mb-3">
               <DropdownMenu>
@@ -458,7 +492,7 @@ export default function Home() {
               Start Video Chat
             </Button>
 
-            {/* Matching Counter - Below Start Video Chat, smaller font */}
+            {/* Matching Counter - Below Start Video Chat */}
             <div className="text-center pb-2">
               <div className="flex items-center justify-center gap-2 text-white mb-1">
                 <div className="relative">
@@ -476,7 +510,6 @@ export default function Home() {
             </div>
           </div>
         </div>
-
       </section>
 
       {/* Main Content Section */}
