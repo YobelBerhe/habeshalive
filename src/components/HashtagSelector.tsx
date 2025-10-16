@@ -16,14 +16,16 @@ export function HashtagSelector({ selectedTags, onTagsChange, maxTags = 10 }: Ha
   const [activeCategory, setActiveCategory] = useState<string>("diaspora");
 
   const categories = [
-    { key: "diaspora", label: "🌍 Location", icon: "🌍" },
-    { key: "languages", label: "🗣️ Languages", icon: "🗣️" },
-    { key: "faith", label: "✝️ Faith", icon: "✝️" },
-    { key: "interests", label: "🎯 Interests", icon: "🎯" },
-    { key: "lifestyle", label: "💫 Lifestyle", icon: "💫" },
-    { key: "values", label: "💎 Values", icon: "💎" },
-    { key: "social", label: "👥 Social", icon: "👥" },
-    { key: "goals", label: "🎯 Goals", icon: "🎯" },
+    { key: "diaspora", label: "Diaspora", icon: "🌍" },
+    { key: "languages", label: "Languages", icon: "🗣️" },
+    { key: "culture", label: "Culture", icon: "☕" },
+    { key: "education", label: "Career", icon: "🎓" },
+    { key: "interests", label: "Interests", icon: "🎯" },
+    { key: "social", label: "Social", icon: "👥" },
+    { key: "communities", label: "Community", icon: "🏘️" },
+    { key: "personality", label: "Personality", icon: "🎉" },
+    { key: "special", label: "Special", icon: "🌟" },
+    { key: "purposes", label: "Purpose", icon: "🎯" },
   ];
 
   const toggleTag = (tag: string) => {

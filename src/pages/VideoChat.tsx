@@ -1369,16 +1369,10 @@ export default function VideoChat() {
                 </Button>
                 <button 
                   onClick={() => setShowProfileViewDialog(true)}
-                  className="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center hover:bg-gray-600"
+                  className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center hover:bg-white/20 transition-colors border border-white/10"
+                  title="Profile Menu"
                 >
                   <UserIcon className="w-5 h-5" />
-                </button>
-                <button 
-                  onClick={() => setShowSettingsDialog(true)}
-                  className="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center hover:bg-gray-600"
-                  title="Settings"
-                >
-                  <Settings className="w-5 h-5" />
                 </button>
               </div>
             </div>
@@ -2007,11 +2001,13 @@ export default function VideoChat() {
           {/* Dialogs */}
           <ReportDialog open={showReportDialog} onOpenChange={setShowReportDialog} />
           <EditProfileDialog open={showProfileDialog} onOpenChange={setShowProfileDialog} />
-          <ProfileViewDialog 
-            open={showProfileViewDialog} 
-            onOpenChange={setShowProfileViewDialog}
-            onEditProfile={handleOpenEditProfile}
-          />
+        <ProfileViewDialog
+          open={showProfileViewDialog}
+          onOpenChange={setShowProfileViewDialog}
+          onEditProfile={handleOpenEditProfile}
+          onOpenSettings={() => setShowSettingsDialog(true)}
+          onOpenContactUs={handleOpenContactUs}
+        />
           <SettingsDialog 
             open={showSettingsDialog} 
             onOpenChange={setShowSettingsDialog}

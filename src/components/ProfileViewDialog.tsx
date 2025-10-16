@@ -1,15 +1,23 @@
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { User, MapPin, Hash, Sparkles } from "lucide-react";
+import { User, MapPin, Hash, Sparkles, Settings as SettingsIcon, MessageSquare, LogOut } from "lucide-react";
 
 interface ProfileViewDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onEditProfile: () => void;
+  onOpenSettings: () => void;
+  onOpenContactUs: () => void;
 }
 
-export function ProfileViewDialog({ open, onOpenChange, onEditProfile }: ProfileViewDialogProps) {
+export function ProfileViewDialog({ 
+  open, 
+  onOpenChange, 
+  onEditProfile, 
+  onOpenSettings,
+  onOpenContactUs 
+}: ProfileViewDialogProps) {
   // Mock data - in real app, this would come from user profile
   const userProfile = {
     name: "gift",
@@ -17,6 +25,7 @@ export function ProfileViewDialog({ open, onOpenChange, onEditProfile }: Profile
     countryCode: "US",
     gender: "Male",
     ipAddress: "192.168.1.1", // This would be fetched from backend
+    code: "5zcjzb3blgjie",
     hashtags: ["hi", "EthiopianDiaspora", "USAHabesha"],
   };
 
@@ -30,80 +39,86 @@ export function ProfileViewDialog({ open, onOpenChange, onEditProfile }: Profile
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-black/95 backdrop-blur-xl border-gray-800 max-w-md text-white">
-        <div className="space-y-6 py-4">
-          {/* Profile Avatar & Name */}
-          <div className="flex flex-col items-center gap-4">
-            <div className="relative">
-              <Avatar className="w-24 h-24 border-4 border-[#00D9B4]">
-                <AvatarImage src="" />
-                <AvatarFallback className="bg-gradient-to-br from-[#00D9B4] to-[#00a085] text-black text-2xl font-bold">
-                  {userProfile.name[0].toUpperCase()}
-                </AvatarFallback>
-              </Avatar>
-              <div className="absolute -bottom-2 -right-2 bg-[#00D9B4] rounded-full p-1">
-                <Sparkles className="w-4 h-4 text-black" />
-              </div>
-            </div>
-
-            <div className="text-center space-y-1">
-              <h2 className="text-2xl font-bold">{userProfile.name}</h2>
-              <div className="flex items-center justify-center gap-2 text-gray-400">
-                <User className="w-4 h-4" />
+      <DialogContent className="bg-black/95 backdrop-blur-xl border-gray-800 max-w-md text-white p-0 gap-0">
+        {/* User Info Section */}
+        <div className="p-6 pb-4 border-b border-white/10">
+          <div className="flex items-start gap-4">
+            <Avatar className="w-16 h-16 border-2 border-[#00D9B4]">
+              <AvatarImage src="" />
+              <AvatarFallback className="bg-gradient-to-br from-[#00D9B4] to-[#00a085] text-black text-xl font-bold">
+                {userProfile.name[0].toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
+            
+            <div className="flex-1">
+              <h2 className="text-xl font-bold mb-1">{userProfile.name}</h2>
+              <div className="flex items-center gap-2 text-sm text-gray-400 mb-2">
+                <span className="text-2xl">{getCountryFlag(userProfile.countryCode)}</span>
                 <span>{userProfile.gender}</span>
               </div>
-            </div>
-          </div>
-
-          {/* Location Info */}
-          <div className="bg-white/5 backdrop-blur-sm rounded-xl p-4 space-y-3">
-            <div className="flex items-center gap-3">
-              <div className="text-3xl">{getCountryFlag(userProfile.countryCode)}</div>
-              <div className="flex-1">
-                <div className="flex items-center gap-2 text-sm text-gray-400 mb-1">
-                  <MapPin className="w-4 h-4" />
-                  <span>Location</span>
-                </div>
-                <p className="font-medium">{userProfile.country}</p>
+              <div className="bg-white/5 backdrop-blur-sm rounded px-2 py-1 inline-block">
+                <span className="text-xs text-gray-400">Code:</span>
+                <code className="text-xs text-[#00D9B4] ml-2 font-mono">{userProfile.code}</code>
               </div>
             </div>
-
-            <div className="border-t border-white/10 pt-3">
-              <div className="text-xs text-gray-500 mb-1">IP Address</div>
-              <code className="text-xs bg-black/30 px-2 py-1 rounded font-mono text-[#00D9B4]">
-                {userProfile.ipAddress}
-              </code>
-            </div>
           </div>
+        </div>
 
-          {/* Hashtags */}
-          <div className="space-y-2">
-            <div className="flex items-center gap-2 text-sm text-gray-400">
-              <Hash className="w-4 h-4" />
-              <span>Profile Tags</span>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {userProfile.hashtags.map((tag) => (
-                <span
-                  key={tag}
-                  className="bg-[#00D9B4]/20 text-[#00D9B4] px-3 py-1.5 rounded-full text-sm font-medium border border-[#00D9B4]/30"
-                >
-                  #{tag}
-                </span>
-              ))}
-            </div>
-          </div>
-
-          {/* Edit Profile Button */}
-          <Button
+        {/* Menu Items */}
+        <div className="p-2">
+          <button
             onClick={() => {
               onOpenChange(false);
               onEditProfile();
             }}
-            className="w-full bg-[#00D9B4] hover:bg-[#00c9a4] text-black font-medium py-6 text-lg rounded-xl"
+            className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-white/5 rounded-lg transition-colors group"
           >
-            Edit Profile
-          </Button>
+            <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-[#00D9B4]/20 transition-colors">
+              <User className="w-5 h-5 text-white group-hover:text-[#00D9B4]" />
+            </div>
+            <span className="flex-1 font-medium">Edit Profile</span>
+          </button>
+
+          <button
+            onClick={() => {
+              onOpenChange(false);
+              onOpenSettings();
+            }}
+            className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-white/5 rounded-lg transition-colors group"
+          >
+            <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-[#00D9B4]/20 transition-colors">
+              <SettingsIcon className="w-5 h-5 text-white group-hover:text-[#00D9B4]" />
+            </div>
+            <span className="flex-1 font-medium">More</span>
+          </button>
+
+          <button
+            onClick={() => {
+              onOpenChange(false);
+              onOpenContactUs();
+            }}
+            className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-white/5 rounded-lg transition-colors group"
+          >
+            <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-[#00D9B4]/20 transition-colors">
+              <MessageSquare className="w-5 h-5 text-white group-hover:text-[#00D9B4]" />
+            </div>
+            <span className="flex-1 font-medium">Contact us</span>
+          </button>
+
+          <div className="my-2 border-t border-white/10" />
+
+          <button
+            onClick={() => {
+              // Handle logout
+              onOpenChange(false);
+            }}
+            className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-white/5 rounded-lg transition-colors group"
+          >
+            <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-red-500/20 transition-colors">
+              <LogOut className="w-5 h-5 text-white group-hover:text-red-400" />
+            </div>
+            <span className="flex-1 font-medium text-red-400">Log out</span>
+          </button>
         </div>
       </DialogContent>
     </Dialog>
