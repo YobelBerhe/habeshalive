@@ -33,6 +33,8 @@ import { ReportDialog } from "@/components/ReportDialog";
 import { EditProfileDialog } from "@/components/EditProfileDialog";
 import { SettingsDialog } from "@/components/SettingsDialog";
 import { ManageAccountDialog } from "@/components/ManageAccountDialog";
+import { ContactUsDialog } from "@/components/ContactUsDialog";
+import { ProfileViewDialog } from "@/components/ProfileViewDialog";
 import { AIContentModeration } from "@/lib/ai-moderation-system";
 import { VideoWatermarkingSystem, ScreenshotDetectionSystem } from "@/lib/watermarking-system";
 import RespectScoreEngine, { type UserScore } from "@/lib/respect-score-system";
@@ -231,8 +233,10 @@ export default function VideoChat() {
   // Dialogs
   const [showReportDialog, setShowReportDialog] = useState(false);
   const [showProfileDialog, setShowProfileDialog] = useState(false);
+  const [showProfileViewDialog, setShowProfileViewDialog] = useState(false);
   const [showSettingsDialog, setShowSettingsDialog] = useState(false);
   const [showManageAccountDialog, setShowManageAccountDialog] = useState(false);
+  const [showContactUsDialog, setShowContactUsDialog] = useState(false);
 
   // 🤖 AI SYSTEM INITIALIZATION
   useEffect(() => {
@@ -625,6 +629,16 @@ export default function VideoChat() {
   const handleBackToSettings = () => {
     setShowManageAccountDialog(false);
     setShowSettingsDialog(true);
+  };
+
+  const handleOpenContactUs = () => {
+    setShowSettingsDialog(false);
+    setShowContactUsDialog(true);
+  };
+
+  const handleOpenEditProfile = () => {
+    setShowProfileViewDialog(false);
+    setShowProfileDialog(true);
   };
 
   const getCurrentPurposeInfo = () => {
@@ -1985,15 +1999,25 @@ export default function VideoChat() {
           {/* Dialogs */}
           <ReportDialog open={showReportDialog} onOpenChange={setShowReportDialog} />
           <EditProfileDialog open={showProfileDialog} onOpenChange={setShowProfileDialog} />
+          <ProfileViewDialog 
+            open={showProfileViewDialog} 
+            onOpenChange={setShowProfileViewDialog}
+            onEditProfile={handleOpenEditProfile}
+          />
           <SettingsDialog 
             open={showSettingsDialog} 
             onOpenChange={setShowSettingsDialog}
             onManageAccount={handleOpenManageAccount}
+            onContactUs={handleOpenContactUs}
           />
           <ManageAccountDialog
             open={showManageAccountDialog}
             onOpenChange={setShowManageAccountDialog}
             onBack={handleBackToSettings}
+          />
+          <ContactUsDialog
+            open={showContactUsDialog}
+            onOpenChange={setShowContactUsDialog}
           />
         </>
       )}

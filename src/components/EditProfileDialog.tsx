@@ -1,9 +1,10 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Camera, ChevronRight } from "lucide-react";
+import { Camera, ChevronRight, Globe } from "lucide-react";
 import { useState } from "react";
+import { HashtagSelector } from "./HashtagSelector";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 interface EditProfileDialogProps {
   open: boolean;
@@ -12,24 +13,27 @@ interface EditProfileDialogProps {
 
 export function EditProfileDialog({ open, onOpenChange }: EditProfileDialogProps) {
   const [aboutMe, setAboutMe] = useState("");
-  const [hashtag, setHashtag] = useState("hi");
+  const [selectedHashtags, setSelectedHashtags] = useState<string[]>(["hi"]);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-[#1a1a1a] text-white border-gray-800 max-w-md">
+      <DialogContent className="bg-gradient-to-b from-[#1a1a1a] to-[#0a0a0a] text-white border-gray-800 max-w-md max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="text-xl font-bold">Edit Profile</DialogTitle>
+          <DialogTitle className="text-2xl font-bold">Edit Profile</DialogTitle>
         </DialogHeader>
         
-        <div className="space-y-6 py-4">
+        <div className="space-y-5 py-4">
           {/* Profile Picture */}
           <div className="flex justify-center">
-            <div className="relative">
-              <div className="w-24 h-24 rounded-full bg-gray-700 flex items-center justify-center">
-                <div className="w-16 h-16 rounded-full bg-gray-600" />
-              </div>
-              <button className="absolute bottom-0 right-0 w-8 h-8 bg-white rounded-full flex items-center justify-center">
-                <Camera className="w-4 h-4 text-black" />
+            <div className="relative group">
+              <Avatar className="w-28 h-28 border-4 border-[#00D9B4]/30 group-hover:border-[#00D9B4] transition-colors">
+                <AvatarImage src="" />
+                <AvatarFallback className="bg-gradient-to-br from-[#00D9B4] to-[#00a085] text-black text-3xl font-bold">
+                  G
+                </AvatarFallback>
+              </Avatar>
+              <button className="absolute bottom-0 right-0 w-10 h-10 bg-[#00D9B4] hover:bg-[#00c9a4] rounded-full flex items-center justify-center shadow-lg transition-colors">
+                <Camera className="w-5 h-5 text-black" />
               </button>
             </div>
           </div>
@@ -49,23 +53,20 @@ export function EditProfileDialog({ open, onOpenChange }: EditProfileDialogProps
               placeholder="Share a little something about yourself."
               value={aboutMe}
               onChange={(e) => setAboutMe(e.target.value)}
-              className="bg-[#2a2a2a] border-gray-700 text-white resize-none h-24"
+              className="bg-[#2a2a2a] border-gray-700 text-white resize-none h-24 focus:border-[#00D9B4]"
               maxLength={250}
             />
-            <div className="text-right text-sm text-gray-400 mt-1">250</div>
+            <div className="text-right text-sm text-gray-400 mt-1">{aboutMe.length}/250</div>
           </div>
 
-          {/* Hashtag */}
+          {/* Hashtags */}
           <div>
-            <label className="text-sm font-medium mb-2 block">Hashtag</label>
-            <div className="flex items-center gap-2">
-              <span className="text-gray-400">#</span>
-              <div className="flex-1 bg-[#2a2a2a] border border-gray-700 rounded-md px-3 py-2">
-                <span className="bg-gray-700 text-white px-3 py-1 rounded-full text-sm">
-                  {hashtag}
-                </span>
-              </div>
-            </div>
+            <label className="text-sm font-medium mb-2 block">Hashtags</label>
+            <HashtagSelector
+              selectedTags={selectedHashtags}
+              onTagsChange={setSelectedHashtags}
+              maxTags={10}
+            />
           </div>
 
           {/* My Info */}
