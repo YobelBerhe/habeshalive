@@ -39,6 +39,7 @@ export function ProfileViewDialog({
 }: ProfileViewDialogProps) {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isOnline, setIsOnline] = useState(false);
 
   useEffect(() => {
     if (open) {
@@ -53,6 +54,9 @@ export function ProfileViewDialog({
       const targetUserId = userId || (await supabase.auth.getUser()).data.user?.id;
       if (!targetUserId) return;
 
+      const { data: { user } } = await supabase.auth.getUser();
+      const userEmail = user?.email || '';
+
       const { data, error } = await supabase
         .from('profiles')
         .select('*')
@@ -60,7 +64,23 @@ export function ProfileViewDialog({
         .single();
 
       if (error) throw error;
-      setProfile(data as UserProfile);
+      
+      // Use username if available, otherwise use first part of email
+      let displayName = data.username;
+      if (!displayName && userEmail) {
+        displayName = userEmail.split('@')[0];
+      }
+      
+      setProfile({ ...data, username: displayName } as UserProfile);
+      
+      // Check online status
+      const { data: onlineData } = await supabase
+        .from('online_users')
+        .select('status')
+        .eq('user_id', targetUserId)
+        .single();
+      
+      setIsOnline(onlineData?.status === 'available');
     } catch (error) {
       console.error('Error loading profile:', error);
     } finally {
@@ -109,23 +129,26 @@ export function ProfileViewDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-black/95 backdrop-blur-xl text-white border-none max-w-sm p-0 gap-0">
+      <DialogContent className="bg-black text-white border-gray-800 max-w-sm p-0 gap-0">
         {/* User Info Header */}
         <div className="p-6 border-b border-white/10">
           <div className="flex items-center gap-3 mb-3">
-            <Avatar className="w-12 h-12 border-2 border-white/20">
-              <AvatarImage src={profile.avatar_url || ''} />
-              <AvatarFallback className="bg-gradient-to-br from-[#00D9B4] to-[#00a085] text-black font-bold">
-                {profile.username?.[0]?.toUpperCase() || 'U'}
-              </AvatarFallback>
-            </Avatar>
+            <div className="relative">
+              <Avatar className="w-12 h-12 border-2 border-white/20">
+                <AvatarImage src={profile.avatar_url || ''} />
+                <AvatarFallback className="bg-gradient-to-br from-[#00D9B4] to-[#00a085] text-black font-bold">
+                  {profile.username?.[0]?.toUpperCase() || 'U'}
+                </AvatarFallback>
+              </Avatar>
+              {isOnline && (
+                <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-black rounded-full"></div>
+              )}
+            </div>
             <div className="flex-1">
               <h3 className="font-bold text-lg">{profile.username}</h3>
-              <div className="flex items-center gap-2 text-sm text-gray-400">
+              <div className="flex items-center gap-1 text-sm text-gray-400">
                 <span className="text-xl">{getCountryFlag(profile.country)}</span>
                 <span>{profile.country || 'Unknown'}</span>
-                <span>•</span>
-                <span>{profile.gender || 'Not specified'}</span>
               </div>
             </div>
           </div>

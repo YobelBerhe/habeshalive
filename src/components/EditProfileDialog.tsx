@@ -27,6 +27,7 @@ export function EditProfileDialog({ open, onOpenChange }: EditProfileDialogProps
   const [avatarUrl, setAvatarUrl] = useState("");
   const [language, setLanguage] = useState("english");
   const [loading, setLoading] = useState(false);
+  const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
     if (open) {
@@ -58,6 +59,45 @@ export function EditProfileDialog({ open, onOpenChange }: EditProfileDialogProps
     }
   };
 
+  const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    try {
+      const file = e.target.files?.[0];
+      if (!file) return;
+
+      setUploading(true);
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const fileExt = file.name.split('.').pop();
+      const filePath = `${user.id}/avatar.${fileExt}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('avatars')
+        .upload(filePath, file, { upsert: true });
+
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('avatars')
+        .getPublicUrl(filePath);
+
+      const { error: updateError } = await supabase
+        .from('profiles')
+        .update({ avatar_url: publicUrl })
+        .eq('id', user.id);
+
+      if (updateError) throw updateError;
+
+      setAvatarUrl(publicUrl);
+      toast.success("✅ Photo uploaded successfully!");
+    } catch (error: any) {
+      console.error('Error uploading photo:', error);
+      toast.error(error.message || "Failed to upload photo");
+    } finally {
+      setUploading(false);
+    }
+  };
+
   const handleSave = async () => {
     try {
       setLoading(true);
@@ -86,7 +126,7 @@ export function EditProfileDialog({ open, onOpenChange }: EditProfileDialogProps
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-gradient-to-b from-[#1a1a1a] to-[#0a0a0a] text-white border-gray-800 max-w-md max-h-[90vh] overflow-y-auto">
+      <DialogContent className="bg-black text-white border-gray-800 max-w-md max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold">Edit Profile</DialogTitle>
         </DialogHeader>
@@ -101,9 +141,17 @@ export function EditProfileDialog({ open, onOpenChange }: EditProfileDialogProps
                   {username[0]?.toUpperCase() || 'U'}
                 </AvatarFallback>
               </Avatar>
-              <button className="absolute bottom-0 right-0 w-10 h-10 bg-[#00D9B4] hover:bg-[#00c9a4] rounded-full flex items-center justify-center shadow-lg transition-colors">
+              <label htmlFor="photo-upload" className="absolute bottom-0 right-0 w-10 h-10 bg-[#00D9B4] hover:bg-[#00c9a4] rounded-full flex items-center justify-center shadow-lg transition-colors cursor-pointer">
                 <Camera className="w-5 h-5 text-black" />
-              </button>
+                <input
+                  id="photo-upload"
+                  type="file"
+                  accept="image/*"
+                  onChange={handlePhotoUpload}
+                  disabled={uploading}
+                  className="hidden"
+                />
+              </label>
             </div>
           </div>
           

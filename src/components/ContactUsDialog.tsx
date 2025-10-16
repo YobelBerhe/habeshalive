@@ -117,9 +117,7 @@ ${formData.description}
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-gradient-to-b from-[#1a1a1a] to-[#0a0a0a] text-white border-gray-800 max-w-lg max-h-[90vh] overflow-y-auto">
-        {/* Habesha Cultural Header */}
-        <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-[#00D9B4] via-yellow-500 to-red-500 opacity-80"></div>
+      <DialogContent className="bg-black text-white border-gray-800 max-w-lg max-h-[90vh] overflow-y-auto">
         
         <DialogHeader>
           <div className="flex items-center gap-3">

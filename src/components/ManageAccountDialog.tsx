@@ -1,5 +1,18 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { ChevronRight, ChevronLeft, AlertTriangle, FileText, Coffee } from "lucide-react";
+import { useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 interface ManageAccountDialogProps {
   open: boolean;
@@ -8,11 +21,68 @@ interface ManageAccountDialogProps {
 }
 
 export function ManageAccountDialog({ open, onOpenChange, onBack }: ManageAccountDialogProps) {
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+
+  const handleDeleteAccount = async () => {
+    try {
+      setDeleting(true);
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      // Delete user profile
+      const { error } = await supabase
+        .from('profiles')
+        .delete()
+        .eq('id', user.id);
+
+      if (error) throw error;
+
+      // Sign out
+      await supabase.auth.signOut();
+      
+      toast.success("Account deleted successfully");
+      onOpenChange(false);
+    } catch (error: any) {
+      console.error('Error deleting account:', error);
+      toast.error(error.message || "Failed to delete account");
+    } finally {
+      setDeleting(false);
+      setShowDeleteDialog(false);
+    }
+  };
+
+  const handleDataRequest = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', user.id)
+        .single();
+
+      // Create downloadable JSON
+      const dataStr = JSON.stringify(profile, null, 2);
+      const dataBlob = new Blob([dataStr], { type: 'application/json' });
+      const url = URL.createObjectURL(dataBlob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `habeshlive-data-${user.id}.json`;
+      link.click();
+      
+      toast.success("✅ Your data has been downloaded");
+    } catch (error: any) {
+      console.error('Error requesting data:', error);
+      toast.error(error.message || "Failed to download data");
+    }
+  };
+
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-gradient-to-b from-[#1a1a1a] to-[#0a0a0a] text-white border-gray-800 max-w-md">
-        {/* Habesha Cultural Header */}
-        <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-[#00D9B4] via-yellow-500 to-red-500 opacity-80"></div>
+    <>
+      <Dialog open={open} onOpenChange={onOpenChange}>
+        <DialogContent className="bg-black text-white border-gray-800 max-w-md">
         
         <DialogHeader>
           <div className="flex items-center gap-3">
@@ -38,7 +108,10 @@ export function ManageAccountDialog({ open, onOpenChange, onBack }: ManageAccoun
             </div>
           </div>
 
-          <button className="w-full bg-[#2a2a2a] border border-red-500/30 rounded-lg p-4 flex items-center justify-between hover:bg-red-500/10 transition-colors group">
+          <button 
+            onClick={() => setShowDeleteDialog(true)}
+            className="w-full bg-[#2a2a2a] border border-red-500/30 rounded-lg p-4 flex items-center justify-between hover:bg-red-500/10 transition-colors group"
+          >
             <div className="flex items-center gap-3">
               <AlertTriangle className="w-5 h-5 text-red-400 group-hover:text-red-300" />
               <div className="text-left">
@@ -49,7 +122,10 @@ export function ManageAccountDialog({ open, onOpenChange, onBack }: ManageAccoun
             <ChevronRight className="w-5 h-5 text-red-400 group-hover:text-red-300" />
           </button>
           
-          <button className="w-full bg-[#2a2a2a] border border-gray-700 rounded-lg p-4 flex items-center justify-between hover:bg-[#333] hover:border-[#00D9B4]/50 transition-colors">
+          <button 
+            onClick={handleDataRequest}
+            className="w-full bg-[#2a2a2a] border border-gray-700 rounded-lg p-4 flex items-center justify-between hover:bg-[#333] hover:border-[#00D9B4]/50 transition-colors"
+          >
             <div className="flex items-center gap-3">
               <FileText className="w-5 h-5 text-gray-400" />
               <div className="text-left">
@@ -75,5 +151,29 @@ export function ManageAccountDialog({ open, onOpenChange, onBack }: ManageAccoun
         </div>
       </DialogContent>
     </Dialog>
+
+    <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+      <AlertDialogContent className="bg-black border-red-500/30 text-white">
+        <AlertDialogHeader>
+          <AlertDialogTitle className="text-red-400">Delete Account Permanently?</AlertDialogTitle>
+          <AlertDialogDescription className="text-gray-400">
+            This action cannot be undone. This will permanently delete your account and remove all your data from our servers.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel className="bg-[#2a2a2a] border-gray-700 text-white hover:bg-[#333]">
+            Cancel
+          </AlertDialogCancel>
+          <AlertDialogAction
+            onClick={handleDeleteAccount}
+            disabled={deleting}
+            className="bg-red-500 hover:bg-red-600 text-white"
+          >
+            {deleting ? 'Deleting...' : 'Delete Account'}
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  </>
   );
 }
