@@ -26,7 +26,8 @@ import {
   Star,
   AlertTriangle,
   Flag,
-  Loader2
+  Loader2,
+  Settings
 } from "lucide-react";
 import { RotatingGlobe } from "@/components/RotatingGlobe";
 import { ReportDialog } from "@/components/ReportDialog";
@@ -1367,10 +1368,17 @@ export default function VideoChat() {
                   🕐 History
                 </Button>
                 <button 
-                  onClick={() => setShowSettingsDialog(true)}
+                  onClick={() => setShowProfileViewDialog(true)}
                   className="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center hover:bg-gray-600"
                 >
                   <UserIcon className="w-5 h-5" />
+                </button>
+                <button 
+                  onClick={() => setShowSettingsDialog(true)}
+                  className="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center hover:bg-gray-600"
+                  title="Settings"
+                >
+                  <Settings className="w-5 h-5" />
                 </button>
               </div>
             </div>
