@@ -650,11 +650,11 @@ export default function VideoChat() {
   const renderOnboarding = () => {
     if (connectionState !== 'onboarding') return null;
 
-    return (
-      <div className="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        {/* Birthday Modal */}
-        {onboardingStep === 'birthday' && (
-          <div className="bg-[#2a2a2a] rounded-3xl p-8 max-w-md w-full relative">
+  return (
+    <div className="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto">
+      {/* Birthday Modal */}
+      {onboardingStep === 'birthday' && (
+        <div className="bg-[#2a2a2a] rounded-3xl p-6 md:p-8 max-w-md w-full relative my-auto">
             <button 
               onClick={() => navigate('/')}
               className="absolute top-6 right-6 text-white hover:text-gray-300"
@@ -662,8 +662,8 @@ export default function VideoChat() {
               <X className="w-6 h-6" />
             </button>
             
-            <h2 className="text-3xl font-bold text-white mb-3">My birthday is</h2>
-            <p className="text-gray-400 mb-8">Tell us your age and we'll help you meet people you'd vibe with.</p>
+            <h2 className="text-2xl md:text-3xl font-bold text-white mb-2 md:mb-3">My birthday is</h2>
+            <p className="text-sm md:text-base text-gray-400 mb-6 md:mb-8">Tell us your age and we'll help you meet people you'd vibe with.</p>
             
             <div className="grid grid-cols-3 gap-4 mb-8">
               <div>
@@ -728,7 +728,7 @@ export default function VideoChat() {
 
         {/* Gender Modal */}
         {onboardingStep === 'gender' && (
-          <div className="bg-[#2a2a2a] rounded-3xl p-8 max-w-md w-full relative">
+          <div className="bg-[#2a2a2a] rounded-3xl p-6 md:p-8 max-w-md w-full relative my-auto">
             <button 
               onClick={() => setOnboardingStep('birthday')}
               className="absolute top-6 left-6 text-white hover:text-gray-300"
@@ -742,7 +742,7 @@ export default function VideoChat() {
               <X className="w-6 h-6" />
             </button>
             
-            <h2 className="text-3xl font-bold text-white mb-8">I am a</h2>
+            <h2 className="text-2xl md:text-3xl font-bold text-white mb-6 md:mb-8">I am a</h2>
             
             <div className="space-y-4 mb-8">
               <button
@@ -801,7 +801,7 @@ export default function VideoChat() {
 
         {/* Ethnicity Modal */}
         {onboardingStep === 'ethnicity' && (
-          <div className="bg-[#2a2a2a] rounded-3xl p-8 max-w-md w-full relative">
+          <div className="bg-[#2a2a2a] rounded-3xl p-6 md:p-8 max-w-md w-full relative my-auto">
             <button 
               onClick={() => setOnboardingStep('gender')}
               className="absolute top-6 left-6 text-white hover:text-gray-300"
@@ -815,8 +815,8 @@ export default function VideoChat() {
               <X className="w-6 h-6" />
             </button>
             
-            <h2 className="text-3xl font-bold text-white mb-3">What's your ethnicity?</h2>
-            <p className="text-gray-400 mb-8 text-sm">Ethnicity is not displayed on the profile.</p>
+            <h2 className="text-2xl md:text-3xl font-bold text-white mb-2 md:mb-3">What's your ethnicity?</h2>
+            <p className="text-sm md:text-base text-gray-400 mb-6 md:mb-8">Ethnicity is not displayed on the profile.</p>
             
             <div className="space-y-4 mb-8">
               <button
@@ -871,7 +871,7 @@ export default function VideoChat() {
 
         {/* Name Modal */}
         {onboardingStep === 'name' && (
-          <div className="bg-[#2a2a2a] rounded-3xl p-8 max-w-md w-full relative">
+          <div className="bg-[#2a2a2a] rounded-3xl p-6 md:p-8 max-w-md w-full relative my-auto">
             <button 
               onClick={() => setOnboardingStep('ethnicity')}
               className="absolute top-6 left-6 text-white hover:text-gray-300"
@@ -1364,15 +1364,15 @@ export default function VideoChat() {
 
           {/* Ready State */}
           {connectionState === 'ready' && (
-            <div className="h-screen flex items-center justify-center p-4">
-              <div className="text-center space-y-6 max-w-xl">
-                <div className="w-24 h-24 mx-auto bg-white rounded-full flex items-center justify-center shadow-2xl">
-                  <VideoIcon className="w-12 h-12 text-black" />
+            <div className="min-h-screen flex items-center justify-center p-4 pt-20 md:pt-24">
+              <div className="text-center space-y-4 md:space-y-6 max-w-xl w-full">
+                <div className="w-20 h-20 md:w-24 md:h-24 mx-auto bg-white rounded-full flex items-center justify-center shadow-2xl">
+                  <VideoIcon className="w-10 h-10 md:w-12 md:h-12 text-black" />
                 </div>
                 
-                <div className="space-y-3">
-                  <h2 className="text-4xl font-bold">Ready to Connect?</h2>
-                  <p className="text-lg text-gray-400">
+                <div className="space-y-2 md:space-y-3">
+                  <h2 className="text-2xl md:text-4xl font-bold">Ready to Connect?</h2>
+                  <p className="text-base md:text-lg text-gray-400 px-4">
                     Meet Habesha people worldwide. Practice language, share culture, make friends.
                   </p>
                   
@@ -1402,10 +1402,10 @@ export default function VideoChat() {
                   </div>
 
                   {/* Safety Features Active */}
-                  <div className="bg-blue-500/10 border border-blue-500/30 rounded-xl p-4 mt-4">
+                  <div className="bg-blue-500/10 border border-blue-500/30 rounded-xl p-3 md:p-4 mt-4 mx-4 md:mx-0">
                     <div className="flex items-center gap-2 mb-2">
-                      <Shield className="w-5 h-5 text-blue-400" />
-                      <span className="text-blue-300 font-semibold text-sm">Advanced Safety Active</span>
+                      <Shield className="w-4 h-4 md:w-5 md:h-5 text-blue-400" />
+                      <span className="text-blue-300 font-semibold text-xs md:text-sm">Advanced Safety Active</span>
                     </div>
                     <div className="grid grid-cols-2 gap-2 text-xs text-gray-400">
                       <div className="flex items-center gap-1">
@@ -1438,9 +1438,9 @@ export default function VideoChat() {
 
                 <Button 
                   onClick={startMatching}
-                  className="bg-white text-black hover:bg-gray-100 rounded-full px-12 py-7 text-xl font-semibold shadow-xl"
+                  className="bg-white text-black hover:bg-gray-100 rounded-full px-8 md:px-12 py-5 md:py-7 text-lg md:text-xl font-semibold shadow-xl"
                 >
-                  <VideoIcon className="w-6 h-6 mr-3" />
+                  <VideoIcon className="w-5 h-5 md:w-6 md:h-6 mr-2 md:mr-3" />
                   Start Matching
                 </Button>
 
@@ -1461,7 +1461,7 @@ export default function VideoChat() {
           {(connectionState === 'searching' || connectionState === 'connected') && (
             <>
               {/* Main Content */}
-              <div className="flex h-screen pt-0 md:pt-20">
+              <div className="flex min-h-screen h-screen pt-0 md:pt-20">
                 {/* Left Sidebar - Desktop Only */}
                 <div className="hidden md:flex flex-col items-center gap-4 p-4 bg-[#0a0a0a]">
                   <button className="w-12 h-12 rounded-full bg-gray-800 hover:bg-gray-700 flex items-center justify-center">
@@ -1842,18 +1842,18 @@ export default function VideoChat() {
               </div>
 
               {/* Bottom Controls */}
-              <div className="fixed bottom-0 left-0 right-0 p-4 md:p-8 z-20">
+              <div className="fixed bottom-0 left-0 right-0 p-3 md:p-8 z-20 bg-gradient-to-t from-black via-black/95 to-transparent pb-safe">
                 <div className="max-w-4xl mx-auto">
                   {/* Mobile Controls */}
                   <div className="md:hidden">
-                    <p className="text-center text-xs mb-3 text-gray-400 px-4">
+                    <p className="text-center text-xs mb-3 text-gray-400 px-2">
                       HabeshaLive cares about your safety. Check out our{" "}
                       <a href="#" className="text-[#00D9B4] hover:underline">
                         Community Guidelines
                       </a>
                     </p>
 
-                    <div className="flex items-center justify-center gap-3 mb-4">
+                    <div className="flex items-center justify-center gap-2 md:gap-3 mb-2">
                       {/* Message Button */}
                       <button 
                         onClick={() => setShowChat(!showChat)}
