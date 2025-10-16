@@ -17,6 +17,11 @@ import {
 import { Video, ChevronDown, Users, Shield, Instagram, Facebook, Youtube, Camera, Sparkles, MessageCircle, User as UserIcon, Edit, MoreHorizontal, Mail, LogOut } from "lucide-react";
 import { AuthDialog } from "@/components/AuthDialog";
 import { RegionalPreferenceDialog } from "@/components/RegionalPreferenceDialog";
+import { ProfileViewDialog } from "@/components/ProfileViewDialog";
+import { EditProfileDialog } from "@/components/EditProfileDialog";
+import { SettingsDialog } from "@/components/SettingsDialog";
+import { ManageAccountDialog } from "@/components/ManageAccountDialog";
+import { ContactUsDialog } from "@/components/ContactUsDialog";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -31,6 +36,28 @@ export default function Home() {
   const [showRegionalDialog, setShowRegionalDialog] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
+  const [showProfileDialog, setShowProfileDialog] = useState(false);
+  const [showEditProfileDialog, setShowEditProfileDialog] = useState(false);
+  const [showSettingsDialog, setShowSettingsDialog] = useState(false);
+  const [showManageAccountDialog, setShowManageAccountDialog] = useState(false);
+  const [showContactUsDialog, setShowContactUsDialog] = useState(false);
+  const [profile, setProfile] = useState<any>(null);
+
+  // Load profile data
+  const loadProfile = async (userId: string) => {
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', userId)
+        .single();
+
+      if (error) throw error;
+      setProfile(data);
+    } catch (error) {
+      console.error('Error loading profile:', error);
+    }
+  };
 
   // Initialize auth state
   useEffect(() => {
@@ -40,7 +67,8 @@ export default function Home() {
         setSession(session);
         setUser(session?.user ?? null);
         
-        if (event === 'SIGNED_IN') {
+        if (event === 'SIGNED_IN' && session?.user) {
+          loadProfile(session.user.id);
           toast.success('Signed in successfully!');
         }
       }
@@ -50,6 +78,9 @@ export default function Home() {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setUser(session?.user ?? null);
+      if (session?.user) {
+        loadProfile(session.user.id);
+      }
     });
 
     return () => subscription.unsubscribe();
@@ -178,23 +209,26 @@ export default function Home() {
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="w-56">
-                    <div className="flex items-center gap-0 px-2 py-2">
+                    <div 
+                      className="flex items-center gap-2 px-2 py-2 cursor-pointer hover:bg-accent rounded-sm"
+                      onClick={() => setShowProfileDialog(true)}
+                    >
                       <UserIcon className="h-5 w-5" />
                       <span className="font-semibold">{user.email?.split('@')[0]}</span>
                     </div>
                     <div className="px-2 py-1 text-sm text-muted-foreground">
-                      🌍 Country flag
+                      🌍 {profile?.country || 'Not set'}
                     </div>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setShowEditProfileDialog(true)}>
                       <Edit className="mr-2 h-4 w-4" />
                       Edit Profile
                     </DropdownMenuItem>
-                    <DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setShowSettingsDialog(true)}>
                       <MoreHorizontal className="mr-2 h-4 w-4" />
                       More
                     </DropdownMenuItem>
-                    <DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setShowContactUsDialog(true)}>
                       <Mail className="mr-2 h-4 w-4" />
                       Contact Us
                     </DropdownMenuItem>
@@ -709,6 +743,56 @@ export default function Home() {
       <RegionalPreferenceDialog 
         open={showRegionalDialog} 
         onOpenChange={setShowRegionalDialog} 
+      />
+
+      {/* Profile Dialogs */}
+      <ProfileViewDialog
+        open={showProfileDialog}
+        onOpenChange={setShowProfileDialog}
+        onEditProfile={() => {
+          setShowProfileDialog(false);
+          setShowEditProfileDialog(true);
+        }}
+        onOpenSettings={() => {
+          setShowProfileDialog(false);
+          setShowSettingsDialog(true);
+        }}
+        onOpenContactUs={() => {
+          setShowProfileDialog(false);
+          setShowContactUsDialog(true);
+        }}
+      />
+
+      <EditProfileDialog
+        open={showEditProfileDialog}
+        onOpenChange={setShowEditProfileDialog}
+      />
+
+      <SettingsDialog
+        open={showSettingsDialog}
+        onOpenChange={setShowSettingsDialog}
+        onManageAccount={() => {
+          setShowSettingsDialog(false);
+          setShowManageAccountDialog(true);
+        }}
+        onContactUs={() => {
+          setShowSettingsDialog(false);
+          setShowContactUsDialog(true);
+        }}
+      />
+
+      <ManageAccountDialog
+        open={showManageAccountDialog}
+        onOpenChange={setShowManageAccountDialog}
+        onBack={() => {
+          setShowManageAccountDialog(false);
+          setShowSettingsDialog(true);
+        }}
+      />
+
+      <ContactUsDialog
+        open={showContactUsDialog}
+        onOpenChange={setShowContactUsDialog}
       />
     </div>
   );
