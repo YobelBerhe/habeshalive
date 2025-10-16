@@ -219,11 +219,11 @@ export default function Home() {
       </header>
 
       {/* Hero Section with Split Layout */}
-      <section className="relative min-h-screen pt-20 overflow-hidden">
-        {/* Desktop: Split View - Left Controls, Right Photos */}
-        <div className="hidden md:grid md:grid-cols-2 min-h-screen">
+      <section className="relative overflow-hidden">
+        {/* Desktop: Split View - Left Controls, Right Photos - FIXED HEIGHT */}
+        <div className="hidden md:grid md:grid-cols-2 h-screen pt-20">
           {/* LEFT SIDE - Controls Panel */}
-          <div className="relative bg-black flex flex-col justify-end p-12">
+          <div className="relative bg-black flex flex-col justify-end p-12 h-full overflow-hidden">
             {/* Large Faded "habesha" Text - Center */}
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
               <div className="text-[140px] font-bold text-white/5 leading-none select-none">
@@ -303,7 +303,7 @@ export default function Home() {
           </div>
 
           {/* RIGHT SIDE - 3 Column Scrolling Photos */}
-          <div className="relative bg-black flex gap-3 p-0">
+          <div className="relative bg-black flex gap-3 p-3 h-full overflow-hidden">
             {/* Column 1 - Scrolling Up */}
             <div className="flex-1 overflow-hidden">
               <div className="animate-scroll-up">
@@ -382,7 +382,7 @@ export default function Home() {
         </div>
 
         {/* Mobile: Original Stacked Layout with Photos Background */}
-        <div className="md:hidden relative min-h-screen">
+        <div className="md:hidden relative min-h-screen pt-20">
           {/* Continuous Scrolling Photo Background */}
           <div className="absolute inset-0 flex gap-1">
             {/* Column 1 - Scrolling Up */}
