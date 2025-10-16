@@ -5,8 +5,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { Mail, MessageSquare, Shield, AlertCircle } from "lucide-react";
-import { useState } from "react";
-import { useToast } from "@/hooks/use-toast";
+import { useState, useEffect } from "react";
+import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 interface ContactUsDialogProps {
   open: boolean;
@@ -14,7 +15,6 @@ interface ContactUsDialogProps {
 }
 
 export function ContactUsDialog({ open, onOpenChange }: ContactUsDialogProps) {
-  const { toast } = useToast();
   const [formData, setFormData] = useState({
     category: "",
     email: "",
@@ -25,23 +25,84 @@ export function ContactUsDialog({ open, onOpenChange }: ContactUsDialogProps) {
     language: "",
     description: "",
   });
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = () => {
-    if (!formData.category || !formData.email || !formData.description) {
-      toast({
-        title: "Missing Information",
-        description: "Please fill in all required fields",
-        variant: "destructive",
-      });
+  useEffect(() => {
+    if (open) {
+      loadUserData();
+    }
+  }, [open]);
+
+  const loadUserData = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('email, country, id')
+        .eq('id', user.id)
+        .single();
+
+      if (profile) {
+        setFormData(prev => ({
+          ...prev,
+          email: profile.email || user.email || '',
+          accountId: profile.id,
+          country: profile.country || '',
+        }));
+      }
+    } catch (error) {
+      console.error('Error loading user data:', error);
+    }
+  };
+
+  const handleSubmit = async () => {
+    // Validate required fields
+    if (!formData.category || !formData.email || !formData.description || !formData.language) {
+      toast.error("Please fill in all required fields");
       return;
     }
 
-    // Submit logic here
-    toast({
-      title: "Request Submitted",
-      description: "We'll get back to you within 24-48 hours",
-    });
-    onOpenChange(false);
+    setLoading(true);
+
+    try {
+      // In production, send this to your backend/support system
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      // You could create a 'support_tickets' table in Supabase
+      const { error } = await supabase
+        .from('reports')
+        .insert({
+          reporter_id: user?.id,
+          reason: formData.category,
+          description: formData.description,
+          status: 'pending',
+          priority: 'normal',
+        });
+
+      if (error) throw error;
+
+      toast.success("Request submitted! We'll get back to you within 24-48 hours");
+      onOpenChange(false);
+      
+      // Reset form
+      setFormData({
+        category: "",
+        email: "",
+        accountId: "",
+        country: "",
+        device: "",
+        osVersion: "",
+        language: "",
+        description: "",
+      });
+    } catch (error: any) {
+      console.error('Error submitting request:', error);
+      toast.error(error.message || "Failed to submit request");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -74,7 +135,7 @@ export function ContactUsDialog({ open, onOpenChange }: ContactUsDialogProps) {
                 <SelectItem value="account">Account</SelectItem>
                 <SelectItem value="payment">Payment & Refund</SelectItem>
                 <SelectItem value="technical">Technical Issues</SelectItem>
-                <SelectItem value="live">Azar Live</SelectItem>
+                <SelectItem value="live">HabeshLive Issues</SelectItem>
                 <SelectItem value="safety">Safety, Security & Privacy</SelectItem>
                 <SelectItem value="legal">Law enforcement inquiries</SelectItem>
               </SelectContent>
@@ -119,6 +180,7 @@ export function ContactUsDialog({ open, onOpenChange }: ContactUsDialogProps) {
               value={formData.accountId}
               onChange={(e) => setFormData({ ...formData, accountId: e.target.value })}
               className="bg-[#2a2a2a] border-gray-700 text-white placeholder:text-gray-500 font-mono text-sm"
+              disabled
             />
           </div>
 
@@ -163,10 +225,9 @@ export function ContactUsDialog({ open, onOpenChange }: ContactUsDialogProps) {
                 <SelectValue placeholder="Select your language" />
               </SelectTrigger>
               <SelectContent className="bg-[#2a2a2a] border-gray-700 text-white">
-                <SelectItem value="english">English</SelectItem>
-                <SelectItem value="amharic">Amharic (አማርኛ)</SelectItem>
-                <SelectItem value="tigrinya">Tigrinya (ትግርኛ)</SelectItem>
-                <SelectItem value="arabic">Arabic (العربية)</SelectItem>
+                <SelectItem value="english">🇬🇧 English</SelectItem>
+                <SelectItem value="tigrinya">🇪🇷 ትግርኛ (Tigrinya)</SelectItem>
+                <SelectItem value="amharic">🇪🇹 አማርኛ (Amharic)</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -174,9 +235,10 @@ export function ContactUsDialog({ open, onOpenChange }: ContactUsDialogProps) {
           {/* Submit Button */}
           <Button
             onClick={handleSubmit}
+            disabled={loading}
             className="w-full bg-gradient-to-r from-[#00D9B4] to-[#00a085] hover:from-[#00c9a4] hover:to-[#009075] text-black font-bold py-6 text-lg rounded-xl shadow-lg shadow-[#00D9B4]/25 transition-all"
           >
-            Submit Request
+            {loading ? 'Submitting...' : 'Submit Request'}
           </Button>
 
           <p className="text-xs text-center text-gray-500">
