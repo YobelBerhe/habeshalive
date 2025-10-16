@@ -2005,8 +2005,14 @@ export default function VideoChat() {
           open={showProfileViewDialog}
           onOpenChange={setShowProfileViewDialog}
           onEditProfile={handleOpenEditProfile}
-          onOpenSettings={() => setShowSettingsDialog(true)}
-          onOpenContactUs={handleOpenContactUs}
+          onOpenSettings={() => {
+            setShowProfileViewDialog(false);
+            setShowSettingsDialog(true);
+          }}
+          onOpenContactUs={() => {
+            setShowProfileViewDialog(false);
+            setShowContactUsDialog(true);
+          }}
         />
           <SettingsDialog 
             open={showSettingsDialog} 
