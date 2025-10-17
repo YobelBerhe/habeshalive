@@ -76,13 +76,13 @@ export function HashtagSelector({ selectedTags, onTagsChange, maxTags = 10 }: Ha
         </PopoverTrigger>
         <PopoverContent className="w-[380px] bg-[#1a1a1a] border-gray-700 p-0" align="start">
           {/* Category Tabs */}
-          <div className="border-b border-gray-700">
-            <div className="flex gap-1 p-2 overflow-x-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-transparent">
+          <div className="border-b border-gray-700 overflow-x-auto">
+            <div className="flex gap-1 p-2 min-w-max">
               {categories.map((cat) => (
                   <button
                     key={cat.key}
                     onClick={() => setActiveCategory(cat.key)}
-                    className={`px-3 py-2 rounded-lg text-xs whitespace-nowrap transition-colors ${
+                    className={`px-3 py-2 rounded-lg text-xs whitespace-nowrap transition-colors flex-shrink-0 ${
                       activeCategory === cat.key
                         ? "bg-[#00D9B4] text-black font-medium"
                         : "bg-[#2a2a2a] text-gray-400 hover:bg-[#333]"

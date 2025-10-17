@@ -195,50 +195,18 @@ export default function Home() {
             {user ? (
               <>
                 <Button
+                  onClick={handleSignOut}
                   className="bg-white text-black hover:bg-gray-100 rounded-full px-6 py-2.5 font-semibold text-base h-auto"
                 >
                   Sign Out
                 </Button>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button
-                      size="icon"
-                      className="bg-white text-black hover:bg-gray-100 rounded-full w-11 h-11"
-                    >
-                      <UserIcon className="h-5 w-5" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-56 bg-black border-gray-800 text-white">
-                    <div 
-                      className="flex items-center gap-2 px-2 py-2 cursor-pointer hover:bg-white/10 rounded-sm"
-                      onClick={() => setShowProfileDialog(true)}
-                    >
-                      <UserIcon className="h-5 w-5" />
-                      <span className="font-semibold">{user.email?.split('@')[0]}</span>
-                    </div>
-                    <div className="px-2 py-1 text-sm text-gray-400">
-                      🌍 {profile?.country || 'Not set'}
-                    </div>
-                    <DropdownMenuSeparator className="bg-gray-800" />
-                    <DropdownMenuItem onClick={() => setShowEditProfileDialog(true)} className="hover:bg-white/10 focus:bg-white/10 focus:text-white">
-                      <Edit className="mr-2 h-4 w-4" />
-                      Edit Profile
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => setShowSettingsDialog(true)} className="hover:bg-white/10 focus:bg-white/10 focus:text-white">
-                      <MoreHorizontal className="mr-2 h-4 w-4" />
-                      More
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => setShowContactUsDialog(true)} className="hover:bg-white/10 focus:bg-white/10 focus:text-white">
-                      <Mail className="mr-2 h-4 w-4" />
-                      Contact Us
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator className="bg-gray-800" />
-                    <DropdownMenuItem onClick={handleSignOut} className="hover:bg-white/10 focus:bg-white/10 focus:text-white">
-                      <LogOut className="mr-2 h-4 w-4" />
-                      Log Out
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                <Button
+                  size="icon"
+                  onClick={() => setShowProfileDialog(true)}
+                  className="bg-white text-black hover:bg-gray-100 rounded-full w-11 h-11"
+                >
+                  <UserIcon className="h-5 w-5" />
+                </Button>
               </>
             ) : (
               <Button

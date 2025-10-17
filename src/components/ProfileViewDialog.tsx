@@ -150,7 +150,13 @@ export function ProfileViewDialog({
       <DialogContent className="bg-black text-white border-gray-800 max-w-sm p-0 gap-0">
         {/* User Info Header */}
         <div className="p-6 border-b border-white/10">
-          <div className="flex items-center gap-3 mb-3">
+          <div 
+            className="flex items-center gap-3 mb-3 cursor-pointer hover:bg-white/5 rounded-lg p-2 -m-2 transition-colors"
+            onClick={() => {
+              onOpenChange(false);
+              onEditProfile();
+            }}
+          >
             <div className="relative">
               <Avatar className="w-12 h-12 border-2 border-white/20">
                 <AvatarImage src={profile.avatar_url || ''} />
