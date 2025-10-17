@@ -167,7 +167,7 @@ export default function Home() {
               <img 
                 src={habeshaLogo} 
                 alt="ሓበሻ Logo" 
-                className="h-16 md:h-20 w-auto object-contain"
+                className="h-20 md:h-28 w-auto object-contain"
               />
             </button>
             
