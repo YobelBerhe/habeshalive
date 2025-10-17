@@ -27,6 +27,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import type { User, Session } from "@supabase/supabase-js";
 import { toast } from "sonner";
+import habeshaLogo from "@/assets/habesha-logo.png";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -157,11 +158,18 @@ export default function Home() {
         <div className="absolute inset-0 bg-gradient-to-b from-habesha-bg/90 via-habesha-bg/50 to-transparent pointer-events-none" />
         
         <div className="max-w-7xl mx-auto flex items-center justify-between relative z-10">
-          {/* Logo - Bigger */}
+          {/* Logo - Clickable Image */}
           <div className="flex items-center gap-8">
-            <div className="text-3xl md:text-3xl font-bold tracking-tight text-habesha-gold">
-              habesha
-            </div>
+            <button 
+              onClick={() => navigate('/')}
+              className="focus:outline-none focus:ring-2 focus:ring-habesha-gold/50 rounded-lg transition-transform hover:scale-105"
+            >
+              <img 
+                src={habeshaLogo} 
+                alt="ሓበሻ Logo" 
+                className="h-16 md:h-20 w-auto object-contain"
+              />
+            </button>
             
             {/* Navigation - Desktop */}
             <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
