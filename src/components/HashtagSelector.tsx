@@ -76,8 +76,8 @@ export function HashtagSelector({ selectedTags, onTagsChange, maxTags = 10 }: Ha
         </PopoverTrigger>
         <PopoverContent className="w-[380px] bg-[#1a1a1a] border-gray-700 p-0" align="start">
           {/* Category Tabs */}
-          <div className="border-b border-gray-700 overflow-x-auto">
-            <div className="flex gap-1 p-2 min-w-max">
+          <div className="border-b border-gray-700 overflow-x-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-transparent">
+            <div className="flex gap-1 p-2 min-w-max pb-3">
               {categories.map((cat) => (
                   <button
                     key={cat.key}
@@ -95,7 +95,7 @@ export function HashtagSelector({ selectedTags, onTagsChange, maxTags = 10 }: Ha
           </div>
 
           {/* Hashtags Grid */}
-          <ScrollArea className="h-[350px]">
+          <div className="h-[350px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-transparent">
             <div className="p-3 grid grid-cols-2 gap-2">
               {currentHashtags.map((hashtag: any) => {
                 const isSelected = selectedTags.includes(hashtag.tag);
@@ -125,7 +125,7 @@ export function HashtagSelector({ selectedTags, onTagsChange, maxTags = 10 }: Ha
                 );
               })}
             </div>
-          </ScrollArea>
+          </div>
         </PopoverContent>
       </Popover>
 
