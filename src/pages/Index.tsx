@@ -28,6 +28,16 @@ import { supabase } from "@/integrations/supabase/client";
 import type { User, Session } from "@supabase/supabase-js";
 import { toast } from "sonner";
 import habeshaLogo from "@/assets/habesha-logo.png";
+import profile1 from "@/assets/profile-1.png";
+import profile2 from "@/assets/profile-2.png";
+import profile3 from "@/assets/profile-3.png";
+import profile4 from "@/assets/profile-4.png";
+import profile5 from "@/assets/profile-5.png";
+import profile6 from "@/assets/profile-6.png";
+import profile7 from "@/assets/profile-7.png";
+import profile8 from "@/assets/profile-8.png";
+import profile9 from "@/assets/profile-9.png";
+import profile10 from "@/assets/profile-10.png";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -121,30 +131,30 @@ export default function Home() {
   const profiles = [
     // Column 1 (scrolls up) - Mix of genders
     [
-      { name: "Selam", age: 24, image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=700&fit=crop", flag: "🇪🇹", online: true },
-      { name: "Daniel", age: 26, image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=700&fit=crop", flag: "🇺🇸", online: true },
-      { name: "Meron", age: 23, image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=700&fit=crop", flag: "🇪🇷", online: true },
-      { name: "Samuel", age: 27, image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=700&fit=crop", flag: "🇬🇧", online: true },
-      { name: "Rahel", age: 25, image: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400&h=700&fit=crop", flag: "🇪🇹", online: true },
-      { name: "Yonas", age: 28, image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=700&fit=crop", flag: "🇪🇷", online: true },
+      { name: "Amara", age: 24, image: profile1, flag: "🇪🇹", online: true },
+      { name: "Marcus", age: 28, image: profile2, flag: "🇺🇸", online: true },
+      { name: "Zahara", age: 22, image: profile3, flag: "🇪🇷", online: true },
+      { name: "Isaiah", age: 26, image: profile4, flag: "🇬🇧", online: true },
+      { name: "Selam", age: 25, image: profile5, flag: "🇪🇹", online: true },
+      { name: "Daniel", age: 30, image: profile6, flag: "🇨🇦", online: true },
     ],
     // Column 2 (scrolls down) - Mix of genders
     [
-      { name: "Helen", age: 26, image: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=400&h=700&fit=crop", flag: "🇬🇧", online: true },
-      { name: "Dawit", age: 29, image: "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=400&h=700&fit=crop", flag: "🇺🇸", online: true },
-      { name: "Tsigereda", age: 22, image: "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=400&h=700&fit=crop", flag: "🇪🇹", online: true },
-      { name: "Amanuel", age: 30, image: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=400&h=700&fit=crop", flag: "🇪🇷", online: true },
-      { name: "Liya", age: 24, image: "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=400&h=700&fit=crop", flag: "🇪🇹", online: true },
-      { name: "Henok", age: 31, image: "https://images.unsplash.com/photo-1504257432389-52343af06ae3?w=400&h=700&fit=crop", flag: "🇺🇸", online: true },
+      { name: "Liya", age: 23, image: profile7, flag: "🇪🇹", online: true },
+      { name: "Samuel", age: 27, image: profile8, flag: "🇺🇸", online: true },
+      { name: "Meron", age: 24, image: profile9, flag: "🇪🇷", online: true },
+      { name: "Elias", age: 29, image: profile10, flag: "🇬🇧", online: true },
+      { name: "Rahel", age: 26, image: profile1, flag: "🇪🇹", online: true },
+      { name: "Yonas", age: 31, image: profile2, flag: "🇨🇦", online: true },
     ],
     // Column 3 (scrolls up) - Mix of genders
     [
-      { name: "Bethlehem", age: 23, image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=700&fit=crop", flag: "🇪🇷", online: true },
-      { name: "Aman", age: 28, image: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400&h=700&fit=crop", flag: "🇬🇧", online: true },
-      { name: "Natsinet", age: 25, image: "https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?w=400&h=700&fit=crop", flag: "🇪🇹", online: true },
-      { name: "Bereket", age: 27, image: "https://images.unsplash.com/photo-1499952127939-9bbf5af6c51c?w=400&h=700&fit=crop", flag: "🇪🇷", online: true },
-      { name: "Saron", age: 24, image: "https://images.unsplash.com/photo-1546961329-78bef0414d7c?w=400&h=700&fit=crop", flag: "🇺🇸", online: true },
-      { name: "Elias", age: 29, image: "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=400&h=700&fit=crop", flag: "🇪🇹", online: true },
+      { name: "Bethlehem", age: 25, image: profile3, flag: "🇪🇷", online: true },
+      { name: "Dawit", age: 28, image: profile4, flag: "🇺🇸", online: true },
+      { name: "Tsion", age: 23, image: profile5, flag: "🇪🇹", online: true },
+      { name: "Amanuel", age: 27, image: profile6, flag: "🇪🇷", online: true },
+      { name: "Helen", age: 24, image: profile7, flag: "🇬🇧", online: true },
+      { name: "Henok", age: 30, image: profile8, flag: "🇪🇹", online: true },
     ],
   ];
 
