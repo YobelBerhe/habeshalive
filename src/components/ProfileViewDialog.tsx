@@ -70,8 +70,26 @@ export function ProfileViewDialog({
       if (!displayName && userEmail) {
         displayName = userEmail.split('@')[0];
       }
+
+      // Get country from IP if not set
+      let country = data.country;
+      if (!country) {
+        try {
+          const ipResponse = await fetch('https://ipapi.co/json/');
+          const ipData = await ipResponse.json();
+          country = ipData.country_name;
+          
+          // Optionally save it to profile
+          await supabase
+            .from('profiles')
+            .update({ country: country })
+            .eq('id', targetUserId);
+        } catch (e) {
+          console.error('Error fetching country:', e);
+        }
+      }
       
-      setProfile({ ...data, username: displayName } as UserProfile);
+      setProfile({ ...data, username: displayName, country: country } as UserProfile);
       
       // Check online status
       const { data: onlineData } = await supabase

@@ -5,6 +5,8 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { ChangeEmailDialog } from "./ChangeEmailDialog";
+import { PrivacyPreferenceDialog } from "./PrivacyPreferenceDialog";
 
 interface SettingsDialogProps {
   open: boolean;
@@ -18,6 +20,8 @@ export function SettingsDialog({ open, onOpenChange, onManageAccount, onContactU
   const [hideGender, setHideGender] = useState(false);
   const [showPartnerProfile, setShowPartnerProfile] = useState(true);
   const [userEmail, setUserEmail] = useState("");
+  const [showChangeEmail, setShowChangeEmail] = useState(false);
+  const [showPrivacyPrefs, setShowPrivacyPrefs] = useState(false);
 
   useEffect(() => {
     if (open) {
@@ -55,6 +59,7 @@ export function SettingsDialog({ open, onOpenChange, onManageAccount, onContactU
   };
 
   return (
+    <>
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="bg-black text-white border-gray-800 max-w-md max-h-[90vh] overflow-y-auto">
         <DialogHeader>
@@ -77,7 +82,13 @@ export function SettingsDialog({ open, onOpenChange, onManageAccount, onContactU
               <h3 className="text-sm font-medium text-gray-400 uppercase tracking-wider">Account & Security</h3>
             </div>
             <div className="space-y-2">
-              <div className="w-full bg-[#2a2a2a] border border-gray-700 rounded-lg p-4 hover:border-[#00D9B4]/50 transition-colors">
+              <button
+                onClick={() => {
+                  onOpenChange(false);
+                  setShowChangeEmail(true);
+                }}
+                className="w-full bg-[#2a2a2a] border border-gray-700 rounded-lg p-4 hover:border-[#00D9B4]/50 transition-colors"
+              >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <Mail className="w-5 h-5 text-gray-400" />
@@ -88,7 +99,7 @@ export function SettingsDialog({ open, onOpenChange, onManageAccount, onContactU
                   </div>
                   <ChevronRight className="w-5 h-5 text-gray-400" />
                 </div>
-              </div>
+              </button>
               
               <button 
                 onClick={() => {
@@ -158,17 +169,18 @@ export function SettingsDialog({ open, onOpenChange, onManageAccount, onContactU
               <h3 className="text-sm font-medium text-gray-400 uppercase tracking-wider">Services</h3>
             </div>
             <div className="space-y-2">
-              <a 
-                href="https://docs.lovable.dev/features/security" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="w-full bg-[#2a2a2a] border border-gray-700 rounded-lg p-4 hover:bg-[#333] hover:border-[#00D9B4]/50 transition-colors block"
+              <button
+                onClick={() => {
+                  onOpenChange(false);
+                  setShowPrivacyPrefs(true);
+                }}
+                className="w-full bg-[#2a2a2a] border border-gray-700 rounded-lg p-4 hover:bg-[#333] hover:border-[#00D9B4]/50 transition-colors"
               >
                 <div className="flex items-center justify-between">
                   <span className="font-medium">Privacy Preference Center</span>
                   <ChevronRight className="w-5 h-5 text-gray-400" />
                 </div>
-              </a>
+              </button>
 
               <button 
                 onClick={() => {
@@ -200,5 +212,25 @@ export function SettingsDialog({ open, onOpenChange, onManageAccount, onContactU
         </div>
       </DialogContent>
     </Dialog>
+
+    <ChangeEmailDialog
+      open={showChangeEmail}
+      onOpenChange={setShowChangeEmail}
+      onBack={() => {
+        setShowChangeEmail(false);
+        onOpenChange(true);
+      }}
+      currentEmail={userEmail}
+    />
+
+    <PrivacyPreferenceDialog
+      open={showPrivacyPrefs}
+      onOpenChange={setShowPrivacyPrefs}
+      onBack={() => {
+        setShowPrivacyPrefs(false);
+        onOpenChange(true);
+      }}
+    />
+    </>
   );
 }

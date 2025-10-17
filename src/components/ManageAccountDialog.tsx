@@ -3,6 +3,7 @@ import { ChevronRight, ChevronLeft, AlertTriangle, FileText, Coffee } from "luci
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { DataRequestDialog } from "./DataRequestDialog";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -22,6 +23,7 @@ interface ManageAccountDialogProps {
 
 export function ManageAccountDialog({ open, onOpenChange, onBack }: ManageAccountDialogProps) {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [showDataRequest, setShowDataRequest] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
   const handleDeleteAccount = async () => {
@@ -123,7 +125,10 @@ export function ManageAccountDialog({ open, onOpenChange, onBack }: ManageAccoun
           </button>
           
           <button 
-            onClick={handleDataRequest}
+            onClick={() => {
+              onOpenChange(false);
+              setShowDataRequest(true);
+            }}
             className="w-full bg-[#2a2a2a] border border-gray-700 rounded-lg p-4 flex items-center justify-between hover:bg-[#333] hover:border-[#00D9B4]/50 transition-colors"
           >
             <div className="flex items-center gap-3">
@@ -174,6 +179,15 @@ export function ManageAccountDialog({ open, onOpenChange, onBack }: ManageAccoun
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
+
+    <DataRequestDialog
+      open={showDataRequest}
+      onOpenChange={setShowDataRequest}
+      onBack={() => {
+        setShowDataRequest(false);
+        onOpenChange(true);
+      }}
+    />
   </>
   );
 }

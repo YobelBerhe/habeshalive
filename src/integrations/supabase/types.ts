@@ -63,6 +63,7 @@ export type Database = {
           ban_expires: string | null
           ban_reason: string | null
           banned: boolean | null
+          bio: string | null
           birthday: Json | null
           city: string | null
           completed_calls: number | null
@@ -107,6 +108,7 @@ export type Database = {
           ban_expires?: string | null
           ban_reason?: string | null
           banned?: boolean | null
+          bio?: string | null
           birthday?: Json | null
           city?: string | null
           completed_calls?: number | null
@@ -151,6 +153,7 @@ export type Database = {
           ban_expires?: string | null
           ban_reason?: string | null
           banned?: boolean | null
+          bio?: string | null
           birthday?: Json | null
           city?: string | null
           completed_calls?: number | null

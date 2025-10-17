@@ -77,9 +77,8 @@ export function HashtagSelector({ selectedTags, onTagsChange, maxTags = 10 }: Ha
         <PopoverContent className="w-[380px] bg-[#1a1a1a] border-gray-700 p-0" align="start">
           {/* Category Tabs */}
           <div className="border-b border-gray-700">
-            <ScrollArea className="w-full">
-              <div className="flex gap-1 p-2 overflow-x-auto">
-                {categories.map((cat) => (
+            <div className="flex gap-1 p-2 overflow-x-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-transparent">
+              {categories.map((cat) => (
                   <button
                     key={cat.key}
                     onClick={() => setActiveCategory(cat.key)}
@@ -92,12 +91,11 @@ export function HashtagSelector({ selectedTags, onTagsChange, maxTags = 10 }: Ha
                     {cat.icon} {cat.label}
                   </button>
                 ))}
-              </div>
-            </ScrollArea>
+            </div>
           </div>
 
           {/* Hashtags Grid */}
-          <ScrollArea className="h-[300px]">
+          <ScrollArea className="h-[350px]">
             <div className="p-3 grid grid-cols-2 gap-2">
               {currentHashtags.map((hashtag: any) => {
                 const isSelected = selectedTags.includes(hashtag.tag);

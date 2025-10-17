@@ -51,7 +51,7 @@ export function EditProfileDialog({ open, onOpenChange }: EditProfileDialogProps
       if (data) {
         setUsername(data.username || '');
         setAvatarUrl(data.avatar_url || '');
-        setAboutMe(''); // Add bio field to database if needed
+        setAboutMe(data.bio || '');
         setSelectedHashtags(data.interests || []);
       }
     } catch (error) {
@@ -107,6 +107,7 @@ export function EditProfileDialog({ open, onOpenChange }: EditProfileDialogProps
       const { error } = await supabase
         .from('profiles')
         .update({
+          bio: aboutMe,
           interests: selectedHashtags,
           updated_at: new Date().toISOString(),
         })
