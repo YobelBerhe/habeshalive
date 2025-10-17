@@ -127,23 +127,27 @@ export function EditProfileDialog({ open, onOpenChange }: EditProfileDialogProps
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-black text-white border-gray-800 max-w-md max-h-[90vh] overflow-y-auto">
+      <DialogContent className="bg-habesha-gradient text-habesha-cream border-habesha-border max-w-md max-h-[90vh] overflow-y-auto">
+        {/* Habesha Cultural Header Pattern */}
+        <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-habesha-gold via-habesha-hover-gold to-habesha-gold opacity-80"></div>
+        
         <DialogHeader>
-          <DialogTitle className="text-2xl font-bold">Edit Profile</DialogTitle>
+          <DialogTitle className="text-2xl font-bold text-habesha-cream">✏️ Edit Profile</DialogTitle>
+          <p className="text-sm text-habesha-cream/70">መግለጺ ኣርትዕ (Update your profile)</p>
         </DialogHeader>
         
         <div className="space-y-5 py-4">
           {/* Profile Picture */}
           <div className="flex justify-center">
             <div className="relative group">
-              <Avatar className="w-28 h-28 border-4 border-[#00D9B4]/30 group-hover:border-[#00D9B4] transition-colors">
+              <Avatar className="w-28 h-28 border-4 border-habesha-gold/30 group-hover:border-habesha-gold transition-colors ring-4 ring-habesha-gold/10">
                 <AvatarImage src={avatarUrl} />
-                <AvatarFallback className="bg-gradient-to-br from-[#00D9B4] to-[#00a085] text-black text-3xl font-bold">
+                <AvatarFallback className="bg-gradient-to-br from-habesha-gold to-habesha-hover-gold text-habesha-bg text-3xl font-bold">
                   {username[0]?.toUpperCase() || 'U'}
                 </AvatarFallback>
               </Avatar>
-              <label htmlFor="photo-upload" className="absolute bottom-0 right-0 w-10 h-10 bg-[#00D9B4] hover:bg-[#00c9a4] rounded-full flex items-center justify-center shadow-lg transition-colors cursor-pointer">
-                <Camera className="w-5 h-5 text-black" />
+              <label htmlFor="photo-upload" className="absolute bottom-0 right-0 w-10 h-10 bg-habesha-gold hover:bg-habesha-hover-gold rounded-full flex items-center justify-center shadow-gold transition-colors cursor-pointer">
+                <Camera className="w-5 h-5 text-habesha-bg" />
                 <input
                   id="photo-upload"
                   type="file"
@@ -179,46 +183,46 @@ export function EditProfileDialog({ open, onOpenChange }: EditProfileDialogProps
 
           {/* Hashtags - ALL 10 CATEGORIES */}
           <div>
-            <label className="text-sm font-medium mb-2 block">
+            <label className="text-sm font-medium mb-2 block text-habesha-cream">
               Hashtags
-              <span className="text-gray-400 ml-2">(Select up to 10)</span>
+              <span className="text-habesha-cream/60 ml-2">(Select up to 10)</span>
             </label>
             <HashtagSelector
               selectedTags={selectedHashtags}
               onTagsChange={setSelectedHashtags}
               maxTags={10}
             />
-            <p className="text-xs text-gray-500 mt-2">
+            <p className="text-xs text-habesha-cream/60 mt-2">
               💡 Choose hashtags that represent you! This helps match with like-minded people.
             </p>
           </div>
 
           {/* Username Display */}
           <div>
-            <label className="text-sm font-medium mb-2 block">My Info</label>
-            <div className="w-full bg-[#2a2a2a] border border-gray-700 rounded-lg p-4 flex items-center justify-between">
+            <label className="text-sm font-medium mb-2 block text-habesha-cream">My Info</label>
+            <div className="w-full bg-habesha-dark border border-habesha-border rounded-lg p-4 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <span className="text-2xl">👤</span>
-                <span>{username}</span>
+                <span className="text-habesha-cream">{username}</span>
               </div>
             </div>
           </div>
 
           {/* Language Selector */}
           <div>
-            <label className="text-sm font-medium mb-2 block">Language Preference</label>
+            <label className="text-sm font-medium mb-2 block text-habesha-cream">Language Preference</label>
             <Select value={language} onValueChange={setLanguage}>
-              <SelectTrigger className="w-full bg-[#2a2a2a] border-gray-700 text-white">
-                <Globe className="w-4 h-4 mr-2" />
+              <SelectTrigger className="w-full bg-habesha-dark border-habesha-border text-habesha-cream focus:border-habesha-gold focus:ring-habesha-gold">
+                <Globe className="w-4 h-4 mr-2 text-habesha-gold" />
                 <SelectValue placeholder="Select language" />
               </SelectTrigger>
-              <SelectContent className="bg-[#2a2a2a] border-gray-700 text-white">
+              <SelectContent className="bg-habesha-dark border-habesha-border text-habesha-cream">
                 <SelectItem value="english">🇬🇧 English (Default)</SelectItem>
                 <SelectItem value="tigrinya">🇪🇷 ትግርኛ (Tigrinya)</SelectItem>
                 <SelectItem value="amharic">🇪🇹 አማርኛ (Amharic)</SelectItem>
               </SelectContent>
             </Select>
-            <p className="text-xs text-gray-500 mt-2">
+            <p className="text-xs text-habesha-cream/60 mt-2">
               Select your preferred language for the interface
             </p>
           </div>
@@ -227,9 +231,9 @@ export function EditProfileDialog({ open, onOpenChange }: EditProfileDialogProps
           <Button
             onClick={handleSave}
             disabled={loading}
-            className="w-full bg-[#00D9B4] hover:bg-[#00c9a4] text-black font-medium py-6 text-lg rounded-xl"
+            className="w-full bg-gradient-to-r from-habesha-gold to-habesha-hover-gold hover:from-habesha-hover-gold hover:to-habesha-gold text-habesha-bg font-bold py-6 text-lg rounded-xl shadow-gold-lg transition-all"
           >
-            {loading ? 'Saving...' : 'Complete'}
+            {loading ? 'Saving...' : '✅ Complete'}
           </Button>
         </div>
       </DialogContent>

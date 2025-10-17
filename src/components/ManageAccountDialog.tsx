@@ -84,19 +84,21 @@ export function ManageAccountDialog({ open, onOpenChange, onBack }: ManageAccoun
   return (
     <>
       <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className="bg-black text-white border-gray-800 max-w-md">
+        <DialogContent className="bg-habesha-gradient text-habesha-cream border-habesha-border max-w-md">
+        {/* Habesha Cultural Header Pattern */}
+        <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-habesha-gold via-habesha-hover-gold to-habesha-gold opacity-80"></div>
         
         <DialogHeader>
           <div className="flex items-center gap-3">
             <button 
               onClick={onBack} 
-              className="hover:bg-white/10 p-2 rounded-lg transition-colors"
+              className="hover:bg-habesha-gold/10 p-2 rounded-lg transition-colors"
             >
-              <ChevronLeft className="w-5 h-5" />
+              <ChevronLeft className="w-5 h-5 text-habesha-cream" />
             </button>
             <div>
-              <DialogTitle className="text-2xl font-bold">Manage account</DialogTitle>
-              <p className="text-sm text-gray-400">መለያኻ ኣመሓድር (Account settings & data)</p>
+              <DialogTitle className="text-2xl font-bold text-habesha-cream">Manage account</DialogTitle>
+              <p className="text-sm text-habesha-cream/70">መለያኻ ኣመሓድር (Account settings & data)</p>
             </div>
           </div>
         </DialogHeader>
@@ -112,13 +114,13 @@ export function ManageAccountDialog({ open, onOpenChange, onBack }: ManageAccoun
 
           <button 
             onClick={() => setShowDeleteDialog(true)}
-            className="w-full bg-[#2a2a2a] border border-red-500/30 rounded-lg p-4 flex items-center justify-between hover:bg-red-500/10 transition-colors group"
+            className="w-full bg-habesha-dark border border-red-500/30 rounded-lg p-4 flex items-center justify-between hover:bg-red-500/10 hover:border-red-500/50 transition-colors group"
           >
             <div className="flex items-center gap-3">
               <AlertTriangle className="w-5 h-5 text-red-400 group-hover:text-red-300" />
               <div className="text-left">
                 <div className="text-red-400 group-hover:text-red-300 font-medium">Delete Account</div>
-                <div className="text-xs text-gray-400">Permanently delete your HabeshLive account</div>
+                <div className="text-xs text-habesha-cream/60">Permanently delete your HabeshLive account</div>
               </div>
             </div>
             <ChevronRight className="w-5 h-5 text-red-400 group-hover:text-red-300" />
@@ -129,25 +131,25 @@ export function ManageAccountDialog({ open, onOpenChange, onBack }: ManageAccoun
               onOpenChange(false);
               setShowDataRequest(true);
             }}
-            className="w-full bg-[#2a2a2a] border border-gray-700 rounded-lg p-4 flex items-center justify-between hover:bg-[#333] hover:border-[#00D9B4]/50 transition-colors"
+            className="w-full bg-habesha-dark border border-habesha-border rounded-lg p-4 flex items-center justify-between hover:bg-habesha-gold/10 hover:border-habesha-gold/50 transition-colors"
           >
             <div className="flex items-center gap-3">
-              <FileText className="w-5 h-5 text-gray-400" />
+              <FileText className="w-5 h-5 text-habesha-cream/70" />
               <div className="text-left">
-                <div className="font-medium">My HabeshLive Data Request</div>
-                <div className="text-xs text-gray-400">Download your personal data</div>
+                <div className="font-medium text-habesha-cream">My HabeshLive Data Request</div>
+                <div className="text-xs text-habesha-cream/60">Download your personal data</div>
               </div>
             </div>
-            <ChevronRight className="w-5 h-5 text-gray-400" />
+            <ChevronRight className="w-5 h-5 text-habesha-cream/50" />
           </button>
 
           {/* Info Box */}
-          <div className="bg-[#00D9B4]/10 border border-[#00D9B4]/30 rounded-lg p-4 mt-4">
+          <div className="bg-habesha-gold/10 border border-habesha-gold/30 rounded-lg p-4 mt-4">
             <div className="flex items-start gap-3">
-              <Coffee className="w-5 h-5 text-[#00D9B4] flex-shrink-0 mt-0.5" />
-              <div className="text-sm text-gray-300">
-                <p className="font-medium text-white mb-1">Data Privacy & Habesha Values</p>
-                <p className="text-xs leading-relaxed">
+              <Coffee className="w-5 h-5 text-habesha-gold flex-shrink-0 mt-0.5" />
+              <div className="text-sm text-habesha-cream">
+                <p className="font-medium text-habesha-gold mb-1">Data Privacy & Habesha Values</p>
+                <p className="text-xs leading-relaxed text-habesha-cream/80">
                   We respect your privacy and handle your data with the utmost care, following our community's values of trust (እምነት) and respect (ክብሪ). You can request or delete your data at any time.
                 </p>
               </div>
@@ -158,15 +160,15 @@ export function ManageAccountDialog({ open, onOpenChange, onBack }: ManageAccoun
     </Dialog>
 
     <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
-      <AlertDialogContent className="bg-black border-red-500/30 text-white">
+      <AlertDialogContent className="bg-habesha-gradient border-red-500/30 text-habesha-cream">
         <AlertDialogHeader>
           <AlertDialogTitle className="text-red-400">Delete Account Permanently?</AlertDialogTitle>
-          <AlertDialogDescription className="text-gray-400">
+          <AlertDialogDescription className="text-habesha-cream/70">
             This action cannot be undone. This will permanently delete your account and remove all your data from our servers.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel className="bg-[#2a2a2a] border-gray-700 text-white hover:bg-[#333]">
+          <AlertDialogCancel className="bg-habesha-dark border-habesha-border text-habesha-cream hover:bg-habesha-gold/10">
             Cancel
           </AlertDialogCancel>
           <AlertDialogAction

@@ -117,16 +117,18 @@ ${formData.description}
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-black text-white border-gray-800 max-w-lg max-h-[90vh] overflow-y-auto">
+      <DialogContent className="bg-habesha-gradient text-habesha-cream border-habesha-border max-w-lg max-h-[90vh] overflow-y-auto">
+        {/* Habesha Cultural Header Pattern */}
+        <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-habesha-gold via-habesha-hover-gold to-habesha-gold opacity-80"></div>
         
         <DialogHeader>
           <div className="flex items-center gap-3">
-            <div className="bg-[#00D9B4]/20 p-2 rounded-lg">
-              <MessageSquare className="w-6 h-6 text-[#00D9B4]" />
+            <div className="bg-habesha-gold/20 p-2 rounded-lg">
+              <MessageSquare className="w-6 h-6 text-habesha-gold" />
             </div>
             <div>
-              <DialogTitle className="text-2xl font-bold">Help Center</DialogTitle>
-              <p className="text-sm text-gray-400">ሓገዝ ማእከል (We're here to help you)</p>
+              <DialogTitle className="text-2xl font-bold text-habesha-cream">Help Center</DialogTitle>
+              <p className="text-sm text-habesha-cream/70">ሓገዝ ማእከል (We're here to help you)</p>
             </div>
           </div>
         </DialogHeader>
@@ -134,15 +136,15 @@ ${formData.description}
         <div className="space-y-5 py-4">
           {/* Category Selection */}
           <div className="space-y-2">
-            <Label className="text-sm font-medium flex items-center gap-2">
-              <Shield className="w-4 h-4 text-[#00D9B4]" />
+            <Label className="text-sm font-medium flex items-center gap-2 text-habesha-cream">
+              <Shield className="w-4 h-4 text-habesha-gold" />
               Issue Category <span className="text-red-400">*</span>
             </Label>
             <Select value={formData.category} onValueChange={(value) => setFormData({ ...formData, category: value })}>
-              <SelectTrigger className="bg-[#2a2a2a] border-gray-700 text-white focus:border-[#00D9B4] focus:ring-[#00D9B4]">
+              <SelectTrigger className="bg-habesha-dark border-habesha-border text-habesha-cream focus:border-habesha-gold focus:ring-habesha-gold">
                 <SelectValue placeholder="Select a category" />
               </SelectTrigger>
-              <SelectContent className="bg-[#2a2a2a] border-gray-700 text-white">
+              <SelectContent className="bg-habesha-dark border-habesha-border text-habesha-cream">
                 <SelectItem value="account">Account</SelectItem>
                 <SelectItem value="payment">Payment & Refund</SelectItem>
                 <SelectItem value="technical">Technical Issues</SelectItem>
@@ -179,66 +181,66 @@ ${formData.description}
               placeholder="Describe your issue in detail... ጉዳይካ ብዝርዝር ግለጽ"
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-              className="bg-[#2a2a2a] border-gray-700 text-white placeholder:text-gray-500 min-h-[120px] resize-none focus:border-[#00D9B4] focus:ring-[#00D9B4]"
+              className="bg-habesha-dark border-habesha-border text-habesha-cream placeholder:text-habesha-cream/40 min-h-[120px] resize-none focus:border-habesha-gold focus:ring-habesha-gold"
             />
           </div>
 
           {/* Account ID */}
           <div className="space-y-2">
-            <Label className="text-sm font-medium">Account ID</Label>
+            <Label className="text-sm font-medium text-habesha-cream">Account ID</Label>
             <Input
               placeholder="Your account ID"
               value={formData.accountId}
               onChange={(e) => setFormData({ ...formData, accountId: e.target.value })}
-              className="bg-[#2a2a2a] border-gray-700 text-white placeholder:text-gray-500 font-mono text-sm"
+              className="bg-habesha-dark border-habesha-border text-habesha-cream placeholder:text-habesha-cream/40 font-mono text-sm"
               disabled
             />
           </div>
 
           {/* Country */}
           <div className="space-y-2">
-            <Label className="text-sm font-medium">Country <span className="text-red-400">*</span></Label>
+            <Label className="text-sm font-medium text-habesha-cream">Country <span className="text-red-400">*</span></Label>
             <Input
               placeholder="Your country"
               value={formData.country}
               onChange={(e) => setFormData({ ...formData, country: e.target.value })}
-              className="bg-[#2a2a2a] border-gray-700 text-white placeholder:text-gray-500 focus:border-[#00D9B4] focus:ring-[#00D9B4]"
+              className="bg-habesha-dark border-habesha-border text-habesha-cream placeholder:text-habesha-cream/40 focus:border-habesha-gold focus:ring-habesha-gold"
             />
           </div>
 
           {/* Device & OS */}
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-2">
-              <Label className="text-sm font-medium">Your Device</Label>
+              <Label className="text-sm font-medium text-habesha-cream">Your Device</Label>
               <Input
                 placeholder="e.g., iPhone 14"
                 value={formData.device}
                 onChange={(e) => setFormData({ ...formData, device: e.target.value })}
-                className="bg-[#2a2a2a] border-gray-700 text-white placeholder:text-gray-500 focus:border-[#00D9B4] focus:ring-[#00D9B4]"
+                className="bg-habesha-dark border-habesha-border text-habesha-cream placeholder:text-habesha-cream/40 focus:border-habesha-gold focus:ring-habesha-gold"
               />
             </div>
             <div className="space-y-2">
-              <Label className="text-sm font-medium">OS Version</Label>
+              <Label className="text-sm font-medium text-habesha-cream">OS Version</Label>
               <Input
                 placeholder="e.g., iOS 17"
                 value={formData.osVersion}
                 onChange={(e) => setFormData({ ...formData, osVersion: e.target.value })}
-                className="bg-[#2a2a2a] border-gray-700 text-white placeholder:text-gray-500 focus:border-[#00D9B4] focus:ring-[#00D9B4]"
+                className="bg-habesha-dark border-habesha-border text-habesha-cream placeholder:text-habesha-cream/40 focus:border-habesha-gold focus:ring-habesha-gold"
               />
             </div>
           </div>
 
           {/* Language Preference */}
           <div className="space-y-2">
-            <Label className="text-sm font-medium flex items-center gap-2">
-              <Coffee className="w-4 h-4 text-[#00D9B4]" />
+            <Label className="text-sm font-medium flex items-center gap-2 text-habesha-cream">
+              <Coffee className="w-4 h-4 text-habesha-gold" />
               Language Preference <span className="text-red-400">*</span>
             </Label>
             <Select value={formData.language} onValueChange={(value) => setFormData({ ...formData, language: value })}>
-              <SelectTrigger className="bg-[#2a2a2a] border-gray-700 text-white focus:border-[#00D9B4] focus:ring-[#00D9B4]">
+              <SelectTrigger className="bg-habesha-dark border-habesha-border text-habesha-cream focus:border-habesha-gold focus:ring-habesha-gold">
                 <SelectValue placeholder="Select your language" />
               </SelectTrigger>
-              <SelectContent className="bg-[#2a2a2a] border-gray-700 text-white">
+              <SelectContent className="bg-habesha-dark border-habesha-border text-habesha-cream">
                 <SelectItem value="english">🇬🇧 English</SelectItem>
                 <SelectItem value="tigrinya">🇪🇷 ትግርኛ (Tigrinya)</SelectItem>
                 <SelectItem value="amharic">🇪🇹 አማርኛ (Amharic)</SelectItem>
@@ -250,14 +252,14 @@ ${formData.description}
           <Button
             onClick={handleSubmit}
             disabled={loading}
-            className="w-full bg-gradient-to-r from-[#00D9B4] to-[#00a085] hover:from-[#00c9a4] hover:to-[#009075] text-black font-bold py-6 text-lg rounded-xl shadow-lg shadow-[#00D9B4]/25 transition-all"
+            className="w-full bg-gradient-to-r from-habesha-gold to-habesha-hover-gold hover:from-habesha-hover-gold hover:to-habesha-gold text-habesha-bg font-bold py-6 text-lg rounded-xl shadow-gold-lg transition-all"
           >
             {loading ? 'Submitting...' : '✅ Submit Request'}
           </Button>
 
-          <div className="bg-[#00D9B4]/10 border border-[#00D9B4]/30 rounded-lg p-3">
-            <p className="text-xs text-center text-gray-300 flex items-center justify-center gap-2">
-              <Coffee className="w-4 h-4 text-[#00D9B4]" />
+          <div className="bg-habesha-gold/10 border border-habesha-gold/30 rounded-lg p-3">
+            <p className="text-xs text-center text-habesha-cream flex items-center justify-center gap-2">
+              <Coffee className="w-4 h-4 text-habesha-gold" />
               Response time: 24-48 hours • We'll contact you via email
             </p>
           </div>

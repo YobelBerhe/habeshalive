@@ -134,9 +134,9 @@ export function ProfileViewDialog({
   if (loading || !profile) {
     return (
       <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className="bg-black/95 text-white border-none max-w-sm">
+        <DialogContent className="bg-habesha-gradient text-habesha-cream border-habesha-border max-w-sm">
           <div className="flex items-center justify-center py-12">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#00D9B4]"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-habesha-gold"></div>
           </div>
         </DialogContent>
       </Dialog>
@@ -147,39 +147,42 @@ export function ProfileViewDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-black text-white border-gray-800 max-w-sm p-0 gap-0">
+      <DialogContent className="bg-habesha-gradient text-habesha-cream border-habesha-border max-w-sm p-0 gap-0">
+        {/* Habesha Cultural Header Pattern */}
+        <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-habesha-gold via-habesha-hover-gold to-habesha-gold opacity-80"></div>
+        
         {/* User Info Header */}
-        <div className="p-6 border-b border-white/10">
+        <div className="p-6 border-b border-habesha-border">
           <div 
-            className="flex items-center gap-3 mb-3 cursor-pointer hover:bg-white/5 rounded-lg p-2 -m-2 transition-colors"
+            className="flex items-center gap-3 mb-3 cursor-pointer hover:bg-habesha-gold/10 rounded-lg p-2 -m-2 transition-colors"
             onClick={() => {
               onOpenChange(false);
               onEditProfile();
             }}
           >
             <div className="relative">
-              <Avatar className="w-12 h-12 border-2 border-white/20">
+              <Avatar className="w-12 h-12 border-2 border-habesha-gold/30">
                 <AvatarImage src={profile.avatar_url || ''} />
-                <AvatarFallback className="bg-gradient-to-br from-[#00D9B4] to-[#00a085] text-black font-bold">
+                <AvatarFallback className="bg-gradient-to-br from-habesha-gold to-habesha-hover-gold text-habesha-bg font-bold">
                   {profile.username?.[0]?.toUpperCase() || 'U'}
                 </AvatarFallback>
               </Avatar>
               {isOnline && (
-                <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-black rounded-full"></div>
+                <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-habesha-bg rounded-full"></div>
               )}
             </div>
             <div className="flex-1">
-              <h3 className="font-bold text-lg">{profile.username}</h3>
-              <div className="flex items-center gap-1 text-sm text-gray-400">
+              <h3 className="font-bold text-lg text-habesha-cream">{profile.username}</h3>
+              <div className="flex items-center gap-1 text-sm text-habesha-cream/70">
                 <span className="text-xl">{getCountryFlag(profile.country)}</span>
                 <span>{profile.country || 'Unknown'}</span>
               </div>
             </div>
           </div>
           
-          <div className="bg-white/5 rounded-lg px-3 py-2 flex items-center justify-between">
-            <span className="text-xs text-gray-400">Code</span>
-            <span className="text-sm font-mono text-white">{userCode}</span>
+          <div className="bg-habesha-dark/50 rounded-lg px-3 py-2 flex items-center justify-between border border-habesha-border">
+            <span className="text-xs text-habesha-cream/60">Code</span>
+            <span className="text-sm font-mono text-habesha-gold">{userCode}</span>
           </div>
         </div>
 
@@ -190,10 +193,10 @@ export function ProfileViewDialog({
               onOpenChange(false);
               onEditProfile();
             }}
-            className="w-full flex items-center gap-3 px-4 py-3 hover:bg-white/10 rounded-lg transition-colors text-left"
+            className="w-full flex items-center gap-3 px-4 py-3 hover:bg-habesha-gold/10 rounded-lg transition-colors text-left"
           >
-            <UserCircle className="w-5 h-5 text-gray-400" />
-            <span className="font-medium">Edit Profile</span>
+            <UserCircle className="w-5 h-5 text-habesha-gold" />
+            <span className="font-medium text-habesha-cream">Edit Profile</span>
           </button>
 
           <button
@@ -201,10 +204,10 @@ export function ProfileViewDialog({
               onOpenChange(false);
               onOpenSettings();
             }}
-            className="w-full flex items-center gap-3 px-4 py-3 hover:bg-white/10 rounded-lg transition-colors text-left"
+            className="w-full flex items-center gap-3 px-4 py-3 hover:bg-habesha-gold/10 rounded-lg transition-colors text-left"
           >
-            <Settings className="w-5 h-5 text-gray-400" />
-            <span className="font-medium">More</span>
+            <Settings className="w-5 h-5 text-habesha-gold" />
+            <span className="font-medium text-habesha-cream">More</span>
           </button>
 
           <button
@@ -212,18 +215,18 @@ export function ProfileViewDialog({
               onOpenChange(false);
               onOpenContactUs();
             }}
-            className="w-full flex items-center gap-3 px-4 py-3 hover:bg-white/10 rounded-lg transition-colors text-left"
+            className="w-full flex items-center gap-3 px-4 py-3 hover:bg-habesha-gold/10 rounded-lg transition-colors text-left"
           >
-            <MessageCircle className="w-5 h-5 text-gray-400" />
-            <span className="font-medium">Contact us</span>
+            <MessageCircle className="w-5 h-5 text-habesha-gold" />
+            <span className="font-medium text-habesha-cream">Contact us</span>
           </button>
 
           <button
             onClick={handleLogout}
-            className="w-full flex items-center gap-3 px-4 py-3 hover:bg-white/10 rounded-lg transition-colors text-left"
+            className="w-full flex items-center gap-3 px-4 py-3 hover:bg-habesha-gold/10 rounded-lg transition-colors text-left"
           >
-            <LogOut className="w-5 h-5 text-gray-400" />
-            <span className="font-medium">Log out</span>
+            <LogOut className="w-5 h-5 text-habesha-gold" />
+            <span className="font-medium text-habesha-cream">Log out</span>
           </button>
         </div>
       </DialogContent>

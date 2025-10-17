@@ -148,18 +148,18 @@ export default function Home() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white">
+    <div className="min-h-screen bg-habesha-bg text-habesha-cream">
       {/* Header */}
       <header className={`fixed top-0 left-0 right-0 z-50 px-4 md:px-6 py-4 transition-all duration-300 ${
-        isScrolled ? 'md:bg-transparent md:backdrop-blur-none' : 'md:bg-black/60 md:backdrop-blur-sm'
+        isScrolled ? 'md:bg-transparent md:backdrop-blur-none' : 'md:bg-habesha-bg/60 md:backdrop-blur-sm'
       }`}>
         {/* Gradient fade shadow from top */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/90 via-black/50 to-transparent pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-b from-habesha-bg/90 via-habesha-bg/50 to-transparent pointer-events-none" />
         
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           {/* Logo - Bigger */}
           <div className="flex items-center gap-8">
-            <div className="text-3xl md:text-3xl font-bold tracking-tight">
+            <div className="text-3xl md:text-3xl font-bold tracking-tight text-habesha-gold">
               habesha
             </div>
             
@@ -167,14 +167,14 @@ export default function Home() {
             <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
               <button 
                 onClick={handleStartVideoChat}
-                className="text-white hover:text-gray-300 transition-colors"
+                className="text-habesha-cream hover:text-habesha-gold transition-colors"
               >
                 Video Chat
               </button>
-              <button className="text-white hover:text-gray-300 transition-colors">
+              <button className="text-habesha-cream hover:text-habesha-gold transition-colors">
                 Blog
               </button>
-              <button className="text-white hover:text-gray-300 transition-colors">
+              <button className="text-habesha-cream hover:text-habesha-gold transition-colors">
                 About
               </button>
             </nav>
@@ -183,12 +183,12 @@ export default function Home() {
           {/* Right Side Buttons */}
           <div className="flex items-center gap-2 md:gap-3">
             <Button
-              className="hidden md:inline-flex items-center gap-1.5 bg-white text-black hover:bg-gray-100 rounded-full px-6 py-2.5 font-semibold text-base h-auto"
+              className="hidden md:inline-flex items-center gap-1.5 bg-habesha-gold text-habesha-bg hover:bg-habesha-hover-gold rounded-full px-6 py-2.5 font-semibold text-base h-auto"
             >
               💎 Shop
             </Button>
             <Button
-              className="hidden md:inline-flex items-center gap-1.5 bg-white text-black hover:bg-gray-100 rounded-full px-6 py-2.5 font-semibold text-base h-auto"
+              className="hidden md:inline-flex items-center gap-1.5 bg-habesha-gold text-habesha-bg hover:bg-habesha-hover-gold rounded-full px-6 py-2.5 font-semibold text-base h-auto"
             >
               🕐 History
             </Button>
@@ -196,14 +196,14 @@ export default function Home() {
               <>
                 <Button
                   onClick={handleSignOut}
-                  className="bg-white text-black hover:bg-gray-100 rounded-full px-6 py-2.5 font-semibold text-base h-auto"
+                  className="bg-habesha-gold text-habesha-bg hover:bg-habesha-hover-gold rounded-full px-6 py-2.5 font-semibold text-base h-auto"
                 >
                   Sign Out
                 </Button>
                 <Button
                   size="icon"
                   onClick={() => setShowProfileDialog(true)}
-                  className="bg-white text-black hover:bg-gray-100 rounded-full w-11 h-11"
+                  className="bg-habesha-gold text-habesha-bg hover:bg-habesha-hover-gold rounded-full w-11 h-11"
                 >
                   <UserIcon className="h-5 w-5" />
                 </Button>
@@ -211,7 +211,7 @@ export default function Home() {
             ) : (
               <Button
                 onClick={() => setShowAuthDialog(true)}
-                className="bg-white text-black hover:bg-gray-100 rounded-full px-6 py-2.5 font-semibold text-base h-auto"
+                className="bg-habesha-gold text-habesha-bg hover:bg-habesha-hover-gold rounded-full px-6 py-2.5 font-semibold text-base h-auto"
               >
                 Log in
               </Button>
@@ -225,25 +225,25 @@ export default function Home() {
         {/* Desktop: Split View - Left Controls, Right Photos - FIXED HEIGHT */}
         <div className="hidden md:grid md:grid-cols-2 h-screen pt-20">
           {/* LEFT SIDE - Controls Panel */}
-          <div className="relative bg-black flex flex-col justify-end p-12 h-full overflow-hidden">
+          <div className="relative bg-habesha-bg flex flex-col justify-end p-12 h-full overflow-hidden">
             {/* Large Faded "habesha" Text - Center */}
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <div className="text-[140px] font-bold text-white/5 leading-none select-none">
+              <div className="text-[140px] font-bold text-habesha-cream/5 leading-none select-none">
                 habesha
               </div>
             </div>
 
             {/* Animated Counter - Above Buttons */}
             <div className="mb-8 relative z-10">
-              <div className="flex items-center gap-3 text-white mb-2">
+              <div className="flex items-center gap-3 text-habesha-cream mb-2">
                 <div className="relative">
                   <div className="w-3 h-3 bg-green-500 rounded-full" />
                   <div className="absolute inset-0 w-3 h-3 bg-green-500 rounded-full animate-ping" />
                 </div>
-                <span className="text-3xl font-bold tabular-nums">
+                <span className="text-3xl font-bold tabular-nums text-habesha-gold">
                   {matchingCount.toLocaleString()}
                 </span>
-                <span className="text-lg text-gray-300">are matching now!</span>
+                <span className="text-lg text-habesha-cream/80">are matching now!</span>
               </div>
             </div>
 
@@ -254,7 +254,7 @@ export default function Home() {
                   <DropdownMenuTrigger asChild>
                     <Button
                       size="lg"
-                      className="w-full bg-[#2a2a2a] hover:bg-[#333] text-white rounded-full py-6 text-base font-semibold border-0"
+                      className="w-full bg-habesha-dark hover:bg-habesha-gold/10 text-habesha-cream rounded-full py-6 text-base font-semibold border-habesha-border"
                     >
                       <span className="flex items-center justify-center gap-2">
                         <span className="text-pink-400">⚥</span>
@@ -263,7 +263,7 @@ export default function Home() {
                       </span>
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent className="w-48 bg-gray-900 border-gray-700">
+                  <DropdownMenuContent className="w-48 bg-habesha-dark border-habesha-border text-habesha-cream">
                     <DropdownMenuItem onClick={() => toast.info('💎 Use tokens to filter by Male')}>
                       Male
                     </DropdownMenuItem>
@@ -279,7 +279,7 @@ export default function Home() {
                 <Button
                   onClick={() => setShowRegionalDialog(true)}
                   size="lg"
-                  className="w-full bg-[#2a2a2a] hover:bg-[#333] text-white rounded-full py-6 text-base font-semibold border-0"
+                  className="w-full bg-habesha-dark hover:bg-habesha-gold/10 text-habesha-cream rounded-full py-6 text-base font-semibold border-habesha-border"
                 >
                   <span className="flex items-center justify-center gap-2">
                     <span className="text-green-400">🌍</span>
@@ -292,20 +292,20 @@ export default function Home() {
               <Button
                 onClick={handleStartVideoChat}
                 size="lg"
-                className="w-full bg-white text-black hover:bg-gray-100 rounded-full py-7 text-xl font-bold shadow-2xl border-0"
+                className="w-full bg-gradient-to-r from-habesha-gold to-habesha-hover-gold hover:from-habesha-hover-gold hover:to-habesha-gold text-habesha-bg rounded-full py-7 text-xl font-bold shadow-gold-lg border-0"
               >
                 <Video className="w-6 h-6 mr-2" />
                 Start Video Chat
               </Button>
               
-              <p className="text-xs text-gray-500 text-center mt-2">
+              <p className="text-xs text-habesha-cream/50 text-center mt-2">
                 All images of models are used for illustrative purposes only.
               </p>
             </div>
           </div>
 
           {/* RIGHT SIDE - 3 Column Scrolling Photos */}
-          <div className="relative bg-black flex gap-3 p-3 h-full overflow-hidden">
+          <div className="relative bg-habesha-bg flex gap-3 p-3 h-full overflow-hidden">
             {/* Column 1 - Scrolling Up */}
             <div className="flex-1 overflow-hidden">
               <div className="animate-scroll-up">

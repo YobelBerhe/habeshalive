@@ -61,15 +61,18 @@ export function SettingsDialog({ open, onOpenChange, onManageAccount, onContactU
   return (
     <>
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-black text-white border-gray-800 max-w-md max-h-[90vh] overflow-y-auto">
+      <DialogContent className="bg-habesha-gradient text-habesha-cream border-habesha-border max-w-md max-h-[90vh] overflow-y-auto">
+        {/* Habesha Cultural Header Pattern */}
+        <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-habesha-gold via-habesha-hover-gold to-habesha-gold opacity-80"></div>
+        
         <DialogHeader>
           <div className="flex items-center gap-3">
-            <div className="bg-[#00D9B4]/20 p-2 rounded-lg">
-              <Settings className="w-6 h-6 text-[#00D9B4]" />
+            <div className="bg-habesha-gold/20 p-2 rounded-lg">
+              <Settings className="w-6 h-6 text-habesha-gold" />
             </div>
             <div>
-              <DialogTitle className="text-2xl font-bold">More</DialogTitle>
-              <p className="text-sm text-gray-400">Settings & preferences</p>
+              <DialogTitle className="text-2xl font-bold text-habesha-cream">More</DialogTitle>
+              <p className="text-sm text-habesha-cream/70">ቅንብራት (Settings & preferences)</p>
             </div>
           </div>
         </DialogHeader>
@@ -119,15 +122,16 @@ export function SettingsDialog({ open, onOpenChange, onManageAccount, onContactU
           {/* Notification */}
           <div>
             <div className="flex items-center gap-2 mb-3">
-              <Bell className="w-4 h-4 text-[#00D9B4]" />
-              <h3 className="text-sm font-medium text-gray-400 uppercase tracking-wider">Notification</h3>
+              <Bell className="w-4 h-4 text-habesha-gold" />
+              <h3 className="text-sm font-medium text-habesha-cream/70 uppercase tracking-wider">Notification</h3>
             </div>
-            <div className="bg-[#2a2a2a] border border-gray-700 rounded-lg p-4">
+            <div className="bg-habesha-dark border border-habesha-border rounded-lg p-4">
               <div className="flex items-center justify-between">
-                <span className="font-medium">Marketing Notifications</span>
+                <span className="font-medium text-habesha-cream">Marketing Notifications</span>
                 <Switch
                   checked={marketingNotifications}
                   onCheckedChange={setMarketingNotifications}
+                  className="data-[state=checked]:bg-habesha-gold"
                 />
               </div>
             </div>
@@ -136,26 +140,28 @@ export function SettingsDialog({ open, onOpenChange, onManageAccount, onContactU
           {/* Preferences */}
           <div>
             <div className="flex items-center gap-2 mb-3">
-              <Sparkles className="w-4 h-4 text-[#00D9B4]" />
-              <h3 className="text-sm font-medium text-gray-400 uppercase tracking-wider">Preferences</h3>
+              <Sparkles className="w-4 h-4 text-habesha-gold" />
+              <h3 className="text-sm font-medium text-habesha-cream/70 uppercase tracking-wider">Preferences</h3>
             </div>
             <div className="space-y-2">
-              <div className="bg-[#2a2a2a] border border-gray-700 rounded-lg p-4">
+              <div className="bg-habesha-dark border border-habesha-border rounded-lg p-4">
                 <div className="flex items-center justify-between">
-                  <span className="font-medium">Hide gender from your profile</span>
+                  <span className="font-medium text-habesha-cream">Hide gender from your profile</span>
                   <Switch
                     checked={hideGender}
                     onCheckedChange={setHideGender}
+                    className="data-[state=checked]:bg-habesha-gold"
                   />
                 </div>
               </div>
               
-              <div className="bg-[#2a2a2a] border border-gray-700 rounded-lg p-4">
+              <div className="bg-habesha-dark border border-habesha-border rounded-lg p-4">
                 <div className="flex items-center justify-between">
-                  <span className="font-medium">Show my profile on partner services</span>
+                  <span className="font-medium text-habesha-cream">Show my profile on partner services</span>
                   <Switch
                     checked={showPartnerProfile}
                     onCheckedChange={setShowPartnerProfile}
+                    className="data-[state=checked]:bg-habesha-gold"
                   />
                 </div>
               </div>
@@ -165,8 +171,8 @@ export function SettingsDialog({ open, onOpenChange, onManageAccount, onContactU
           {/* Services */}
           <div>
             <div className="flex items-center gap-2 mb-3">
-              <Sparkles className="w-4 h-4 text-[#00D9B4]" />
-              <h3 className="text-sm font-medium text-gray-400 uppercase tracking-wider">Services</h3>
+              <Sparkles className="w-4 h-4 text-habesha-gold" />
+              <h3 className="text-sm font-medium text-habesha-cream/70 uppercase tracking-wider">Services</h3>
             </div>
             <div className="space-y-2">
               <button
@@ -174,11 +180,11 @@ export function SettingsDialog({ open, onOpenChange, onManageAccount, onContactU
                   onOpenChange(false);
                   setShowPrivacyPrefs(true);
                 }}
-                className="w-full bg-[#2a2a2a] border border-gray-700 rounded-lg p-4 hover:bg-[#333] hover:border-[#00D9B4]/50 transition-colors"
+                className="w-full bg-habesha-dark border border-habesha-border rounded-lg p-4 hover:bg-habesha-gold/10 hover:border-habesha-gold/50 transition-colors"
               >
                 <div className="flex items-center justify-between">
-                  <span className="font-medium">Privacy Preference Center</span>
-                  <ChevronRight className="w-5 h-5 text-gray-400" />
+                  <span className="font-medium text-habesha-cream">Privacy Preference Center</span>
+                  <ChevronRight className="w-5 h-5 text-habesha-cream/50" />
                 </div>
               </button>
 
@@ -187,14 +193,14 @@ export function SettingsDialog({ open, onOpenChange, onManageAccount, onContactU
                   onOpenChange(false);
                   onContactUs();
                 }}
-                className="w-full bg-[#2a2a2a] border border-gray-700 rounded-lg p-4 hover:bg-[#333] hover:border-[#00D9B4]/50 transition-colors"
+                className="w-full bg-habesha-dark border border-habesha-border rounded-lg p-4 hover:bg-habesha-gold/10 hover:border-habesha-gold/50 transition-colors"
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <HelpCircle className="w-5 h-5 text-gray-400" />
-                    <span className="font-medium">Help</span>
+                    <HelpCircle className="w-5 h-5 text-habesha-cream/70" />
+                    <span className="font-medium text-habesha-cream">Help</span>
                   </div>
-                  <ChevronRight className="w-5 h-5 text-gray-400" />
+                  <ChevronRight className="w-5 h-5 text-habesha-cream/50" />
                 </div>
               </button>
             </div>
@@ -204,7 +210,7 @@ export function SettingsDialog({ open, onOpenChange, onManageAccount, onContactU
           <Button
             onClick={handleLogout}
             variant="outline"
-            className="w-full bg-transparent border-red-500/30 text-red-400 hover:bg-red-500/10 hover:text-red-300 py-6"
+            className="w-full bg-transparent border-red-500/30 text-red-400 hover:bg-red-500/10 hover:text-red-300 hover:border-red-500/50 py-6"
           >
             <LogOut className="w-5 h-5 mr-2" />
             Log out
