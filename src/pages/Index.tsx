@@ -446,7 +446,7 @@ export default function Home() {
 
 
           {/* Mobile Controls - Fixed at Bottom */}
-          <div className="fixed inset-x-0 bottom-0 z-20 px-4 pb-safe pt-3 bg-gradient-to-t from-habesha-bg via-habesha-bg/90 to-transparent backdrop-blur">
+          <div className="fixed inset-x-0 bottom-0 z-20 px-4 pb-safe pt-3 bg-gradient-to-t from-black via-black/80 to-transparent">
             {/* Filter Buttons - Side by Side */}
             <div className="grid grid-cols-2 gap-3 mb-3">
               <DropdownMenu>
@@ -501,8 +501,8 @@ export default function Home() {
             <div className="text-center pb-2">
               <div className="flex items-center justify-center gap-2 text-habesha-cream mb-1">
                 <div className="relative">
-                  <div className="w-2 h-2 bg-habesha-gold rounded-full" />
-                  <div className="absolute inset-0 w-2 h-2 bg-habesha-gold rounded-full animate-ping" />
+                  <div className="w-2 h-2 bg-green-500 rounded-full" />
+                  <div className="absolute inset-0 w-2 h-2 bg-green-500 rounded-full animate-ping" />
                 </div>
                 <span className="text-base font-bold tabular-nums text-habesha-gold">
                   {matchingCount.toLocaleString()}
