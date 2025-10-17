@@ -151,7 +151,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-habesha-bg text-habesha-cream">
       {/* Header */}
-      <header className="fixed top-0 left-0 right-0 z-50 px-4 md:px-6 py-4">
+      <header className="fixed top-0 left-0 right-0 z-50 px-4 md:px-6 py-2 md:py-3">
         {/* Gradient fade shadow from top - smooth fade to photos */}
         <div className="absolute inset-0 bg-gradient-to-b from-habesha-bg via-habesha-bg/60 to-transparent pointer-events-none" />
         
