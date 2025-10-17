@@ -80,9 +80,9 @@ export function PrivacyPreferenceDialog({ open, onOpenChange, onBack }: PrivacyP
         </DialogHeader>
         
         <div className="space-y-5 py-4">
-          <div className="bg-[#00D9B4]/10 border border-[#00D9B4]/30 rounded-lg p-4">
+          <div className="bg-habesha-gold/10 border border-habesha-gold/30 rounded-lg p-4">
             <div className="flex items-start gap-3">
-              <Shield className="w-5 h-5 text-[#00D9B4] flex-shrink-0 mt-0.5" />
+              <Shield className="w-5 h-5 text-habesha-gold flex-shrink-0 mt-0.5" />
               <div className="text-sm text-gray-300">
                 <p className="font-medium text-white mb-1">Your Privacy Matters</p>
                 <p className="text-xs leading-relaxed">
@@ -96,7 +96,7 @@ export function PrivacyPreferenceDialog({ open, onOpenChange, onBack }: PrivacyP
           <div className="bg-[#2a2a2a] border border-gray-700 rounded-lg p-4">
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
-                <Target className="w-5 h-5 text-[#00D9B4]" />
+                <Target className="w-5 h-5 text-habesha-gold" />
                 <Label className="text-base font-medium cursor-pointer">Analytics</Label>
               </div>
               <Switch
@@ -115,7 +115,7 @@ export function PrivacyPreferenceDialog({ open, onOpenChange, onBack }: PrivacyP
           <div className="bg-[#2a2a2a] border border-gray-700 rounded-lg p-4">
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
-                <Eye className="w-5 h-5 text-[#00D9B4]" />
+                <Eye className="w-5 h-5 text-habesha-gold" />
                 <Label className="text-base font-medium cursor-pointer">Personalization</Label>
               </div>
               <Switch
@@ -134,7 +134,7 @@ export function PrivacyPreferenceDialog({ open, onOpenChange, onBack }: PrivacyP
           <div className="bg-[#2a2a2a] border border-gray-700 rounded-lg p-4">
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
-                <Shield className="w-5 h-5 text-[#00D9B4]" />
+                <Shield className="w-5 h-5 text-habesha-gold" />
                 <Label className="text-base font-medium cursor-pointer">Third-Party Sharing</Label>
               </div>
               <Switch
@@ -152,7 +152,7 @@ export function PrivacyPreferenceDialog({ open, onOpenChange, onBack }: PrivacyP
           <Button
             onClick={handleSave}
             disabled={loading}
-            className="w-full bg-[#00D9B4] hover:bg-[#00c9a4] text-black font-medium py-6 text-lg rounded-xl"
+            className="w-full bg-gradient-to-r from-habesha-gold to-habesha-hover-gold hover:from-habesha-hover-gold hover:to-habesha-gold text-habesha-bg font-medium py-6 text-lg rounded-xl"
           >
             {loading ? 'Saving...' : '✅ Save Preferences'}
           </Button>

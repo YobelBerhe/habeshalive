@@ -233,8 +233,11 @@ export default function Home() {
               </div>
             </div>
 
+            {/* Fading gradient overlay towards right (photo grid) */}
+            <div className="absolute inset-y-0 right-0 w-48 bg-gradient-to-l from-transparent via-habesha-bg/30 to-habesha-bg pointer-events-none z-0" />
+
             {/* Animated Counter - Above Buttons */}
-            <div className="mb-8 relative z-10">
+            <div className="mb-8 relative z-10 bg-gradient-to-r from-habesha-bg/95 via-habesha-bg/80 to-transparent px-6 py-4 rounded-2xl backdrop-blur-sm">
               <div className="flex items-center gap-3 text-habesha-cream mb-2">
                 <div className="relative">
                   <div className="w-3 h-3 bg-habesha-gold rounded-full" />
@@ -248,7 +251,7 @@ export default function Home() {
             </div>
 
             {/* Bottom Buttons - Stacked */}
-            <div className="space-y-3 relative z-10">
+            <div className="space-y-3 relative z-10 bg-gradient-to-r from-habesha-bg/95 via-habesha-bg/80 to-transparent px-6 py-6 rounded-2xl backdrop-blur-sm">
               <div className="grid grid-cols-2 gap-3">
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>

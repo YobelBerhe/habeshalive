@@ -158,7 +158,7 @@ ${formData.description}
           {/* Email */}
           <div className="space-y-2">
             <Label className="text-sm font-medium flex items-center gap-2">
-              <Mail className="w-4 h-4 text-[#00D9B4]" />
+              <Mail className="w-4 h-4 text-habesha-gold" />
               Email Address <span className="text-red-400">*</span>
             </Label>
             <Input
@@ -166,15 +166,15 @@ ${formData.description}
               placeholder="your.email@example.com"
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              className="bg-[#2a2a2a] border-gray-700 text-white placeholder:text-gray-500 focus:border-[#00D9B4] focus:ring-[#00D9B4]"
+              className="bg-habesha-dark border-habesha-border text-habesha-cream placeholder:text-habesha-cream/40 focus:border-habesha-gold focus:ring-habesha-gold"
             />
-            <p className="text-xs text-gray-500">Please make sure your email is valid</p>
+            <p className="text-xs text-habesha-cream/50">Please make sure your email is valid</p>
           </div>
 
           {/* Description */}
           <div className="space-y-2">
             <Label className="text-sm font-medium flex items-center gap-2">
-              <AlertCircle className="w-4 h-4 text-[#00D9B4]" />
+              <AlertCircle className="w-4 h-4 text-habesha-gold" />
               Description (as detailed as possible) <span className="text-red-400">*</span>
             </Label>
             <Textarea
