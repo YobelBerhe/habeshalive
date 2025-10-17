@@ -686,7 +686,7 @@ export default function VideoChat() {
                 <select
                   value={birthday.month.toString().padStart(2, '0')}
                   onChange={(e) => setBirthday({ ...birthday, month: parseInt(e.target.value) })}
-                  className="w-full bg-gray-800 text-white rounded-lg px-3 py-3 text-center focus:outline-none focus:ring-2 focus:ring-green-500"
+                  className="w-full bg-gray-800 text-white rounded-lg px-3 py-3 text-center focus:outline-none focus:ring-2 focus:ring-habesha-gold"
                 >
                   <option value="01">Jan</option>
                   <option value="02">Feb</option>
@@ -707,7 +707,7 @@ export default function VideoChat() {
                 <select
                   value={birthday.day.toString().padStart(2, '0')}
                   onChange={(e) => setBirthday({ ...birthday, day: parseInt(e.target.value) })}
-                  className="w-full bg-gray-800 text-white rounded-lg px-3 py-3 text-center focus:outline-none focus:ring-2 focus:ring-green-500"
+                  className="w-full bg-gray-800 text-white rounded-lg px-3 py-3 text-center focus:outline-none focus:ring-2 focus:ring-habesha-gold"
                 >
                   {Array.from({ length: 31 }, (_, i) => i + 1).map(day => (
                     <option key={day} value={day.toString().padStart(2, '0')}>
@@ -721,7 +721,7 @@ export default function VideoChat() {
                 <select
                   value={birthday.year.toString()}
                   onChange={(e) => setBirthday({ ...birthday, year: parseInt(e.target.value) })}
-                  className="w-full bg-gray-800 text-white rounded-lg px-3 py-3 text-center focus:outline-none focus:ring-2 focus:ring-green-500"
+                  className="w-full bg-gray-800 text-white rounded-lg px-3 py-3 text-center focus:outline-none focus:ring-2 focus:ring-habesha-gold"
                 >
                   {Array.from({ length: 83 }, (_, i) => 2006 - i).map(year => (
                     <option key={year} value={year.toString()}>
@@ -911,9 +911,9 @@ export default function VideoChat() {
                   onChange={(e) => setFirstName(e.target.value)}
                   placeholder="Enter your first name"
                   maxLength={20}
-                  className="w-full bg-transparent border-2 border-green-500 rounded-2xl px-6 py-4 text-white text-lg focus:outline-none focus:border-green-400"
+                  className="w-full bg-transparent border-2 border-habesha-gold rounded-2xl px-6 py-4 text-white text-lg focus:outline-none focus:border-habesha-hover-gold"
                 />
-                <div className="absolute right-4 bottom-4 text-green-400 text-sm">
+                <div className="absolute right-4 bottom-4 text-habesha-gold text-sm">
                   {firstName.length}/20
                 </div>
               </div>
@@ -1029,7 +1029,7 @@ export default function VideoChat() {
             
             <Button 
               onClick={() => setOnboardingStep('safety')}
-              className="w-full bg-green-500 hover:bg-green-600 text-black rounded-full py-6 text-lg font-bold"
+              className="w-full bg-habesha-gold hover:bg-habesha-hover-gold text-habesha-bg rounded-full py-6 text-lg font-bold"
             >
               Continue
             </Button>
@@ -1194,7 +1194,7 @@ export default function VideoChat() {
             
             <Button 
               onClick={() => setOnboardingStep('preferences')}
-              className="w-full bg-green-500 hover:bg-green-600 text-black rounded-full py-6 text-lg font-bold"
+              className="w-full bg-habesha-gold hover:bg-habesha-hover-gold text-habesha-bg rounded-full py-6 text-lg font-bold"
             >
               I Understand - Continue
             </Button>
@@ -1323,7 +1323,7 @@ export default function VideoChat() {
             
             <Button 
               onClick={completeOnboarding}
-              className="w-full bg-green-500 hover:bg-green-600 text-black rounded-full py-6 text-lg font-bold mb-3"
+              className="w-full bg-habesha-gold hover:bg-habesha-hover-gold text-habesha-bg rounded-full py-6 text-lg font-bold mb-3"
             >
               Start Video Chat
             </Button>
