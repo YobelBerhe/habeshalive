@@ -132,20 +132,20 @@ export default function Home() {
     // Column 1 (scrolls up) - Mix of genders
     [
       { name: "Amara", age: 24, image: profile1, flag: "🇪🇹", online: true },
-      { name: "Marcus", age: 28, image: profile2, flag: "🇺🇸", online: true },
+      { name: "Beylul", age: 25, image: profile2, flag: "🇺🇸", online: true },
       { name: "Zahara", age: 22, image: profile3, flag: "🇪🇷", online: true },
       { name: "Isaiah", age: 26, image: profile4, flag: "🇬🇧", online: true },
-      { name: "Selam", age: 25, image: profile5, flag: "🇪🇹", online: true },
+      { name: "Biniam", age: 27, image: profile5, flag: "🇪🇹", online: true },
       { name: "Daniel", age: 30, image: profile6, flag: "🇨🇦", online: true },
     ],
     // Column 2 (scrolls down) - Mix of genders
     [
       { name: "Liya", age: 23, image: profile7, flag: "🇪🇹", online: true },
-      { name: "Samuel", age: 27, image: profile8, flag: "🇺🇸", online: true },
+      { name: "Rahel", age: 27, image: profile8, flag: "🇺🇸", online: true },
       { name: "Meron", age: 24, image: profile9, flag: "🇪🇷", online: true },
       { name: "Elias", age: 29, image: profile10, flag: "🇬🇧", online: true },
-      { name: "Rahel", age: 26, image: profile1, flag: "🇪🇹", online: true },
-      { name: "Yonas", age: 31, image: profile2, flag: "🇨🇦", online: true },
+      { name: "Michael", age: 26, image: profile1, flag: "🇪🇹", online: true },
+      { name: "Yorsalem", age: 31, image: profile2, flag: "🇨🇦", online: true },
     ],
     // Column 3 (scrolls up) - Mix of genders
     [
@@ -256,8 +256,8 @@ export default function Home() {
             <div className="mb-8 relative z-10 bg-gradient-to-r from-habesha-bg/95 via-habesha-bg/80 to-transparent px-6 py-4 rounded-2xl backdrop-blur-sm">
               <div className="flex items-center gap-3 text-habesha-cream mb-2">
                 <div className="relative">
-                  <div className="w-3 h-3 bg-habesha-gold rounded-full" />
-                  <div className="absolute inset-0 w-3 h-3 bg-habesha-gold rounded-full animate-ping" />
+                  <div className="w-3 h-3 bg-green-500 rounded-full" />
+                  <div className="absolute inset-0 w-3 h-3 bg-green-500 rounded-full animate-ping" />
                 </div>
                 <span className="text-3xl font-bold tabular-nums text-habesha-gold">
                   {matchingCount.toLocaleString()}
