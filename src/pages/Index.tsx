@@ -151,18 +151,16 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-habesha-bg text-habesha-cream">
       {/* Header */}
-      <header className={`fixed top-0 left-0 right-0 z-50 px-4 md:px-6 py-4 transition-all duration-300 ${
-        isScrolled ? 'md:bg-transparent md:backdrop-blur-none' : 'md:bg-habesha-bg/60 md:backdrop-blur-sm'
-      }`}>
-        {/* Gradient fade shadow from top */}
-        <div className="absolute inset-0 bg-gradient-to-b from-habesha-bg/90 via-habesha-bg/50 to-transparent pointer-events-none" />
+      <header className="fixed top-0 left-0 right-0 z-50 px-4 md:px-6 py-4">
+        {/* Gradient fade shadow from top - smooth fade to photos */}
+        <div className="absolute inset-0 bg-gradient-to-b from-habesha-bg via-habesha-bg/60 to-transparent pointer-events-none" />
         
         <div className="max-w-7xl mx-auto flex items-center justify-between relative z-10">
           {/* Logo - Clickable Image */}
           <div className="flex items-center gap-8">
             <button 
               onClick={() => navigate('/')}
-              className="focus:outline-none focus:ring-2 focus:ring-habesha-gold/50 rounded-lg transition-transform hover:scale-105"
+              className="focus:outline-none transition-transform hover:scale-105"
             >
               <img 
                 src={habeshaLogo} 
