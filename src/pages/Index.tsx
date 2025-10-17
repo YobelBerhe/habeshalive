@@ -156,7 +156,7 @@ export default function Home() {
         {/* Gradient fade shadow from top */}
         <div className="absolute inset-0 bg-gradient-to-b from-habesha-bg/90 via-habesha-bg/50 to-transparent pointer-events-none" />
         
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
+        <div className="max-w-7xl mx-auto flex items-center justify-between relative z-10">
           {/* Logo - Bigger */}
           <div className="flex items-center gap-8">
             <div className="text-3xl md:text-3xl font-bold tracking-tight text-habesha-gold">
