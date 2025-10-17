@@ -142,6 +142,7 @@ export default function VideoChat() {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [authLoading, setAuthLoading] = useState(true);
+  const [userProfile, setUserProfile] = useState<{ avatar_url?: string; first_name?: string } | null>(null);
 
   // Check authentication
   useEffect(() => {
@@ -175,6 +176,27 @@ export default function VideoChat() {
 
     return () => subscription.unsubscribe();
   }, [navigate]);
+
+  // Fetch user profile data
+  useEffect(() => {
+    const fetchProfile = async () => {
+      if (!user?.id) return;
+      
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('avatar_url, first_name')
+        .eq('id', user.id)
+        .maybeSingle();
+      
+      if (error) {
+        console.error('Error fetching profile:', error);
+      } else if (data) {
+        setUserProfile(data);
+      }
+    };
+
+    fetchProfile();
+  }, [user?.id]);
   
   // Connection & Onboarding
   const [connectionState, setConnectionState] = useState<ConnectionState>('onboarding');
@@ -1369,10 +1391,18 @@ export default function VideoChat() {
                 </Button>
                 <button 
                   onClick={() => setShowProfileViewDialog(true)}
-                  className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center hover:bg-white/20 transition-colors border border-white/10"
+                  className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center hover:bg-white/20 transition-colors border border-white/10 overflow-hidden"
                   title="Profile Menu"
                 >
-                  <UserIcon className="w-5 h-5" />
+                  {userProfile?.avatar_url ? (
+                    <img 
+                      src={userProfile.avatar_url} 
+                      alt={userProfile.first_name || 'Profile'}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <UserIcon className="w-5 h-5" />
+                  )}
                 </button>
               </div>
             </div>
