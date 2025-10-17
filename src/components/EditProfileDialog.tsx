@@ -171,11 +171,11 @@ export function EditProfileDialog({ open, onOpenChange }: EditProfileDialogProps
           {/* About Me */}
           <div>
             <label className="text-sm font-medium mb-2 block">About me</label>
-            <Textarea
+          <Textarea
               placeholder="Share a little something about yourself."
               value={aboutMe}
               onChange={(e) => setAboutMe(e.target.value)}
-              className="bg-[#2a2a2a] border-gray-700 text-white resize-none h-24 focus:border-[#00D9B4]"
+              className="bg-habesha-dark border-habesha-border text-habesha-cream resize-none h-24 focus:border-habesha-gold focus:ring-habesha-gold"
               maxLength={250}
             />
             <div className="text-right text-sm text-gray-400 mt-1">{aboutMe.length}/250</div>

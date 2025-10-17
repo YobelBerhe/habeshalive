@@ -237,8 +237,8 @@ export default function Home() {
             <div className="mb-8 relative z-10">
               <div className="flex items-center gap-3 text-habesha-cream mb-2">
                 <div className="relative">
-                  <div className="w-3 h-3 bg-green-500 rounded-full" />
-                  <div className="absolute inset-0 w-3 h-3 bg-green-500 rounded-full animate-ping" />
+                  <div className="w-3 h-3 bg-habesha-gold rounded-full" />
+                  <div className="absolute inset-0 w-3 h-3 bg-habesha-gold rounded-full animate-ping" />
                 </div>
                 <span className="text-3xl font-bold tabular-nums text-habesha-gold">
                   {matchingCount.toLocaleString()}
@@ -443,14 +443,14 @@ export default function Home() {
 
 
           {/* Mobile Controls - Fixed at Bottom */}
-          <div className="fixed inset-x-0 bottom-0 z-20 px-4 pb-safe pt-3 bg-gradient-to-t from-background/95 via-background/70 to-transparent backdrop-blur">
+          <div className="fixed inset-x-0 bottom-0 z-20 px-4 pb-safe pt-3 bg-gradient-to-t from-habesha-bg via-habesha-bg/90 to-transparent backdrop-blur">
             {/* Filter Buttons - Side by Side */}
             <div className="grid grid-cols-2 gap-3 mb-3">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button
                     size="lg"
-                    className="bg-black/70 backdrop-blur-sm border border-white/20 text-white hover:bg-white/10 rounded-full py-5 text-sm font-semibold"
+                    className="bg-habesha-dark/80 backdrop-blur-sm border border-habesha-gold/30 text-habesha-cream hover:bg-habesha-gold/10 hover:border-habesha-gold/50 rounded-full py-5 text-sm font-semibold"
                   >
                     <span className="flex items-center justify-center gap-1.5">
                       <span className="text-pink-400">⚥</span>
@@ -459,7 +459,7 @@ export default function Home() {
                     </span>
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-40 bg-gray-900 border-gray-700">
+                <DropdownMenuContent className="w-40 bg-habesha-dark border-habesha-border text-habesha-cream">
                   <DropdownMenuItem onClick={() => toast.info('💎 Use tokens to filter by Male')}>
                     Male
                   </DropdownMenuItem>
@@ -474,10 +474,10 @@ export default function Home() {
               <Button
                 onClick={() => setShowRegionalDialog(true)}
                 size="lg"
-                className="bg-black/70 backdrop-blur-sm border border-white/20 text-white hover:bg-white/10 rounded-full py-5 text-sm font-semibold"
+                className="bg-habesha-dark/80 backdrop-blur-sm border border-habesha-gold/30 text-habesha-cream hover:bg-habesha-gold/10 hover:border-habesha-gold/50 rounded-full py-5 text-sm font-semibold"
               >
                 <span className="flex items-center justify-center gap-1.5">
-                  <span className="text-green-400">🌍</span>
+                  <span className="text-habesha-gold">🌍</span>
                   Country
                   <ChevronDown className="w-4 h-4" />
                 </span>
@@ -488,7 +488,7 @@ export default function Home() {
             <Button
               onClick={handleStartVideoChat}
               size="lg"
-              className="w-full bg-white text-black hover:bg-gray-100 rounded-full py-6 text-xl font-bold shadow-2xl mb-2"
+              className="w-full bg-gradient-to-r from-habesha-gold to-habesha-hover hover:from-habesha-hover hover:to-habesha-gold text-habesha-bg rounded-full py-6 text-xl font-bold shadow-gold-lg mb-2"
             >
               <Video className="w-6 h-6 mr-2" />
               Start Video Chat
@@ -496,17 +496,17 @@ export default function Home() {
 
             {/* Matching Counter - Below Start Video Chat */}
             <div className="text-center pb-2">
-              <div className="flex items-center justify-center gap-2 text-white mb-1">
+              <div className="flex items-center justify-center gap-2 text-habesha-cream mb-1">
                 <div className="relative">
-                  <div className="w-2 h-2 bg-green-500 rounded-full" />
-                  <div className="absolute inset-0 w-2 h-2 bg-green-500 rounded-full animate-ping" />
+                  <div className="w-2 h-2 bg-habesha-gold rounded-full" />
+                  <div className="absolute inset-0 w-2 h-2 bg-habesha-gold rounded-full animate-ping" />
                 </div>
-                <span className="text-base font-bold tabular-nums">
+                <span className="text-base font-bold tabular-nums text-habesha-gold">
                   {matchingCount.toLocaleString()}
                 </span>
-                <span className="text-xs text-gray-300">are matching now!</span>
+                <span className="text-xs text-habesha-cream/70">are matching now!</span>
               </div>
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-habesha-cream/50">
                 All images of models are used for illustrative purposes only.
               </p>
             </div>

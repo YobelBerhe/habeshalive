@@ -65,28 +65,31 @@ export function ChangeEmailDialog({ open, onOpenChange, onBack, currentEmail }: 
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-black text-white border-gray-800 max-w-md">
+      <DialogContent className="bg-habesha-gradient text-habesha-cream border-habesha-border max-w-md">
+        {/* Habesha Cultural Header */}
+        <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-habesha-gold via-habesha-hover to-habesha-gold opacity-80"></div>
+        
         <DialogHeader>
           <div className="flex items-center gap-3">
             <button 
               onClick={onBack} 
-              className="hover:bg-white/10 p-2 rounded-lg transition-colors"
+              className="hover:bg-habesha-gold/10 p-2 rounded-lg transition-colors"
             >
-              <ChevronLeft className="w-5 h-5" />
+              <ChevronLeft className="w-5 h-5 text-habesha-cream" />
             </button>
             <div>
-              <DialogTitle className="text-xl font-bold">Change Email</DialogTitle>
-              <p className="text-sm text-gray-400">Update your email address</p>
+              <DialogTitle className="text-xl font-bold text-habesha-cream">Change Email</DialogTitle>
+              <p className="text-sm text-habesha-cream/70">Update your email address</p>
             </div>
           </div>
         </DialogHeader>
         
         <div className="space-y-5 py-4">
-          <div className="bg-[#00D9B4]/10 border border-[#00D9B4]/30 rounded-lg p-4">
+          <div className="bg-habesha-gold/10 border border-habesha-gold/30 rounded-lg p-4">
             <div className="flex items-start gap-3">
-              <AlertCircle className="w-5 h-5 text-[#00D9B4] flex-shrink-0 mt-0.5" />
-              <div className="text-sm text-gray-300">
-                <p className="font-medium text-white mb-1">Email Verification Required</p>
+              <AlertCircle className="w-5 h-5 text-habesha-gold flex-shrink-0 mt-0.5" />
+              <div className="text-sm text-habesha-cream/80">
+                <p className="font-medium text-habesha-cream mb-1">Email Verification Required</p>
                 <p className="text-xs leading-relaxed">
                   You'll receive a verification email at your new address. Click the link to confirm the change.
                 </p>
@@ -95,18 +98,18 @@ export function ChangeEmailDialog({ open, onOpenChange, onBack, currentEmail }: 
           </div>
 
           <div className="space-y-2">
-            <Label className="text-sm font-medium">Current Email</Label>
+            <Label className="text-sm font-medium text-habesha-cream">Current Email</Label>
             <Input
               type="email"
               value={currentEmail}
               disabled
-              className="bg-[#2a2a2a] border-gray-700 text-gray-400"
+              className="bg-habesha-dark border-habesha-border text-habesha-cream/70"
             />
           </div>
 
           <div className="space-y-2">
-            <Label className="text-sm font-medium flex items-center gap-2">
-              <Mail className="w-4 h-4 text-[#00D9B4]" />
+            <Label className="text-sm font-medium flex items-center gap-2 text-habesha-cream">
+              <Mail className="w-4 h-4 text-habesha-gold" />
               New Email Address <span className="text-red-400">*</span>
             </Label>
             <Input
@@ -114,12 +117,12 @@ export function ChangeEmailDialog({ open, onOpenChange, onBack, currentEmail }: 
               placeholder="your.newemail@example.com"
               value={newEmail}
               onChange={(e) => setNewEmail(e.target.value)}
-              className="bg-[#2a2a2a] border-gray-700 text-white placeholder:text-gray-500 focus:border-[#00D9B4] focus:ring-[#00D9B4]"
+              className="bg-habesha-dark border-habesha-border text-habesha-cream placeholder:text-habesha-cream/40 focus:border-habesha-gold focus:ring-habesha-gold"
             />
           </div>
 
           <div className="space-y-2">
-            <Label className="text-sm font-medium">
+            <Label className="text-sm font-medium text-habesha-cream">
               Current Password <span className="text-red-400">*</span>
             </Label>
             <Input
@@ -127,9 +130,9 @@ export function ChangeEmailDialog({ open, onOpenChange, onBack, currentEmail }: 
               placeholder="Enter your password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="bg-[#2a2a2a] border-gray-700 text-white placeholder:text-gray-500 focus:border-[#00D9B4] focus:ring-[#00D9B4]"
+              className="bg-habesha-dark border-habesha-border text-habesha-cream placeholder:text-habesha-cream/40 focus:border-habesha-gold focus:ring-habesha-gold"
             />
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-habesha-cream/60">
               Enter your password to confirm this change
             </p>
           </div>
@@ -137,7 +140,7 @@ export function ChangeEmailDialog({ open, onOpenChange, onBack, currentEmail }: 
           <Button
             onClick={handleSubmit}
             disabled={loading}
-            className="w-full bg-[#00D9B4] hover:bg-[#00c9a4] text-black font-medium py-6 text-lg rounded-xl"
+            className="w-full bg-gradient-to-r from-habesha-gold to-habesha-hover hover:from-habesha-hover hover:to-habesha-gold text-habesha-bg font-bold py-6 text-lg rounded-xl shadow-gold-lg"
           >
             {loading ? 'Updating...' : '✅ Change Email'}
           </Button>

@@ -81,8 +81,8 @@ export function SettingsDialog({ open, onOpenChange, onManageAccount, onContactU
           {/* Account & Security */}
           <div>
             <div className="flex items-center gap-2 mb-3">
-              <Shield className="w-4 h-4 text-[#00D9B4]" />
-              <h3 className="text-sm font-medium text-gray-400 uppercase tracking-wider">Account & Security</h3>
+              <Shield className="w-4 h-4 text-habesha-gold" />
+              <h3 className="text-sm font-medium text-habesha-cream/70 uppercase tracking-wider">Account & Security</h3>
             </div>
             <div className="space-y-2">
               <button
@@ -90,17 +90,17 @@ export function SettingsDialog({ open, onOpenChange, onManageAccount, onContactU
                   onOpenChange(false);
                   setShowChangeEmail(true);
                 }}
-                className="w-full bg-[#2a2a2a] border border-gray-700 rounded-lg p-4 hover:border-[#00D9B4]/50 transition-colors"
+                className="w-full bg-habesha-dark border border-habesha-border rounded-lg p-4 hover:bg-habesha-gold/10 hover:border-habesha-gold/50 transition-colors"
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <Mail className="w-5 h-5 text-gray-400" />
+                    <Mail className="w-5 h-5 text-habesha-gold" />
                     <div className="text-left">
-                      <p className="font-medium">Email</p>
-                      <p className="text-xs text-gray-400">{userEmail || 'Not set'}</p>
+                      <p className="font-medium text-habesha-cream">Email</p>
+                      <p className="text-xs text-habesha-cream/60">{userEmail || 'Not set'}</p>
                     </div>
                   </div>
-                  <ChevronRight className="w-5 h-5 text-gray-400" />
+                  <ChevronRight className="w-5 h-5 text-habesha-cream/50" />
                 </div>
               </button>
               
@@ -109,11 +109,11 @@ export function SettingsDialog({ open, onOpenChange, onManageAccount, onContactU
                   onOpenChange(false);
                   onManageAccount();
                 }}
-                className="w-full bg-[#2a2a2a] border border-gray-700 rounded-lg p-4 hover:bg-[#333] hover:border-[#00D9B4]/50 transition-colors"
+                className="w-full bg-habesha-dark border border-habesha-border rounded-lg p-4 hover:bg-habesha-gold/10 hover:border-habesha-gold/50 transition-colors"
               >
                 <div className="flex items-center justify-between">
-                  <span className="font-medium">Manage account</span>
-                  <ChevronRight className="w-5 h-5 text-gray-400" />
+                  <span className="font-medium text-habesha-cream">Manage account</span>
+                  <ChevronRight className="w-5 h-5 text-habesha-cream/50" />
                 </div>
               </button>
             </div>

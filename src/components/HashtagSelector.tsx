@@ -49,7 +49,7 @@ export function HashtagSelector({ selectedTags, onTagsChange, maxTags = 10 }: Ha
             <Badge
               key={tag}
               variant="secondary"
-              className="bg-[#00D9B4] text-black hover:bg-[#00c9a4] pr-1 gap-1"
+              className="bg-habesha-gold text-habesha-bg hover:bg-habesha-hover pr-1 gap-1"
             >
               #{tag}
               <button
@@ -90,7 +90,7 @@ export function HashtagSelector({ selectedTags, onTagsChange, maxTags = 10 }: Ha
                     onClick={() => setActiveCategory(cat.key)}
                     className={`px-3 py-2 rounded-lg text-xs whitespace-nowrap transition-colors flex-shrink-0 ${
                       activeCategory === cat.key
-                        ? "bg-[#00D9B4] text-black font-medium"
+                        ? "bg-habesha-gold text-habesha-bg font-medium"
                         : "bg-[#2a2a2a] text-gray-400 hover:bg-[#333]"
                     }`}
                   >
@@ -120,7 +120,7 @@ export function HashtagSelector({ selectedTags, onTagsChange, maxTags = 10 }: Ha
                     disabled={isDisabled}
                     className={`p-2 rounded-lg text-left text-sm transition-all ${
                       isSelected
-                        ? "bg-[#00D9B4] text-black font-medium"
+                        ? "bg-habesha-gold text-habesha-bg font-medium"
                         : isDisabled
                         ? "bg-[#1a1a1a] text-gray-600 cursor-not-allowed"
                         : "bg-[#2a2a2a] text-white hover:bg-[#333]"
