@@ -8,53 +8,55 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 0 0% 4%;
-    --foreground: 0 0% 98%;
+    /* Gold & Cream Luxury Theme */
+    --background: 0 34% 8%;
+    --foreground: 45 100% 95%;
 
-    --card: 0 0% 10%;
-    --card-foreground: 0 0% 98%;
+    --card: 0 0% 5%;
+    --card-foreground: 45 100% 95%;
 
-    --popover: 0 0% 10%;
-    --popover-foreground: 0 0% 98%;
+    --popover: 0 0% 5%;
+    --popover-foreground: 45 100% 95%;
 
-    /* Eritrean Blue */
-    --primary: 203 100% 37%;
-    --primary-foreground: 0 0% 100%;
+    /* Rich Gold Primary */
+    --primary: 45 69% 52%;
+    --primary-foreground: 0 34% 8%;
 
-    /* Eritrean Green */
-    --secondary: 134 79% 37%;
-    --secondary-foreground: 0 0% 100%;
+    /* Hover Gold Secondary */
+    --secondary: 42 69% 68%;
+    --secondary-foreground: 0 34% 8%;
 
     --muted: 0 0% 15%;
-    --muted-foreground: 0 0% 64%;
+    --muted-foreground: 45 50% 70%;
 
-    /* Eritrean Red accent */
-    --accent: 353 98% 51%;
-    --accent-foreground: 0 0% 100%;
+    /* Gold Accent */
+    --accent: 45 69% 52%;
+    --accent-foreground: 0 34% 8%;
 
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
+    --destructive-foreground: 45 100% 95%;
 
-    --border: 0 0% 15%;
-    --input: 0 0% 15%;
-    --ring: 203 100% 37%;
+    --border: 45 20% 20%;
+    --input: 0 0% 10%;
+    --ring: 45 69% 52%;
 
     --radius: 1rem;
     
-    /* Cultural colors */
-    --eritrean-blue: 203 100% 37%;
-    --eritrean-green: 134 79% 37%;
-    --eritrean-red: 353 98% 51%;
-    --gold: 45 100% 58%;
+    /* Habesha Cultural Colors */
+    --habesha-gold: 45 69% 52%;
+    --habesha-cream: 45 100% 95%;
+    --habesha-hover-gold: 42 69% 68%;
+    --habesha-dark: 0 0% 5%;
+    --habesha-bg: 0 34% 8%;
     
     /* Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(203 100% 37%), hsl(134 79% 37%));
-    --gradient-accent: linear-gradient(135deg, hsl(353 98% 51%), hsl(45 100% 58%));
-    --gradient-hero: linear-gradient(180deg, hsl(0 0% 4%), hsl(0 0% 8%));
+    --gradient-primary: linear-gradient(135deg, hsl(45 69% 52%), hsl(42 69% 68%));
+    --gradient-accent: linear-gradient(135deg, hsl(15 34% 23%), hsl(0 34% 8%));
+    --gradient-hero: linear-gradient(180deg, hsl(0 34% 8%), hsl(0 0% 5%));
     
     /* Shadows */
-    --shadow-glow: 0 0 40px hsl(203 100% 37% / 0.3);
-    --shadow-card: 0 10px 30px -10px hsl(0 0% 0% / 0.5);
+    --shadow-glow: 0 0 40px hsl(45 69% 52% / 0.3);
+    --shadow-card: 0 10px 30px -10px hsl(45 69% 52% / 0.2);
 
     --sidebar-background: 0 0% 98%;
 
@@ -74,17 +76,17 @@ All colors MUST be HSL.
   }
 
   .dark {
-    /* Same as root since we're dark-first */
-    --background: 0 0% 4%;
-    --foreground: 0 0% 98%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    /* Gold & Cream Theme (dark-first) */
+    --background: 0 34% 8%;
+    --foreground: 45 100% 95%;
+    --sidebar-background: 0 0% 5%;
+    --sidebar-foreground: 45 100% 95%;
+    --sidebar-primary: 45 69% 52%;
+    --sidebar-primary-foreground: 0 34% 8%;
+    --sidebar-accent: 0 0% 10%;
+    --sidebar-accent-foreground: 45 100% 95%;
+    --sidebar-border: 45 20% 20%;
+    --sidebar-ring: 45 69% 52%;
   }
 }
 

@@ -48,11 +48,12 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        // Eritrean flag colors
-        "eritrean-blue": "hsl(var(--eritrean-blue))",
-        "eritrean-green": "hsl(var(--eritrean-green))",
-        "eritrean-red": "hsl(var(--eritrean-red))",
-        gold: "hsl(var(--gold))",
+        // Habesha cultural colors
+        "habesha-gold": "hsl(var(--habesha-gold))",
+        "habesha-cream": "hsl(var(--habesha-cream))",
+        "habesha-hover-gold": "hsl(var(--habesha-hover-gold))",
+        "habesha-dark": "hsl(var(--habesha-dark))",
+        "habesha-bg": "hsl(var(--habesha-bg))",
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -98,10 +99,9 @@ export default {
         "gradient-conic": "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
       boxShadow: {
-        glow: "0 0 40px hsl(var(--eritrean-blue) / 0.4)",
-        "glow-green": "0 0 40px hsl(var(--eritrean-green) / 0.4)",
-        "glow-red": "0 0 40px hsl(var(--eritrean-red) / 0.4)",
-        "glow-gold": "0 0 40px hsl(var(--gold) / 0.4)",
+        glow: "0 0 40px hsl(var(--habesha-gold) / 0.4)",
+        "glow-gold": "0 0 40px hsl(var(--habesha-gold) / 0.4)",
+        "glow-cream": "0 0 20px hsl(var(--habesha-cream) / 0.2)",
       },
     },
   },
