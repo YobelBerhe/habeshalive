@@ -752,7 +752,13 @@ export default function Home() {
 
       <EditProfileDialog
         open={showEditProfileDialog}
-        onOpenChange={setShowEditProfileDialog}
+        onOpenChange={(open) => {
+          setShowEditProfileDialog(open);
+          if (!open && user?.id) {
+            // Refresh profile when dialog closes
+            loadProfile(user.id);
+          }
+        }}
       />
 
       <SettingsDialog

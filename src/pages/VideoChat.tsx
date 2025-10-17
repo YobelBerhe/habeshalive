@@ -197,6 +197,24 @@ export default function VideoChat() {
 
     fetchProfile();
   }, [user?.id]);
+
+  // Refresh profile when returning from edit dialog
+  const handleProfileDialogClose = (open: boolean) => {
+    setShowProfileDialog(open);
+    if (!open && user?.id) {
+      // Refresh profile data when dialog closes
+      supabase
+        .from('profiles')
+        .select('avatar_url, first_name')
+        .eq('id', user.id)
+        .maybeSingle()
+        .then(({ data }) => {
+          if (data) {
+            setUserProfile(data);
+          }
+        });
+    }
+  };
   
   // Connection & Onboarding
   const [connectionState, setConnectionState] = useState<ConnectionState>('onboarding');
@@ -2030,7 +2048,7 @@ export default function VideoChat() {
 
           {/* Dialogs */}
           <ReportDialog open={showReportDialog} onOpenChange={setShowReportDialog} />
-          <EditProfileDialog open={showProfileDialog} onOpenChange={setShowProfileDialog} />
+          <EditProfileDialog open={showProfileDialog} onOpenChange={handleProfileDialogClose} />
         <ProfileViewDialog
           open={showProfileViewDialog}
           onOpenChange={setShowProfileViewDialog}

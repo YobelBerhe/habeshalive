@@ -81,6 +81,9 @@ export function EditProfileDialog({ open, onOpenChange }: EditProfileDialogProps
         .from('avatars')
         .getPublicUrl(filePath);
 
+      // Add timestamp to force image reload
+      const urlWithTimestamp = `${publicUrl}?t=${Date.now()}`;
+
       const { error: updateError } = await supabase
         .from('profiles')
         .update({ avatar_url: publicUrl })
@@ -88,8 +91,11 @@ export function EditProfileDialog({ open, onOpenChange }: EditProfileDialogProps
 
       if (updateError) throw updateError;
 
-      setAvatarUrl(publicUrl);
+      setAvatarUrl(urlWithTimestamp);
       toast.success("✅ Photo uploaded successfully!");
+      
+      // Reset input to allow same file upload
+      e.target.value = '';
     } catch (error: any) {
       console.error('Error uploading photo:', error);
       toast.error(error.message || "Failed to upload photo");
