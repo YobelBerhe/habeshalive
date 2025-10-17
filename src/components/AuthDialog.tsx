@@ -437,7 +437,7 @@ export function AuthDialog({ open, onOpenChange }: AuthDialogProps) {
     <div className="space-y-3">
       <Button
         onClick={() => setMode('email')}
-        className="w-full h-12 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700"
+        className="w-full h-12 bg-habesha-gold text-habesha-bg hover:bg-habesha-hover-gold"
         disabled={loading}
       >
         <Mail className="w-5 h-5 mr-2" />
@@ -446,7 +446,7 @@ export function AuthDialog({ open, onOpenChange }: AuthDialogProps) {
 
       <Button
         onClick={() => setMode('phone')}
-        className="w-full h-12 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700"
+        className="w-full h-12 bg-habesha-gold text-habesha-bg hover:bg-habesha-hover-gold"
         disabled={loading}
       >
         <Phone className="w-5 h-5 mr-2" />
@@ -494,7 +494,7 @@ export function AuthDialog({ open, onOpenChange }: AuthDialogProps) {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md bg-gradient-to-br from-gray-900 to-black border-white/10">
         <DialogHeader>
-          <DialogTitle className="text-2xl font-bold text-center bg-gradient-to-r from-green-400 to-yellow-500 bg-clip-text text-transparent">
+          <DialogTitle className="text-2xl font-bold text-center text-habesha-gold">
             {mode === 'verify-email' 
               ? 'Verify Your Email'
               : mode === 'verify-phone'
