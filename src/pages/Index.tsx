@@ -151,7 +151,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-habesha-bg text-habesha-cream">
       {/* Header */}
-      <header className="fixed top-0 left-0 right-0 z-50 px-4 md:px-6 py-2 md:py-3">
+      <header className="fixed top-0 left-0 right-0 z-50 px-4 md:px-6 py-4 md:py-0 md:pt-4">
         {/* Gradient fade shadow from top - smooth fade to photos */}
         <div className="absolute inset-0 bg-gradient-to-b from-habesha-bg via-habesha-bg/60 to-transparent pointer-events-none" />
         
@@ -229,7 +229,7 @@ export default function Home() {
       {/* Hero Section with Split Layout */}
       <section className="relative overflow-hidden">
         {/* Desktop: Split View - Left Controls, Right Photos - FIXED HEIGHT */}
-        <div className="hidden md:grid md:grid-cols-2 h-screen pt-20">
+        <div className="hidden md:grid md:grid-cols-2 h-screen pt-32">
           {/* LEFT SIDE - Controls Panel */}
           <div className="relative bg-habesha-bg flex flex-col justify-end p-12 h-full overflow-hidden">
             {/* Large Faded "habesha" Text - Center */}
