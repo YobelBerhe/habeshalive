@@ -36,6 +36,7 @@ import { SettingsDialog } from "@/components/SettingsDialog";
 import { ManageAccountDialog } from "@/components/ManageAccountDialog";
 import { ContactUsDialog } from "@/components/ContactUsDialog";
 import { ProfileViewDialog } from "@/components/ProfileViewDialog";
+import { ScrollableDatePicker } from "@/components/ScrollableDatePicker";
 import { AIContentModeration } from "@/lib/ai-moderation-system";
 import { VideoWatermarkingSystem, ScreenshotDetectionSystem } from "@/lib/watermarking-system";
 import RespectScoreEngine, { type UserScore } from "@/lib/respect-score-system";
@@ -222,8 +223,8 @@ export default function VideoChat() {
   const [partner, setPartner] = useState<Partner | null>(null);
   
   // User Info
-  const [birthday, setBirthday] = useState({ month: 10, day: 14, year: 2007 });
-  const [userGender, setUserGender] = useState<'male' | 'female' | 'non-binary'>('female');
+  const [birthday, setBirthday] = useState({ month: 11, day: 26, year: 1995 });
+  const [userGender, setUserGender] = useState<'male' | 'female'>('female');
   const [ethnicity, setEthnicity] = useState('');
   const [firstName, setFirstName] = useState('');
   const [userPurpose, setUserPurpose] = useState<Purpose>('language-practice');
@@ -702,185 +703,130 @@ const [aiInitializing, setAiInitializing] = useState(false);
     return 1;
   };
 
+  // Calculate age from birthday
+  const calculateAge = () => {
+    const today = new Date();
+    const birthDate = new Date(birthday.year, birthday.month - 1, birthday.day);
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+    return age;
+  };
+
   // Onboarding Modals Render
   const renderOnboarding = () => {
     if (connectionState !== 'onboarding') return null;
 
   return (
-    <div className="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto">
+    <div className="fixed inset-0 bg-black z-50 md:bg-transparent md:backdrop-blur-md">
       {/* Birthday Modal */}
       {onboardingStep === 'birthday' && (
-        <div className="bg-[#2a2a2a] rounded-3xl p-6 md:p-8 max-w-md w-full relative my-auto">
+        <div className="h-full md:h-auto w-full md:max-w-lg md:mx-auto md:mt-20 bg-black md:rounded-3xl p-8 flex flex-col relative">
             <button 
               onClick={() => navigate('/')}
-              className="absolute top-6 right-6 text-white hover:text-gray-300"
+              className="absolute top-6 right-6 text-white hover:text-gray-300 z-10"
             >
-              <X className="w-6 h-6" />
+              <X className="w-8 h-8" />
             </button>
             
-            <h2 className="text-2xl md:text-3xl font-bold text-white mb-2 md:mb-3">My birthday is</h2>
-            <p className="text-sm md:text-base text-gray-400 mb-6 md:mb-8">Tell us your age and we'll help you meet people you'd vibe with.</p>
+            <h2 className="text-4xl md:text-3xl font-bold text-white mb-3">My birthday is</h2>
+            <p className="text-base md:text-sm text-gray-400 mb-12">Tell us your age and we'll help you meet people you'd vibe with.</p>
             
-            <div className="grid grid-cols-3 gap-4 mb-8">
-              <div>
-                <div className="text-gray-500 text-sm mb-2 text-center">Month</div>
-                <select
-                  value={birthday.month.toString().padStart(2, '0')}
-                  onChange={(e) => setBirthday({ ...birthday, month: parseInt(e.target.value) })}
-                  className="w-full bg-gray-800 text-white rounded-lg px-3 py-3 text-center focus:outline-none focus:ring-2 focus:ring-habesha-gold"
-                >
-                  <option value="01">Jan</option>
-                  <option value="02">Feb</option>
-                  <option value="03">Mar</option>
-                  <option value="04">Apr</option>
-                  <option value="05">May</option>
-                  <option value="06">Jun</option>
-                  <option value="07">Jul</option>
-                  <option value="08">Aug</option>
-                  <option value="09">Sep</option>
-                  <option value="10">Oct</option>
-                  <option value="11">Nov</option>
-                  <option value="12">Dec</option>
-                </select>
-              </div>
-              <div>
-                <div className="text-gray-500 text-sm mb-2 text-center">Day</div>
-                <select
-                  value={birthday.day.toString().padStart(2, '0')}
-                  onChange={(e) => setBirthday({ ...birthday, day: parseInt(e.target.value) })}
-                  className="w-full bg-gray-800 text-white rounded-lg px-3 py-3 text-center focus:outline-none focus:ring-2 focus:ring-habesha-gold"
-                >
-                  {Array.from({ length: 31 }, (_, i) => i + 1).map(day => (
-                    <option key={day} value={day.toString().padStart(2, '0')}>
-                      {day}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <div className="text-gray-500 text-sm mb-2 text-center">Year</div>
-                <select
-                  value={birthday.year.toString()}
-                  onChange={(e) => setBirthday({ ...birthday, year: parseInt(e.target.value) })}
-                  className="w-full bg-gray-800 text-white rounded-lg px-3 py-3 text-center focus:outline-none focus:ring-2 focus:ring-habesha-gold"
-                >
-                  {Array.from({ length: 83 }, (_, i) => 2006 - i).map(year => (
-                    <option key={year} value={year.toString()}>
-                      {year}
-                    </option>
-                  ))}
-                </select>
-              </div>
+            <div className="flex-1 flex items-center justify-center mb-8">
+              <ScrollableDatePicker
+                selectedDay={birthday.day}
+                selectedMonth={birthday.month}
+                selectedYear={birthday.year}
+                onDateChange={(day, month, year) => setBirthday({ day, month, year })}
+              />
             </div>
             
             <Button 
               onClick={() => setOnboardingStep('gender')}
-              className="w-full bg-gray-700 hover:bg-gray-600 text-white rounded-full py-6 text-lg"
+              className="w-full bg-[#00E5A0] hover:bg-[#00CC8E] text-black rounded-full py-8 text-lg font-bold"
             >
-              Continue
+              I'm {calculateAge()} years old
+              <div className="text-xs font-normal mt-1 opacity-80">Double-check! You won't be able to edit this.</div>
             </Button>
           </div>
         )}
 
         {/* Gender Modal */}
         {onboardingStep === 'gender' && (
-          <div className="bg-[#2a2a2a] rounded-3xl p-6 md:p-8 max-w-md w-full relative my-auto">
+          <div className="h-full md:h-auto w-full md:max-w-lg md:mx-auto md:mt-20 bg-black md:rounded-3xl p-8 flex flex-col relative">
             <button 
               onClick={() => setOnboardingStep('birthday')}
               className="absolute top-6 left-6 text-white hover:text-gray-300"
             >
-              <ChevronLeft className="w-6 h-6" />
+              <ChevronLeft className="w-8 h-8" />
             </button>
             <button 
               onClick={() => navigate('/')}
               className="absolute top-6 right-6 text-white hover:text-gray-300"
             >
-              <X className="w-6 h-6" />
+              <X className="w-8 h-8" />
             </button>
             
-            <h2 className="text-2xl md:text-3xl font-bold text-white mb-6 md:mb-8">I am a</h2>
+            <h2 className="text-4xl md:text-3xl font-bold text-white mb-12">I am a</h2>
             
-            <div className="space-y-4 mb-8">
+            <div className="space-y-4 mb-8 flex-1">
               <button
-                onClick={() => setUserGender('male')}
-                className={`w-full p-6 rounded-2xl text-lg font-semibold transition-all ${
-                  userGender === 'male' 
-                    ? 'bg-gray-700 text-white border-2 border-blue-500' 
-                    : 'bg-gray-800 text-gray-400 hover:bg-gray-750'
-                }`}
+                onClick={() => {
+                  setUserGender('male');
+                  setTimeout(() => setOnboardingStep('ethnicity'), 300);
+                }}
+                className="w-full p-8 rounded-2xl text-2xl font-semibold transition-all bg-[#3a3a3a] text-white hover:bg-[#4a4a4a]"
               >
-                <div className="flex items-center justify-center gap-3">
-                  <span className="text-2xl">♂️</span>
-                  Male
-                </div>
+                Male
               </button>
               <button
-                onClick={() => setUserGender('female')}
-                className={`w-full p-6 rounded-2xl text-lg font-semibold transition-all ${
-                  userGender === 'female' 
-                    ? 'bg-gray-700 text-white border-2 border-pink-500' 
-                    : 'bg-gray-800 text-gray-400 hover:bg-gray-750'
-                }`}
+                onClick={() => {
+                  setUserGender('female');
+                  setTimeout(() => setOnboardingStep('ethnicity'), 300);
+                }}
+                className="w-full p-8 rounded-2xl text-2xl font-semibold transition-all bg-[#3a3a3a] text-white hover:bg-[#4a4a4a]"
               >
-                <div className="flex items-center justify-center gap-3">
-                  <span className="text-2xl">♀️</span>
-                  Female
-                </div>
-              </button>
-              <button
-                onClick={() => setUserGender('non-binary')}
-                className={`w-full p-6 rounded-2xl text-lg font-semibold transition-all ${
-                  userGender === 'non-binary' 
-                    ? 'bg-gray-700 text-white border-2 border-purple-500' 
-                    : 'bg-gray-800 text-gray-400 hover:bg-gray-750'
-                }`}
-              >
-                <div className="flex items-center justify-center gap-3">
-                  <span className="text-2xl">⚧️</span>
-                  Non-binary
-                </div>
+                Female
               </button>
             </div>
             
-            <Button 
-              onClick={() => setOnboardingStep('ethnicity')}
-              className="w-full bg-gray-700 hover:bg-gray-600 text-white rounded-full py-6 text-lg"
-            >
-              Next
-            </Button>
-            
-            <p className="text-xs text-gray-500 text-center mt-4">
-              *This information helps us improve your match experience.
+            <p className="text-xs text-gray-500 text-center mt-auto">
+              *Why do we ask this? This information helps us improve your match experience. Please note you won't be able to change it later!
             </p>
           </div>
         )}
 
         {/* Ethnicity Modal */}
         {onboardingStep === 'ethnicity' && (
-          <div className="bg-[#2a2a2a] rounded-3xl p-6 md:p-8 max-w-md w-full relative my-auto">
+          <div className="h-full md:h-auto w-full md:max-w-lg md:mx-auto md:mt-20 bg-black md:rounded-3xl p-8 flex flex-col relative">
             <button 
               onClick={() => setOnboardingStep('gender')}
               className="absolute top-6 left-6 text-white hover:text-gray-300"
             >
-              <ChevronLeft className="w-6 h-6" />
+              <ChevronLeft className="w-8 h-8" />
             </button>
             <button 
               onClick={() => navigate('/')}
               className="absolute top-6 right-6 text-white hover:text-gray-300"
             >
-              <X className="w-6 h-6" />
+              <X className="w-8 h-8" />
             </button>
             
-            <h2 className="text-2xl md:text-3xl font-bold text-white mb-2 md:mb-3">What's your ethnicity?</h2>
-            <p className="text-sm md:text-base text-gray-400 mb-6 md:mb-8">Ethnicity is not displayed on the profile.</p>
+            <h2 className="text-4xl md:text-3xl font-bold text-white mb-3">What's your ethnicity?</h2>
+            <p className="text-base md:text-sm text-gray-400 mb-8">Ethnicity is not displayed on the profile.</p>
             
-            <div className="space-y-4 mb-8">
+            <div className="space-y-4 mb-8 flex-1">
               <button
-                onClick={() => setEthnicity('eritrean-habesha')}
-                className={`w-full p-6 rounded-2xl text-lg font-semibold transition-all ${
+                onClick={() => {
+                  setEthnicity('eritrean-habesha');
+                  setTimeout(() => setOnboardingStep('name'), 300);
+                }}
+                className={`w-full p-8 rounded-2xl text-xl font-semibold transition-all ${
                   ethnicity === 'eritrean-habesha' 
-                    ? 'bg-gray-700 text-white border-2 border-gray-500' 
-                    : 'bg-gray-800 text-gray-400 hover:bg-gray-750'
+                    ? 'bg-[#4a4a4a] text-white' 
+                    : 'bg-[#3a3a3a] text-white hover:bg-[#4a4a4a]'
                 }`}
               >
                 <div className="flex items-center justify-center gap-3">
@@ -889,11 +835,14 @@ const [aiInitializing, setAiInitializing] = useState(false);
                 </div>
               </button>
               <button
-                onClick={() => setEthnicity('ethiopian-habesha')}
-                className={`w-full p-6 rounded-2xl text-lg font-semibold transition-all ${
+                onClick={() => {
+                  setEthnicity('ethiopian-habesha');
+                  setTimeout(() => setOnboardingStep('name'), 300);
+                }}
+                className={`w-full p-8 rounded-2xl text-xl font-semibold transition-all ${
                   ethnicity === 'ethiopian-habesha' 
-                    ? 'bg-gray-700 text-white border-2 border-gray-500' 
-                    : 'bg-gray-800 text-gray-400 hover:bg-gray-750'
+                    ? 'bg-[#4a4a4a] text-white' 
+                    : 'bg-[#3a3a3a] text-white hover:bg-[#4a4a4a]'
                 }`}
               >
                 <div className="flex items-center justify-center gap-3">
@@ -902,11 +851,14 @@ const [aiInitializing, setAiInitializing] = useState(false);
                 </div>
               </button>
               <button
-                onClick={() => setEthnicity('mixed-habesha')}
-                className={`w-full p-6 rounded-2xl text-lg font-semibold transition-all ${
+                onClick={() => {
+                  setEthnicity('mixed-habesha');
+                  setTimeout(() => setOnboardingStep('name'), 300);
+                }}
+                className={`w-full p-8 rounded-2xl text-xl font-semibold transition-all ${
                   ethnicity === 'mixed-habesha' 
-                    ? 'bg-gray-700 text-white border-2 border-gray-500' 
-                    : 'bg-gray-800 text-gray-400 hover:bg-gray-750'
+                    ? 'bg-[#4a4a4a] text-white' 
+                    : 'bg-[#3a3a3a] text-white hover:bg-[#4a4a4a]'
                 }`}
               >
                 <div className="flex items-center justify-center gap-3">
@@ -915,36 +867,29 @@ const [aiInitializing, setAiInitializing] = useState(false);
                 </div>
               </button>
             </div>
-            
-            <Button 
-              onClick={() => setOnboardingStep('name')}
-              className="w-full bg-gray-700 hover:bg-gray-600 text-white rounded-full py-6 text-lg"
-            >
-              Next
-            </Button>
           </div>
         )}
 
         {/* Name Modal */}
         {onboardingStep === 'name' && (
-          <div className="bg-[#2a2a2a] rounded-3xl p-6 md:p-8 max-w-md w-full relative my-auto">
+          <div className="h-full md:h-auto w-full md:max-w-lg md:mx-auto md:mt-20 bg-black md:rounded-3xl p-8 flex flex-col relative">
             <button 
               onClick={() => setOnboardingStep('ethnicity')}
               className="absolute top-6 left-6 text-white hover:text-gray-300"
             >
-              <ChevronLeft className="w-6 h-6" />
+              <ChevronLeft className="w-8 h-8" />
             </button>
             <button 
               onClick={() => navigate('/')}
               className="absolute top-6 right-6 text-white hover:text-gray-300"
             >
-              <X className="w-6 h-6" />
+              <X className="w-8 h-8" />
             </button>
             
-            <h2 className="text-3xl font-bold text-white mb-3">My first name is</h2>
-            <p className="text-gray-400 mb-8">Your name will be shown in video chats. You can change it later!</p>
+            <h2 className="text-4xl md:text-3xl font-bold text-white mb-3">My first name is</h2>
+            <p className="text-base text-gray-400 mb-8">Your name will be shown in video chats. You can change it later!</p>
             
-            <div className="mb-8">
+            <div className="mb-8 flex-1">
               <div className="relative">
                 <input
                   type="text"
@@ -952,7 +897,7 @@ const [aiInitializing, setAiInitializing] = useState(false);
                   onChange={(e) => setFirstName(e.target.value)}
                   placeholder="Enter your first name"
                   maxLength={20}
-                  className="w-full bg-transparent border-2 border-habesha-gold rounded-2xl px-6 py-4 text-white text-lg focus:outline-none focus:border-habesha-hover-gold"
+                  className="w-full bg-transparent border-2 border-habesha-gold rounded-2xl px-6 py-6 text-white text-xl focus:outline-none focus:border-habesha-hover-gold"
                 />
                 <div className="absolute right-4 bottom-4 text-habesha-gold text-sm">
                   {firstName.length}/20
@@ -963,7 +908,7 @@ const [aiInitializing, setAiInitializing] = useState(false);
             <Button 
               onClick={() => setOnboardingStep('purpose')}
               disabled={!firstName}
-              className="w-full bg-gray-700 hover:bg-gray-600 text-white rounded-full py-6 text-lg disabled:opacity-50"
+              className="w-full bg-[#00E5A0] hover:bg-[#00CC8E] text-black rounded-full py-8 text-lg font-bold disabled:opacity-50 disabled:bg-gray-700"
             >
               Next
             </Button>
@@ -972,22 +917,22 @@ const [aiInitializing, setAiInitializing] = useState(false);
 
         {/* 🌟 PURPOSE SELECTION MODAL - THE GAME CHANGER! 🌟 */}
         {onboardingStep === 'purpose' && (
-          <div className="bg-[#2a2a2a] rounded-3xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto relative my-8">
+          <div className="h-full md:h-auto w-full md:max-w-2xl md:mx-auto md:mt-12 bg-black md:rounded-3xl p-8 overflow-y-auto relative">
             <button 
-              onClick={() => setOnboardingStep('purpose')}
+              onClick={() => setOnboardingStep('name')}
               className="absolute top-6 left-6 text-white hover:text-gray-300"
             >
-              <ChevronLeft className="w-6 h-6" />
+              <ChevronLeft className="w-8 h-8" />
             </button>
             <button 
               onClick={() => navigate('/')}
               className="absolute top-6 right-6 text-white hover:text-gray-300"
             >
-              <X className="w-6 h-6" />
+              <X className="w-8 h-8" />
             </button>
             
-            <h2 className="text-3xl font-bold text-white mb-3">What brings you here?</h2>
-            <p className="text-gray-400 mb-6">Choose your main purpose - we'll match you with like-minded people</p>
+            <h2 className="text-4xl md:text-3xl font-bold text-white mb-3">What brings you here?</h2>
+            <p className="text-base md:text-sm text-gray-400 mb-6">Choose your main purpose - we'll match you with like-minded people</p>
             
             {/* Info Banner */}
             <div className="bg-blue-500/10 border border-blue-500/30 rounded-xl p-4 mb-6">
@@ -1014,7 +959,7 @@ const [aiInitializing, setAiInitializing] = useState(false);
                     className={`p-5 rounded-2xl text-left transition-all ${
                       isSelected
                         ? `bg-gradient-to-br ${purpose.color} text-white border-2 border-white/30 scale-105`
-                        : 'bg-gray-800 text-gray-400 hover:bg-gray-750 border-2 border-transparent'
+                        : 'bg-[#3a3a3a] text-gray-400 hover:bg-[#4a4a4a] border-2 border-transparent'
                     }`}
                   >
                     <div className="flex items-start gap-3 mb-3">
@@ -1070,7 +1015,7 @@ const [aiInitializing, setAiInitializing] = useState(false);
             
             <Button 
               onClick={() => setOnboardingStep('safety')}
-              className="w-full bg-habesha-gold hover:bg-habesha-hover-gold text-habesha-bg rounded-full py-6 text-lg font-bold"
+              className="w-full bg-[#00E5A0] hover:bg-[#00CC8E] text-black rounded-full py-8 text-lg font-bold"
             >
               Continue
             </Button>
@@ -1079,12 +1024,12 @@ const [aiInitializing, setAiInitializing] = useState(false);
 
         {/* 🛡️ ENHANCED SAFETY MODAL - WITH ALL 4 FEATURES! */}
         {onboardingStep === 'safety' && (
-          <div className="bg-[#2a2a2a] rounded-3xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto relative my-8">
+          <div className="h-full md:h-auto w-full md:max-w-2xl md:mx-auto md:mt-12 bg-black md:rounded-3xl p-8 overflow-y-auto relative">
             <button 
               onClick={() => setOnboardingStep('purpose')}
               className="absolute top-6 left-6 text-white hover:text-gray-300 z-10"
             >
-              <ChevronLeft className="w-6 h-6" />
+              <ChevronLeft className="w-8 h-8" />
             </button>
             
             <h2 className="text-3xl font-bold text-white mb-3 pr-8">Your Safety is Our Priority! 🛡️</h2>
@@ -1235,7 +1180,7 @@ const [aiInitializing, setAiInitializing] = useState(false);
             
             <Button 
               onClick={() => setOnboardingStep('preferences')}
-              className="w-full bg-habesha-gold hover:bg-habesha-hover-gold text-habesha-bg rounded-full py-6 text-lg font-bold"
+              className="w-full bg-[#00E5A0] hover:bg-[#00CC8E] text-black rounded-full py-8 text-lg font-bold"
             >
               I Understand - Continue
             </Button>
@@ -1244,9 +1189,9 @@ const [aiInitializing, setAiInitializing] = useState(false);
 
         {/* 🌟 SAME-GENDER MATCHING PREFERENCE MODAL - THE STAR! 🌟 */}
         {onboardingStep === 'preferences' && (
-          <div className="bg-[#2a2a2a] rounded-3xl p-8 max-w-md w-full max-h-[90vh] overflow-y-auto relative my-8">
-            <h2 className="text-3xl font-bold text-white mb-3">Who would you like to match with?</h2>
-            <p className="text-gray-400 mb-2">Select your preference for safety and comfort</p>
+          <div className="h-full md:h-auto w-full md:max-w-lg md:mx-auto md:mt-12 bg-black md:rounded-3xl p-8 overflow-y-auto relative">
+            <h2 className="text-4xl md:text-3xl font-bold text-white mb-3">Who would you like to match with?</h2>
+            <p className="text-base md:text-sm text-gray-400 mb-2">Select your preference for safety and comfort</p>
             
             {/* Safety Info Banner */}
             <div className="bg-blue-500/10 border border-blue-500/30 rounded-xl p-4 mb-6">
@@ -1268,7 +1213,7 @@ const [aiInitializing, setAiInitializing] = useState(false);
                 className={`w-full p-6 rounded-2xl transition-all relative ${
                   matchingMode === 'same-gender-only' 
                     ? 'bg-gradient-to-r from-green-600 to-blue-600 text-white border-2 border-green-400' 
-                    : 'bg-gray-800 text-gray-400 hover:bg-gray-750'
+                    : 'bg-[#3a3a3a] text-gray-400 hover:bg-[#4a4a4a]'
                 }`}
               >
                 {matchingMode === 'same-gender-only' && (
@@ -1283,7 +1228,7 @@ const [aiInitializing, setAiInitializing] = useState(false);
                   <div className="text-left flex-1">
                     <div className="font-bold text-lg mb-1">Same Gender Only</div>
                     <div className="text-sm opacity-90">
-                      Only match with {userGender === 'male' ? 'men' : userGender === 'female' ? 'women' : 'non-binary people'} (Safest)
+                      Only match with {userGender === 'male' ? 'men' : 'women'} (Safest)
                     </div>
                   </div>
                   {matchingMode === 'same-gender-only' && (
@@ -1298,7 +1243,7 @@ const [aiInitializing, setAiInitializing] = useState(false);
                 className={`w-full p-6 rounded-2xl transition-all ${
                   matchingMode === 'both' 
                     ? 'bg-gray-700 text-white border-2 border-purple-500' 
-                    : 'bg-gray-800 text-gray-400 hover:bg-gray-750'
+                    : 'bg-[#3a3a3a] text-gray-400 hover:bg-[#4a4a4a]'
                 }`}
               >
                 <div className="flex items-center gap-4">
@@ -1321,7 +1266,7 @@ const [aiInitializing, setAiInitializing] = useState(false);
                 className={`w-full p-6 rounded-2xl transition-all ${
                   matchingMode === 'opposite-only' 
                     ? 'bg-gray-700 text-white border-2 border-pink-500' 
-                    : 'bg-gray-800 text-gray-400 hover:bg-gray-750'
+                    : 'bg-[#3a3a3a] text-gray-400 hover:bg-[#4a4a4a]'
                 }`}
               >
                 <div className="flex items-center gap-4">
@@ -1364,7 +1309,7 @@ const [aiInitializing, setAiInitializing] = useState(false);
             
             <Button 
               onClick={completeOnboarding}
-              className="w-full bg-habesha-gold hover:bg-habesha-hover-gold text-habesha-bg rounded-full py-6 text-lg font-bold mb-3"
+              className="w-full bg-[#00E5A0] hover:bg-[#00CC8E] text-black rounded-full py-8 text-lg font-bold mb-3"
             >
               Start Video Chat
             </Button>
