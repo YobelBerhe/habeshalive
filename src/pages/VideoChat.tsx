@@ -255,7 +255,8 @@ export default function VideoChat() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [aiInitialized, setAiInitialized] = useState(false);
-  const [aiInitializing, setAiInitializing] = useState(false);
+const [aiInitializing, setAiInitializing] = useState(false);
+  const [videoPosition, setVideoPosition] = useState<'half' | 'corner'>('half'); // Add video position state
   const callStartTimeRef = useRef<number | null>(null);
   
   // WebRTC video refs
@@ -1566,13 +1567,25 @@ export default function VideoChat() {
                     {/* Right Video - Matched User */}
                     <div className="relative bg-black h-full flex items-center justify-center">
                       {connectionState === 'searching' ? (
-                        <div className="relative w-full h-full flex items-center justify-center bg-gradient-radial from-white/10 via-transparent to-transparent">
-                          <div className="absolute inset-0 flex items-center justify-center overflow-hidden">
-                            <div className="w-96 h-96 rounded-full bg-white/30 blur-[100px]"></div>
+                         <div className="relative w-full h-full flex items-center justify-center">
+                          {/* Blurred profile photo background */}
+                          <div className="absolute inset-0">
+                            <img 
+                              src={mockPartners[Math.floor(Math.random() * mockPartners.length)].image}
+                              alt=""
+                              className="w-full h-full object-cover blur-2xl opacity-40"
+                            />
                           </div>
-                          <div className="relative z-10 text-center">
-                            <RotatingGlobe />
-                            <p className="text-xl font-bold mt-6">Finding your next match...</p>
+                          {/* Centered profile circle with blur */}
+                          <div className="relative z-10 flex flex-col items-center">
+                            <div className="w-48 h-48 rounded-full overflow-hidden mb-6">
+                              <img 
+                                src={mockPartners[Math.floor(Math.random() * mockPartners.length)].image}
+                                alt=""
+                                className="w-full h-full object-cover blur-sm"
+                              />
+                            </div>
+                            <p className="text-xl font-bold">Connecting...</p>
                             <p className="text-sm text-gray-400 mt-2">
                               Matching with {matchingMode === 'same-gender-only' 
                                 ? `${userGender === 'male' ? 'men' : userGender === 'female' ? 'women' : 'non-binary people'} only`
@@ -1687,14 +1700,26 @@ export default function VideoChat() {
                   <div className="md:hidden h-full flex flex-col relative">
                     {connectionState === 'searching' ? (
                       <>
-                        {/* Matched User Area - with blurred background and globe */}
+                        {/* Matched User Area - with blurred profile photo */}
                         <div className="flex-1 relative bg-black flex items-center justify-center">
-                          <div className="absolute inset-0 flex items-center justify-center overflow-hidden">
-                            <div className="w-64 h-64 rounded-full bg-white/30 blur-[80px]"></div>
+                          {/* Blurred background */}
+                          <div className="absolute inset-0">
+                            <img 
+                              src={mockPartners[Math.floor(Math.random() * mockPartners.length)].image}
+                              alt=""
+                              className="w-full h-full object-cover blur-2xl opacity-40"
+                            />
                           </div>
-                          <div className="relative z-10 text-center">
-                            <RotatingGlobe />
-                            <p className="text-xl font-bold mt-6">Finding your next match...</p>
+                          {/* Centered circular profile with blur */}
+                          <div className="relative z-10 flex flex-col items-center">
+                            <div className="w-40 h-40 rounded-full overflow-hidden mb-4">
+                              <img 
+                                src={mockPartners[Math.floor(Math.random() * mockPartners.length)].image}
+                                alt=""
+                                className="w-full h-full object-cover blur-sm"
+                              />
+                            </div>
+                            <p className="text-lg font-bold">Connecting...</p>
                             <p className="text-sm text-gray-400 mt-2">
                               {matchingMode === 'same-gender-only' 
                                 ? `Matching ${userGender}s only`
@@ -1710,7 +1735,7 @@ export default function VideoChat() {
                           </div>
                         </div>
                         
-                        {/* My Camera - stays visible */}
+                        {/* My Camera - clean without text overlay */}
                         <div className="flex-1 relative bg-black flex items-center justify-center border-t border-gray-800">
                           <video
                             ref={localVideoRef}
@@ -1719,17 +1744,16 @@ export default function VideoChat() {
                             muted
                             className="w-full h-full object-cover"
                           />
-                          <div className={`absolute inset-0 ${!webrtcConnected ? 'flex' : 'hidden'} items-center justify-center text-gray-600 text-center bg-black/70`}>
-                            <div>
-                              <Camera className="w-16 h-16 mx-auto mb-2" />
-                              <p>Your Camera</p>
+                          {!webrtcConnected && (
+                            <div className="absolute inset-0 flex items-center justify-center bg-black/70">
+                              <Camera className="w-16 h-16 text-gray-600" />
                             </div>
-                          </div>
+                          )}
                         </div>
                       </>
                     ) : connectionState === 'connected' && partner ? (
                       <>
-                        {!isFullScreen ? (
+                        {videoPosition === 'half' ? (
                           <>
                             {/* Matched User Video - Top Half */}
                             <div className="flex-1 relative bg-black flex items-center justify-center">
@@ -1813,7 +1837,7 @@ export default function VideoChat() {
                               )}
                             </div>
 
-                            {/* My Camera - Bottom Half */}
+                            {/* My Camera - Bottom Half - Clean without text */}
                             <div className="flex-1 relative bg-black flex items-center justify-center border-t border-gray-800">
                               <video
                                 ref={localVideoRef}
@@ -1822,7 +1846,11 @@ export default function VideoChat() {
                                 muted
                                 className="w-full h-full object-cover"
                               />
-                              {/* Hide "Your Camera" text when video is connected in split view */}
+                              {!webrtcConnected && (
+                                <div className="absolute inset-0 flex items-center justify-center bg-black/70">
+                                  <Camera className="w-16 h-16 text-gray-600" />
+                                </div>
+                              )}
                             </div>
                           </>
                         ) : (
@@ -1892,8 +1920,8 @@ export default function VideoChat() {
                                 </div>
                               )}
 
-                              {/* My Camera - PIP */}
-                              <div className="absolute top-16 right-4 w-24 h-32 bg-black rounded-lg overflow-hidden border-2 border-gray-700 z-10">
+                              {/* My Camera - Top Right Corner */}
+                              <div className="absolute top-4 right-4 w-32 h-44 rounded-2xl overflow-hidden border-2 border-white/20 shadow-2xl z-10">
                                 <video
                                   ref={localVideoRef}
                                   autoPlay
@@ -1914,49 +1942,42 @@ export default function VideoChat() {
               {/* Bottom Controls - Azar Style */}
               <div className="fixed bottom-0 left-0 right-0 z-20 pb-safe">
                 <div className="max-w-4xl mx-auto">
-                  {/* Mobile Controls - Azar Dark Bottom Section */}
+                  {/* Mobile Controls - Clean without dark overlay */}
                   <div className="md:hidden">
-                    {/* Dark Bottom Bar */}
-                    <div className="bg-gradient-to-t from-black via-black to-transparent pt-8 pb-4 px-4">
+                    <div className="absolute bottom-0 left-0 right-0 p-4 pb-safe">
                       {/* Safety Guidelines Link */}
-                      <p className="text-center text-xs mb-4 text-gray-400 px-2">
+                      <p className="text-center text-xs mb-3 text-white/60">
                         HabeshaLive cares about your safety. Check out our{" "}
-                        <a href="#" className="text-[#00D9B4] hover:underline">
+                        <button className="text-green-400 font-medium">
                           Community Guidelines
-                        </a>
+                        </button>
                       </p>
 
                       {/* Control Buttons Row */}
-                      <div className="flex items-center justify-center gap-4">
-                        {/* Chat Button - Dark Circle */}
+                      <div className="flex items-center justify-center gap-3">
+                        {/* Chat Button */}
                         <button 
                           onClick={() => setShowChat(!showChat)}
-                          className="w-14 h-14 rounded-full bg-black/80 backdrop-blur-sm border border-white/10 hover:bg-black/90 flex items-center justify-center transition-all"
+                          className="w-12 h-12 rounded-full bg-gray-800/80 backdrop-blur-sm flex items-center justify-center"
                         >
-                          <MessageCircle className="w-6 h-6 text-white" />
+                          <MessageCircle className="w-5 h-5" />
                         </button>
 
-                        {/* Toggle View Button - Dark Circle */}
+                        {/* Video Position Toggle Button */}
                         <button 
-                          onClick={() => setIsFullScreen(!isFullScreen)}
-                          className="w-14 h-14 rounded-full bg-black/80 backdrop-blur-sm border border-white/10 hover:bg-black/90 flex items-center justify-center transition-all"
+                          onClick={() => setVideoPosition(videoPosition === 'half' ? 'corner' : 'half')}
+                          className="w-12 h-12 rounded-full bg-gray-800/80 backdrop-blur-sm flex items-center justify-center"
                         >
-                          {isFullScreen ? (
-                            <div className="grid grid-cols-2 gap-0.5 w-5 h-5">
-                              <div className="bg-white rounded-sm"></div>
-                              <div className="bg-white rounded-sm"></div>
-                              <div className="bg-white rounded-sm"></div>
-                              <div className="bg-white rounded-sm"></div>
-                            </div>
-                          ) : (
-                            <Camera className="w-6 h-6 text-white" />
-                          )}
+                          <div className="flex flex-col gap-0.5">
+                            <div className="w-3.5 h-2 bg-white rounded-sm"></div>
+                            <div className="w-3.5 h-2 bg-white rounded-sm"></div>
+                          </div>
                         </button>
 
-                        {/* Next Button - Large White Pill */}
+                        {/* Next Button */}
                         <Button
                           onClick={handleNext}
-                          className="bg-white hover:bg-gray-100 text-black font-bold px-8 py-6 rounded-full text-lg shadow-lg transition-all"
+                          className="bg-white hover:bg-gray-100 text-black font-bold px-10 py-3.5 rounded-full text-base"
                         >
                           Next →
                         </Button>
@@ -1966,36 +1987,29 @@ export default function VideoChat() {
 
                   {/* Desktop Controls - Small Right-Positioned */}
                   <div className="hidden md:block">
-                    <div className="flex items-end justify-end gap-3 pr-8 pb-6">
-                      {/* Small Message Button */}
-                      <button className="w-12 h-12 rounded-full bg-black/60 backdrop-blur-sm border border-white/10 hover:bg-black/80 flex items-center justify-center transition-all">
-                        <MessageCircle className="w-5 h-5 text-white" />
+                    <div className="absolute bottom-6 right-6 flex items-center gap-3 z-30">
+                      {/* Message Button */}
+                      <button className="w-12 h-12 rounded-full bg-gray-800/70 backdrop-blur-sm flex items-center justify-center hover:bg-gray-700/70">
+                        <MessageCircle className="w-5 h-5" />
                       </button>
 
-                      {/* Small Next Button */}
+                      {/* Next Button */}
                       <Button
                         onClick={handleNext}
-                        className="bg-white hover:bg-gray-100 text-black font-bold px-6 py-3 rounded-full text-sm shadow-lg transition-all"
+                        className="bg-white hover:bg-gray-100 text-black font-bold px-8 py-3 rounded-full text-base"
                       >
                         Next →
                       </Button>
 
-                      {/* Small Filter Button */}
-                      <button className="w-12 h-12 rounded-full bg-black/60 backdrop-blur-sm border border-white/10 hover:bg-black/80 flex items-center justify-center transition-all">
-                        <span className="text-lg">🎭</span>
+                      {/* Filter Button */}
+                      <button className="w-12 h-12 rounded-full bg-gray-800/70 backdrop-blur-sm flex items-center justify-center hover:bg-gray-700/70">
+                        <span className="text-xl">✨</span>
                       </button>
                     </div>
 
-                    {/* ESC hint - Smaller and Right-Aligned */}
-                    <div className="flex items-center justify-end gap-6 pr-8 pb-4 text-xs text-gray-500">
-                      <div className="flex items-center gap-2">
-                        <kbd className="px-2 py-0.5 bg-gray-800 rounded text-xs">esc</kbd>
-                        <span>End Chat</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <span>Next Chat</span>
-                        <kbd className="px-2 py-0.5 bg-gray-800 rounded text-xs">→</kbd>
-                      </div>
+                    {/* ESC hint */}
+                    <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 text-center">
+                      <p className="text-xs text-white/40">Press ESC to exit</p>
                     </div>
                   </div>
                 </div>

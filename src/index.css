@@ -100,6 +100,15 @@ All colors MUST be HSL.
   }
 }
 
+/* Hide scrollbar for horizontal carousel */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 /* Continuous scrolling animations */
 @keyframes scroll-up {
   0% {

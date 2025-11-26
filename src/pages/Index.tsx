@@ -317,23 +317,23 @@ export default function Home() {
                 Start Video Chat
               </Button>
               
-              <p className="text-xs text-habesha-cream/50 text-center mt-2">
+              <p className="text-[10px] text-habesha-cream/50 text-center mt-2">
                 All images of models are used for illustrative purposes only.
               </p>
             </div>
           </div>
 
           {/* RIGHT SIDE - 3 Column Scrolling Photos */}
-          <div className="relative bg-habesha-bg flex gap-3 p-3 h-full overflow-hidden">
+          <div className="relative bg-habesha-bg flex gap-2 p-2 h-full overflow-hidden">
             {/* Column 1 - Scrolling Up */}
             <div className="flex-1 overflow-hidden">
               <div className="animate-scroll-up">
                 {[...profiles[0], ...profiles[0]].map((profile, index) => (
-                  <div key={index} className="mb-3 relative">
+                  <div key={index} className="mb-2 relative">
                     <img 
                       src={profile.image} 
                       alt="" 
-                      className="w-full h-[420px] object-cover rounded-2xl"
+                      className="w-full h-[420px] object-cover rounded-xl"
                     />
                     {profile.online && (
                       <div className="absolute top-3 left-3 bg-black/80 rounded-full px-2.5 py-1 flex items-center gap-1.5">
@@ -354,11 +354,11 @@ export default function Home() {
             <div className="flex-1 overflow-hidden">
               <div className="animate-scroll-down">
                 {[...profiles[1], ...profiles[1]].map((profile, index) => (
-                  <div key={index} className="mb-3 relative">
+                  <div key={index} className="mb-2 relative">
                     <img 
                       src={profile.image} 
                       alt="" 
-                      className="w-full h-[420px] object-cover rounded-2xl"
+                      className="w-full h-[420px] object-cover rounded-xl"
                     />
                     {profile.online && (
                       <div className="absolute top-3 left-3 bg-black/80 rounded-full px-2.5 py-1 flex items-center gap-1.5">
@@ -379,11 +379,11 @@ export default function Home() {
             <div className="flex-1 overflow-hidden">
               <div className="animate-scroll-up">
                 {[...profiles[2], ...profiles[2]].map((profile, index) => (
-                  <div key={index} className="mb-3 relative">
+                  <div key={index} className="mb-2 relative">
                     <img 
                       src={profile.image} 
                       alt="" 
-                      className="w-full h-[420px] object-cover rounded-2xl"
+                      className="w-full h-[420px] object-cover rounded-xl"
                     />
                     {profile.online && (
                       <div className="absolute top-3 left-3 bg-black/80 rounded-full px-2.5 py-1 flex items-center gap-1.5">
@@ -525,7 +525,7 @@ export default function Home() {
                 </span>
                 <span className="text-xs text-habesha-cream/70">are matching now!</span>
               </div>
-              <p className="text-xs text-habesha-cream/50">
+              <p className="text-[10px] text-habesha-cream/50">
                 All images of models are used for illustrative purposes only.
               </p>
             </div>
@@ -551,46 +551,48 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="py-12 md:py-16 px-4 md:px-6">
-        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
-          {/* Feature 1 */}
-          <div className="border border-gray-800 rounded-3xl p-6 md:p-8 bg-[#0f0f0f] hover:border-gray-700 transition-all hover:scale-105">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="bg-white rounded-2xl p-3 md:p-4 w-14 h-14 md:w-16 md:h-16 flex items-center justify-center flex-shrink-0">
-                <Video className="w-7 h-7 md:w-8 md:h-8 text-black" />
+      {/* Features Section - Horizontal Carousel */}
+      <section className="py-12 md:py-16 px-4 md:px-6 overflow-hidden">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide pb-4">
+            {/* Feature 1 */}
+            <div className="min-w-[280px] md:min-w-[320px] border border-gray-800 rounded-3xl p-6 md:p-8 bg-[#0f0f0f] hover:border-gray-700 transition-all snap-center flex-shrink-0">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="bg-white rounded-2xl p-3 md:p-4 w-14 h-14 md:w-16 md:h-16 flex items-center justify-center flex-shrink-0">
+                  <Video className="w-7 h-7 md:w-8 md:h-8 text-black" />
+                </div>
+                <h3 className="text-xl md:text-2xl font-bold">HD Video Chat</h3>
               </div>
-              <h3 className="text-xl md:text-2xl font-bold">HD Video Chat</h3>
+              <p className="text-gray-400 text-sm md:text-base leading-relaxed">
+                Experience instant connection with Habesha people nearby and around the world. Crystal clear quality!
+              </p>
             </div>
-            <p className="text-gray-400 text-sm md:text-base leading-relaxed">
-              Experience instant connection with Habesha people nearby and around the world. Crystal clear quality!
-            </p>
-          </div>
 
-          {/* Feature 2 */}
-          <div className="border border-gray-800 rounded-3xl p-6 md:p-8 bg-[#0f0f0f] hover:border-gray-700 transition-all hover:scale-105">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="bg-white rounded-2xl p-3 md:p-4 w-14 h-14 md:w-16 md:h-16 flex items-center justify-center flex-shrink-0">
-                <Shield className="w-7 h-7 md:w-8 md:h-8 text-black" />
+            {/* Feature 2 */}
+            <div className="min-w-[280px] md:min-w-[320px] border border-gray-800 rounded-3xl p-6 md:p-8 bg-[#0f0f0f] hover:border-gray-700 transition-all snap-center flex-shrink-0">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="bg-white rounded-2xl p-3 md:p-4 w-14 h-14 md:w-16 md:h-16 flex items-center justify-center flex-shrink-0">
+                  <Shield className="w-7 h-7 md:w-8 md:h-8 text-black" />
+                </div>
+                <h3 className="text-xl md:text-2xl font-bold">Safe & Secure</h3>
               </div>
-              <h3 className="text-xl md:text-2xl font-bold">Safe & Secure</h3>
+              <p className="text-gray-400 text-sm md:text-base leading-relaxed">
+                AI moderation, same-gender options, and cultural sensitivity. Built for our community values.
+              </p>
             </div>
-            <p className="text-gray-400 text-sm md:text-base leading-relaxed">
-              AI moderation, same-gender options, and cultural sensitivity. Built for our community values.
-            </p>
-          </div>
 
-          {/* Feature 3 */}
-          <div className="border border-gray-800 rounded-3xl p-6 md:p-8 bg-[#0f0f0f] hover:border-gray-700 transition-all hover:scale-105">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="bg-white rounded-2xl p-3 md:p-4 w-14 h-14 md:w-16 md:h-16 flex items-center justify-center flex-shrink-0">
-                <Users className="w-7 h-7 md:w-8 md:h-8 text-black" />
+            {/* Feature 3 */}
+            <div className="min-w-[280px] md:min-w-[320px] border border-gray-800 rounded-3xl p-6 md:p-8 bg-[#0f0f0f] hover:border-gray-700 transition-all snap-center flex-shrink-0">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="bg-white rounded-2xl p-3 md:p-4 w-14 h-14 md:w-16 md:h-16 flex items-center justify-center flex-shrink-0">
+                  <Users className="w-7 h-7 md:w-8 md:h-8 text-black" />
+                </div>
+                <h3 className="text-xl md:text-2xl font-bold">Cultural Connection</h3>
               </div>
-              <h3 className="text-xl md:text-2xl font-bold">Cultural Connection</h3>
+              <p className="text-gray-400 text-sm md:text-base leading-relaxed">
+                Practice Tigrinya, Amharic. Share culture and celebrate our heritage together.
+              </p>
             </div>
-            <p className="text-gray-400 text-sm md:text-base leading-relaxed">
-              Practice Tigrinya, Amharic. Share culture and celebrate our heritage together.
-            </p>
           </div>
         </div>
       </section>
@@ -664,7 +666,7 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-black py-12 md:py-16 px-4 md:px-6 border-t border-gray-900">
+      <footer className="bg-black py-12 md:py-16 px-4 md:px-6 border-t border-gray-900 pb-32 md:pb-16">
         <div className="max-w-6xl mx-auto">
           {/* Company Name */}
           <div className="flex items-center justify-center gap-4 mb-8 md:mb-12">
