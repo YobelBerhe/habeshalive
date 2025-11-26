@@ -1546,10 +1546,21 @@ export default function VideoChat() {
                   <div className="hidden md:grid md:grid-cols-2 gap-0 h-full">
                     {/* Left Video - My Camera */}
                     <div className="relative bg-black h-full flex items-center justify-center">
-                      <div className="text-gray-600 text-center">
-                        <Camera className="w-16 h-16 mx-auto mb-2" />
-                        <p>Your Camera</p>
-                      </div>
+                      <video
+                        ref={localVideoRef}
+                        autoPlay
+                        playsInline
+                        muted
+                        className="w-full h-full object-cover"
+                      />
+                      {!webrtcConnected && (
+                        <div className="absolute inset-0 flex items-center justify-center text-gray-600 text-center bg-black/70">
+                          <div>
+                            <Camera className="w-16 h-16 mx-auto mb-2" />
+                            <p>Your Camera</p>
+                          </div>
+                        </div>
+                      )}
                     </div>
 
                     {/* Right Video - Matched User */}
@@ -1811,12 +1822,7 @@ export default function VideoChat() {
                                 muted
                                 className="w-full h-full object-cover"
                               />
-                              <div className={`absolute inset-0 ${!webrtcConnected ? 'flex' : 'hidden'} items-center justify-center text-gray-600 text-center bg-black/70`}>
-                                <div>
-                                  <Camera className="w-16 h-16 mx-auto mb-2" />
-                                  <p>Your Camera</p>
-                                </div>
-                              </div>
+                              {/* Hide "Your Camera" text when video is connected in split view */}
                             </div>
                           </>
                         ) : (
@@ -1905,95 +1911,90 @@ export default function VideoChat() {
                 </div>
               </div>
 
-              {/* Bottom Controls */}
-              <div className="fixed bottom-0 left-0 right-0 p-3 md:p-8 z-20 bg-gradient-to-t from-black via-black/95 to-transparent pb-safe">
+              {/* Bottom Controls - Azar Style */}
+              <div className="fixed bottom-0 left-0 right-0 z-20 pb-safe">
                 <div className="max-w-4xl mx-auto">
-                  {/* Mobile Controls */}
+                  {/* Mobile Controls - Azar Dark Bottom Section */}
                   <div className="md:hidden">
-                    <p className="text-center text-xs mb-3 text-gray-400 px-2">
-                      HabeshaLive cares about your safety. Check out our{" "}
-                      <a href="#" className="text-[#00D9B4] hover:underline">
-                        Community Guidelines
-                      </a>
-                    </p>
+                    {/* Dark Bottom Bar */}
+                    <div className="bg-gradient-to-t from-black via-black to-transparent pt-8 pb-4 px-4">
+                      {/* Safety Guidelines Link */}
+                      <p className="text-center text-xs mb-4 text-gray-400 px-2">
+                        HabeshaLive cares about your safety. Check out our{" "}
+                        <a href="#" className="text-[#00D9B4] hover:underline">
+                          Community Guidelines
+                        </a>
+                      </p>
 
-                    <div className="flex items-center justify-center gap-2 md:gap-3 mb-2">
-                      {/* Message Button */}
-                      <button 
-                        onClick={() => setShowChat(!showChat)}
-                        className="w-12 h-12 rounded-full bg-black/60 backdrop-blur-sm border border-white/20 hover:bg-black/80 flex items-center justify-center"
-                      >
-                        <MessageCircle className="w-5 h-5 text-white" />
-                      </button>
+                      {/* Control Buttons Row */}
+                      <div className="flex items-center justify-center gap-4">
+                        {/* Chat Button - Dark Circle */}
+                        <button 
+                          onClick={() => setShowChat(!showChat)}
+                          className="w-14 h-14 rounded-full bg-black/80 backdrop-blur-sm border border-white/10 hover:bg-black/90 flex items-center justify-center transition-all"
+                        >
+                          <MessageCircle className="w-6 h-6 text-white" />
+                        </button>
 
-                      {/* Toggle View Button */}
-                      <button 
-                        onClick={() => setIsFullScreen(!isFullScreen)}
-                        className="w-12 h-12 rounded-full bg-black/60 backdrop-blur-sm border border-white/20 hover:bg-black/80 flex items-center justify-center"
-                      >
-                        {isFullScreen ? (
-                          <div className="grid grid-cols-2 gap-0.5 w-5 h-5">
-                            <div className="bg-white rounded-sm"></div>
-                            <div className="bg-white rounded-sm"></div>
-                            <div className="bg-white rounded-sm"></div>
-                            <div className="bg-white rounded-sm"></div>
-                          </div>
-                        ) : (
-                          <div className="relative w-5 h-5">
-                            <div className="absolute inset-0 bg-white rounded-sm opacity-50"></div>
-                            <div className="absolute top-0 right-0 w-2 h-2 bg-white rounded-sm"></div>
-                          </div>
-                        )}
-                      </button>
+                        {/* Toggle View Button - Dark Circle */}
+                        <button 
+                          onClick={() => setIsFullScreen(!isFullScreen)}
+                          className="w-14 h-14 rounded-full bg-black/80 backdrop-blur-sm border border-white/10 hover:bg-black/90 flex items-center justify-center transition-all"
+                        >
+                          {isFullScreen ? (
+                            <div className="grid grid-cols-2 gap-0.5 w-5 h-5">
+                              <div className="bg-white rounded-sm"></div>
+                              <div className="bg-white rounded-sm"></div>
+                              <div className="bg-white rounded-sm"></div>
+                              <div className="bg-white rounded-sm"></div>
+                            </div>
+                          ) : (
+                            <Camera className="w-6 h-6 text-white" />
+                          )}
+                        </button>
 
-                      {/* Next Button */}
-                      <Button
-                        onClick={handleNext}
-                        className="bg-white hover:bg-gray-200 text-black font-bold px-6 py-5 rounded-full text-base"
-                      >
-                        Next →
-                      </Button>
+                        {/* Next Button - Large White Pill */}
+                        <Button
+                          onClick={handleNext}
+                          className="bg-white hover:bg-gray-100 text-black font-bold px-8 py-6 rounded-full text-lg shadow-lg transition-all"
+                        >
+                          Next →
+                        </Button>
+                      </div>
                     </div>
                   </div>
 
-                  {/* Desktop Controls */}
+                  {/* Desktop Controls - Small Right-Positioned */}
                   <div className="hidden md:block">
-                    <p className="text-center text-sm mb-4 text-gray-400">
-                      HabeshaLive cares about your safety. Check out our{" "}
-                      <a href="#" className="text-[#00D9B4] hover:underline">
-                        Community Guidelines
-                      </a>
-                    </p>
-
-                    <div className="flex items-center justify-center gap-4 mb-4">
-                      {/* Message Button */}
-                      <button className="w-14 h-14 rounded-full bg-gray-800 hover:bg-gray-700 flex items-center justify-center">
-                        <MessageCircle className="w-6 h-6" />
+                    <div className="flex items-end justify-end gap-3 pr-8 pb-6">
+                      {/* Small Message Button */}
+                      <button className="w-12 h-12 rounded-full bg-black/60 backdrop-blur-sm border border-white/10 hover:bg-black/80 flex items-center justify-center transition-all">
+                        <MessageCircle className="w-5 h-5 text-white" />
                       </button>
 
-                      {/* Next Button */}
+                      {/* Small Next Button */}
                       <Button
                         onClick={handleNext}
-                        className="bg-white hover:bg-gray-200 text-black font-bold px-8 py-6 rounded-full text-lg"
+                        className="bg-white hover:bg-gray-100 text-black font-bold px-6 py-3 rounded-full text-sm shadow-lg transition-all"
                       >
                         Next →
                       </Button>
 
-                      {/* Filter Button */}
-                      <button className="w-14 h-14 rounded-full bg-gray-800 hover:bg-gray-700 flex items-center justify-center">
-                        <span className="text-2xl">🎭</span>
+                      {/* Small Filter Button */}
+                      <button className="w-12 h-12 rounded-full bg-black/60 backdrop-blur-sm border border-white/10 hover:bg-black/80 flex items-center justify-center transition-all">
+                        <span className="text-lg">🎭</span>
                       </button>
                     </div>
 
-                    {/* ESC hint */}
-                    <div className="flex items-center justify-between text-sm text-gray-500">
+                    {/* ESC hint - Smaller and Right-Aligned */}
+                    <div className="flex items-center justify-end gap-6 pr-8 pb-4 text-xs text-gray-500">
                       <div className="flex items-center gap-2">
-                        <kbd className="px-2 py-1 bg-gray-800 rounded">esc</kbd>
-                        <span>End Video Chat</span>
+                        <kbd className="px-2 py-0.5 bg-gray-800 rounded text-xs">esc</kbd>
+                        <span>End Chat</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <span>Next Video Chat</span>
-                        <kbd className="px-2 py-1 bg-gray-800 rounded">→</kbd>
+                        <span>Next Chat</span>
+                        <kbd className="px-2 py-0.5 bg-gray-800 rounded text-xs">→</kbd>
                       </div>
                     </div>
                   </div>
