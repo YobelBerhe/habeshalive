@@ -558,9 +558,8 @@ const [aiInitializing, setAiInitializing] = useState(false);
       }
     }
     
-    // Cleanup WebRTC
-    webrtcService.cleanup();
-    setWebrtcConnected(false);
+    // Cleanup only the peer connection, keep local stream active
+    webrtcService.closePeerConnection();
     
     // Reset AI states
     setAiDetectedIssue(false);
@@ -1680,7 +1679,7 @@ const [aiInitializing, setAiInitializing] = useState(false);
                           </div>
                         </div>
                         
-                        {/* My Camera - clean without text overlay */}
+                        {/* My Camera - clean without any overlays */}
                         <div className="flex-1 relative bg-black flex items-center justify-center border-t border-gray-800">
                           <video
                             ref={localVideoRef}
@@ -1689,11 +1688,6 @@ const [aiInitializing, setAiInitializing] = useState(false);
                             muted
                             className="w-full h-full object-cover"
                           />
-                          {!webrtcConnected && (
-                            <div className="absolute inset-0 flex items-center justify-center bg-black/70">
-                              <Camera className="w-16 h-16 text-gray-600" />
-                            </div>
-                          )}
                         </div>
                       </>
                     ) : connectionState === 'connected' && partner ? (
@@ -1782,7 +1776,7 @@ const [aiInitializing, setAiInitializing] = useState(false);
                               )}
                             </div>
 
-                            {/* My Camera - Bottom Half - Clean without text */}
+                            {/* My Camera - Bottom Half - Clean without text or icons */}
                             <div className="flex-1 relative bg-black flex items-center justify-center border-t border-gray-800">
                               <video
                                 ref={localVideoRef}
@@ -1791,11 +1785,6 @@ const [aiInitializing, setAiInitializing] = useState(false);
                                 muted
                                 className="w-full h-full object-cover"
                               />
-                              {!webrtcConnected && (
-                                <div className="absolute inset-0 flex items-center justify-center bg-black/70">
-                                  <Camera className="w-16 h-16 text-gray-600" />
-                                </div>
-                              )}
                             </div>
                           </>
                         ) : (
@@ -1865,8 +1854,8 @@ const [aiInitializing, setAiInitializing] = useState(false);
                                 </div>
                               )}
 
-                              {/* My Camera - Top Right Corner */}
-                              <div className="absolute top-4 right-4 w-32 h-44 rounded-2xl overflow-hidden border-2 border-white/20 shadow-2xl z-10">
+                              {/* My Camera - Top Right Corner - Lowered to avoid overlap */}
+                              <div className="absolute top-20 right-4 w-32 h-44 rounded-2xl overflow-hidden border-2 border-white/20 shadow-2xl z-10">
                                 <video
                                   ref={localVideoRef}
                                   autoPlay
