@@ -379,6 +379,30 @@ export class WebRTCService {
   }
 
   /**
+   * 🔌 CLOSE PEER CONNECTION ONLY (Keep local stream active)
+   */
+  closePeerConnection() {
+    console.log('🔌 Closing peer connection only...');
+    
+    // Close peer connection
+    if (this.peerConnection) {
+      this.peerConnection.close();
+      this.peerConnection = null;
+    }
+    
+    // Clear remote stream
+    this.remoteStream = null;
+    
+    // Unsubscribe from signaling
+    if (this.signalingChannel) {
+      this.signalingChannel.unsubscribe();
+      this.signalingChannel = null;
+    }
+    
+    console.log('✅ Peer connection closed (local stream still active)');
+  }
+
+  /**
    * 🧹 CLEANUP
    */
   cleanup() {
