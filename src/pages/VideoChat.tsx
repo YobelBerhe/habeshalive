@@ -742,13 +742,17 @@ const [aiInitializing, setAiInitializing] = useState(false);
               />
             </div>
             
-            <Button 
-              onClick={() => setOnboardingStep('gender')}
-              className="w-full bg-[#00E5A0] hover:bg-[#00CC8E] text-black rounded-full py-8 text-lg font-bold"
-            >
-              I'm {calculateAge()} years old
-              <div className="text-xs font-normal mt-1 opacity-80">Double-check! You won't be able to edit this.</div>
-            </Button>
+            <div className="space-y-3">
+              <Button 
+                onClick={() => setOnboardingStep('gender')}
+                className="w-full bg-[#00E5A0] hover:bg-[#00CC8E] text-black rounded-full py-7 text-lg font-bold"
+              >
+                I'm {calculateAge()} years old
+              </Button>
+              <p className="text-center text-sm text-gray-400">
+                Double-check! You won't be able to edit this.
+              </p>
+            </div>
           </div>
         )}
 
