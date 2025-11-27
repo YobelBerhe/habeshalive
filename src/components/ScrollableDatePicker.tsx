@@ -83,7 +83,7 @@ export function ScrollableDatePicker({
         <div className="h-full border-t border-b border-white/10"></div>
       </div>
 
-      <div className="grid grid-cols-3 gap-0 h-64 relative">
+      <div className="grid grid-cols-3 gap-8 h-64 relative">
         {/* Day Picker */}
         <div
           ref={dayRef}
