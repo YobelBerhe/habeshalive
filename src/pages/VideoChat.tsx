@@ -725,6 +725,12 @@ const [aiInitializing, setAiInitializing] = useState(false);
         <div className="h-full md:h-auto w-full md:max-w-lg md:mx-auto md:mt-20 bg-black md:rounded-3xl p-8 flex flex-col relative">
             <button 
               onClick={() => navigate('/')}
+              className="absolute top-6 left-6 text-white hover:text-gray-300 z-10"
+            >
+              <ChevronLeft className="w-8 h-8" />
+            </button>
+            <button 
+              onClick={() => navigate('/')}
               className="absolute top-6 right-6 text-white hover:text-gray-300 z-10"
             >
               <X className="w-8 h-8" />
@@ -745,7 +751,7 @@ const [aiInitializing, setAiInitializing] = useState(false);
             <div className="space-y-3">
               <Button 
                 onClick={() => setOnboardingStep('gender')}
-                className="w-full bg-[#00E5A0] hover:bg-[#00CC8E] text-black rounded-full py-7 text-lg font-bold"
+                className="w-full bg-habesha-gold hover:bg-habesha-hover-gold text-black rounded-full py-7 text-lg font-bold"
               >
                 I'm {calculateAge()} years old
               </Button>
@@ -911,7 +917,7 @@ const [aiInitializing, setAiInitializing] = useState(false);
             <Button 
               onClick={() => setOnboardingStep('purpose')}
               disabled={!firstName}
-              className="w-full bg-[#00E5A0] hover:bg-[#00CC8E] text-black rounded-full py-8 text-lg font-bold disabled:opacity-50 disabled:bg-gray-700"
+              className="w-full bg-habesha-gold hover:bg-habesha-hover-gold text-black rounded-full py-8 text-lg font-bold disabled:opacity-50 disabled:bg-gray-700"
             >
               Next
             </Button>
@@ -1018,7 +1024,7 @@ const [aiInitializing, setAiInitializing] = useState(false);
             
             <Button 
               onClick={() => setOnboardingStep('safety')}
-              className="w-full bg-[#00E5A0] hover:bg-[#00CC8E] text-black rounded-full py-8 text-lg font-bold"
+              className="w-full bg-habesha-gold hover:bg-habesha-hover-gold text-black rounded-full py-8 text-lg font-bold"
             >
               Continue
             </Button>
@@ -1183,7 +1189,7 @@ const [aiInitializing, setAiInitializing] = useState(false);
             
             <Button 
               onClick={() => setOnboardingStep('preferences')}
-              className="w-full bg-[#00E5A0] hover:bg-[#00CC8E] text-black rounded-full py-8 text-lg font-bold"
+              className="w-full bg-habesha-gold hover:bg-habesha-hover-gold text-black rounded-full py-8 text-lg font-bold"
             >
               I Understand - Continue
             </Button>
@@ -1193,6 +1199,13 @@ const [aiInitializing, setAiInitializing] = useState(false);
         {/* 🌟 SAME-GENDER MATCHING PREFERENCE MODAL - THE STAR! 🌟 */}
         {onboardingStep === 'preferences' && (
           <div className="h-full md:h-auto w-full md:max-w-lg md:mx-auto md:mt-12 bg-black md:rounded-3xl p-8 overflow-y-auto relative">
+            <button 
+              onClick={() => setOnboardingStep('safety')}
+              className="absolute top-6 left-6 text-white hover:text-gray-300 z-10"
+            >
+              <ChevronLeft className="w-8 h-8" />
+            </button>
+            
             <h2 className="text-4xl md:text-3xl font-bold text-white mb-3">Who would you like to match with?</h2>
             <p className="text-base md:text-sm text-gray-400 mb-2">Select your preference for safety and comfort</p>
             
@@ -1312,7 +1325,7 @@ const [aiInitializing, setAiInitializing] = useState(false);
             
             <Button 
               onClick={completeOnboarding}
-              className="w-full bg-[#00E5A0] hover:bg-[#00CC8E] text-black rounded-full py-8 text-lg font-bold mb-3"
+              className="w-full bg-habesha-gold hover:bg-habesha-hover-gold text-black rounded-full py-8 text-lg font-bold mb-3"
             >
               Start Video Chat
             </Button>
