@@ -1884,51 +1884,103 @@ export default function VideoChat() {
                   <div className="md:hidden h-full flex flex-col relative">
                     {connectionState === 'searching' ? (
                       <>
-                        {/* Matched User Area - with blurred profile photo */}
-                        <div className="flex-1 relative bg-black flex items-center justify-center">
-                          {/* Blurred background */}
-                          <div className="absolute inset-0">
-                            <img 
-                              src={mockPartners[Math.floor(Math.random() * mockPartners.length)].image}
-                              alt=""
-                              className="w-full h-full object-cover blur-2xl opacity-40"
-                            />
-                          </div>
-                          {/* Centered circular profile with blur */}
-                          <div className="relative z-10 flex flex-col items-center">
-                            <div className="w-40 h-40 rounded-full overflow-hidden mb-4">
-                              <img 
-                                src={mockPartners[Math.floor(Math.random() * mockPartners.length)].image}
-                                alt=""
-                                className="w-full h-full object-cover blur-sm"
+                        {videoPosition === 'half' ? (
+                          <>
+                            {/* Matched User Area - with blurred profile photo */}
+                            <div className="flex-1 relative bg-black flex items-center justify-center">
+                              {/* Blurred background */}
+                              <div className="absolute inset-0">
+                                <img 
+                                  src={mockPartners[Math.floor(Math.random() * mockPartners.length)].image}
+                                  alt=""
+                                  className="w-full h-full object-cover blur-2xl opacity-40"
+                                />
+                              </div>
+                              {/* Centered circular profile with blur */}
+                              <div className="relative z-10 flex flex-col items-center">
+                                <div className="w-40 h-40 rounded-full overflow-hidden mb-4">
+                                  <img 
+                                    src={mockPartners[Math.floor(Math.random() * mockPartners.length)].image}
+                                    alt=""
+                                    className="w-full h-full object-cover blur-sm"
+                                  />
+                                </div>
+                                <p className="text-lg font-bold">Connecting...</p>
+                                <p className="text-sm text-gray-400 mt-2">
+                                  {matchingMode === 'same-gender-only' 
+                                    ? `Matching ${userGender}s only`
+                                    : matchingMode === 'opposite-only'
+                                    ? 'Opposite gender only'
+                                    : 'All genders'}
+                                </p>
+                                {getCurrentPurposeInfo() && (
+                                  <p className="text-sm text-gray-400 mt-1">
+                                    Purpose: {getCurrentPurposeInfo()!.title}
+                                  </p>
+                                )}
+                              </div>
+                            </div>
+                            
+                            {/* My Camera - clean without any overlays */}
+                            <div className="flex-1 relative bg-black flex items-center justify-center border-t border-gray-800">
+                              <video
+                                ref={localVideoRef}
+                                autoPlay
+                                playsInline
+                                muted
+                                className="w-full h-full object-cover"
                               />
                             </div>
-                            <p className="text-lg font-bold">Connecting...</p>
-                            <p className="text-sm text-gray-400 mt-2">
-                              {matchingMode === 'same-gender-only' 
-                                ? `Matching ${userGender}s only`
-                                : matchingMode === 'opposite-only'
-                                ? 'Opposite gender only'
-                                : 'All genders'}
-                            </p>
-                            {getCurrentPurposeInfo() && (
-                              <p className="text-sm text-gray-400 mt-1">
-                                Purpose: {getCurrentPurposeInfo()!.title}
-                              </p>
-                            )}
-                          </div>
-                        </div>
-                        
-                        {/* My Camera - clean without any overlays */}
-                        <div className="flex-1 relative bg-black flex items-center justify-center border-t border-gray-800">
-                          <video
-                            ref={localVideoRef}
-                            autoPlay
-                            playsInline
-                            muted
-                            className="w-full h-full object-cover"
-                          />
-                        </div>
+                          </>
+                        ) : (
+                          <>
+                            {/* Full Screen: Searching with My Camera PIP in corner */}
+                            <div className="flex-1 relative bg-black flex items-center justify-center">
+                              {/* Blurred background */}
+                              <div className="absolute inset-0">
+                                <img 
+                                  src={mockPartners[Math.floor(Math.random() * mockPartners.length)].image}
+                                  alt=""
+                                  className="w-full h-full object-cover blur-2xl opacity-40"
+                                />
+                              </div>
+                              {/* Centered circular profile with blur */}
+                              <div className="relative z-10 flex flex-col items-center">
+                                <div className="w-40 h-40 rounded-full overflow-hidden mb-4">
+                                  <img 
+                                    src={mockPartners[Math.floor(Math.random() * mockPartners.length)].image}
+                                    alt=""
+                                    className="w-full h-full object-cover blur-sm"
+                                  />
+                                </div>
+                                <p className="text-lg font-bold">Connecting...</p>
+                                <p className="text-sm text-gray-400 mt-2">
+                                  {matchingMode === 'same-gender-only' 
+                                    ? `Matching ${userGender}s only`
+                                    : matchingMode === 'opposite-only'
+                                    ? 'Opposite gender only'
+                                    : 'All genders'}
+                                </p>
+                                {getCurrentPurposeInfo() && (
+                                  <p className="text-sm text-gray-400 mt-1">
+                                    Purpose: {getCurrentPurposeInfo()!.title}
+                                  </p>
+                                )}
+                              </div>
+
+                              {/* My Camera - Top Right Corner during searching */}
+                              <div className="absolute top-20 right-4 w-32 h-44 rounded-2xl overflow-hidden border-2 border-white/20 shadow-2xl z-10">
+                                <video
+                                  ref={localVideoCornerRef}
+                                  autoPlay
+                                  playsInline
+                                  muted
+                                  className="w-full h-full object-cover"
+                                />
+                              </div>
+                            </div>
+                          </>
+                        )}
                       </>
                     ) : connectionState === 'connected' && partner ? (
                       <>
