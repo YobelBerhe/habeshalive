@@ -268,10 +268,14 @@ export default function VideoChat() {
   const [videoPosition, setVideoPosition] = useState<'half' | 'corner'>('half');
   const callStartTimeRef = useRef<number | null>(null);
   
-  // WebRTC video refs
+  // WebRTC video refs - single refs for consistent video display
   const localVideoRef = useRef<HTMLVideoElement | null>(null);
+  const localVideoCornerRef = useRef<HTMLVideoElement | null>(null);
   const remoteVideoRef = useRef<HTMLVideoElement | null>(null);
+  const remoteVideoCornerRef = useRef<HTMLVideoElement | null>(null);
   const [webrtcConnected, setWebrtcConnected] = useState(false);
+  const [localStream, setLocalStream] = useState<MediaStream | null>(null);
+  const [remoteStream, setRemoteStream] = useState<MediaStream | null>(null);
   
   // Video Controls
   const [isFullScreen, setIsFullScreen] = useState(false);
@@ -340,7 +344,33 @@ export default function VideoChat() {
     initializeAI();
   }, []);
 
-  // 🤖 AI CONTENT MODERATION (Real Implementation)
+  // Sync streams to all video elements when they change or position changes
+  useEffect(() => {
+    if (localStream) {
+      // Sync local stream to all local video elements
+      if (localVideoRef.current && localVideoRef.current.srcObject !== localStream) {
+        localVideoRef.current.srcObject = localStream;
+      }
+      if (localVideoCornerRef.current && localVideoCornerRef.current.srcObject !== localStream) {
+        localVideoCornerRef.current.srcObject = localStream;
+      }
+      // Set AI monitoring ref to local stream video
+      if (localVideoRef.current) {
+        videoRef.current = localVideoRef.current;
+      }
+    }
+    if (remoteStream) {
+      // Sync remote stream to all remote video elements
+      if (remoteVideoRef.current && remoteVideoRef.current.srcObject !== remoteStream) {
+        remoteVideoRef.current.srcObject = remoteStream;
+      }
+      if (remoteVideoCornerRef.current && remoteVideoCornerRef.current.srcObject !== remoteStream) {
+        remoteVideoCornerRef.current.srcObject = remoteStream;
+      }
+    }
+  }, [localStream, remoteStream, videoPosition]);
+
+
   useEffect(() => {
     // Skip if AI not initialized (graceful degradation)
     if (!aiInitialized || connectionState !== 'connected' || !safetyFeatures.aiBlur) {
@@ -528,11 +558,9 @@ export default function VideoChat() {
             // Use mock WebRTC for development
             await mockWebRTCService.initialize(
               // On remote stream received
-              (remoteStream) => {
+              (stream) => {
                 console.log('🎥 Mock remote stream received!');
-                if (remoteVideoRef.current) {
-                  remoteVideoRef.current.srcObject = remoteStream;
-                }
+                setRemoteStream(stream);
                 setConnectionState('connected');
                 setWebrtcConnected(true);
                 toast.success('Video Connected!', {
@@ -555,12 +583,10 @@ export default function VideoChat() {
               }
             );
             
-            // Set local stream to video element
-            const localStream = mockWebRTCService.getLocalStream();
-            if (localVideoRef.current && localStream) {
-              localVideoRef.current.srcObject = localStream;
-              // AI should monitor the SAME element
-              videoRef.current = localVideoRef.current;
+            // Store local stream in state for consistent display
+            const stream = mockWebRTCService.getLocalStream();
+            if (stream) {
+              setLocalStream(stream);
             }
           } else {
             // Use real WebRTC for production
@@ -572,11 +598,9 @@ export default function VideoChat() {
               user.id,
               matchedPartner.name,
               isInitiator,
-              (remoteStream) => {
+              (stream) => {
                 console.log('🎥 Remote stream received!');
-                if (remoteVideoRef.current) {
-                  remoteVideoRef.current.srcObject = remoteStream;
-                }
+                setRemoteStream(stream);
                 setConnectionState('connected');
                 setWebrtcConnected(true);
                 toast.success('Video Connected!', {
@@ -602,10 +626,9 @@ export default function VideoChat() {
               }
             );
             
-            const localStream = webrtcService.getLocalStream();
-            if (localVideoRef.current && localStream) {
-              localVideoRef.current.srcObject = localStream;
-              videoRef.current = localVideoRef.current;
+            const stream = webrtcService.getLocalStream();
+            if (stream) {
+              setLocalStream(stream);
             }
           }
           
@@ -666,10 +689,8 @@ export default function VideoChat() {
           if (USE_MOCK_WEBRTC) {
             // Reinitialize mock remote stream
             await mockWebRTCService.reinitializeRemote(
-              (remoteStream) => {
-                if (remoteVideoRef.current) {
-                  remoteVideoRef.current.srcObject = remoteStream;
-                }
+              (stream) => {
+                setRemoteStream(stream);
                 setConnectionState('connected');
                 setWebrtcConnected(true);
               },
@@ -680,11 +701,10 @@ export default function VideoChat() {
               }
             );
             
-            // Ensure local stream is still set
-            const localStream = mockWebRTCService.getLocalStream();
-            if (localVideoRef.current && localStream) {
-              localVideoRef.current.srcObject = localStream;
-              videoRef.current = localVideoRef.current;
+            // Ensure local stream is still available
+            const stream = mockWebRTCService.getLocalStream();
+            if (stream) {
+              setLocalStream(stream);
             }
           } else {
             const sessionId = `session-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
@@ -695,10 +715,8 @@ export default function VideoChat() {
               user.id,
               matchedPartner.name,
               isInitiator,
-              (remoteStream) => {
-                if (remoteVideoRef.current) {
-                  remoteVideoRef.current.srcObject = remoteStream;
-                }
+              (stream) => {
+                setRemoteStream(stream);
                 setConnectionState('connected');
                 setWebrtcConnected(true);
               },
@@ -712,10 +730,9 @@ export default function VideoChat() {
               }
             );
             
-            const localStream = webrtcService.getLocalStream();
-            if (localVideoRef.current && localStream) {
-              localVideoRef.current.srcObject = localStream;
-              videoRef.current = localVideoRef.current;
+            const stream = webrtcService.getLocalStream();
+            if (stream) {
+              setLocalStream(stream);
             }
           }
         } catch (error) {
@@ -2062,7 +2079,7 @@ export default function VideoChat() {
 
                               {/* Video Placeholder */}
                               <video
-                                ref={remoteVideoRef}
+                                ref={remoteVideoCornerRef}
                                 autoPlay
                                 playsInline
                                 className="w-full h-full object-cover"
@@ -2080,7 +2097,7 @@ export default function VideoChat() {
                               {/* My Camera - Top Right Corner - Lowered to avoid overlap */}
                               <div className="absolute top-20 right-4 w-32 h-44 rounded-2xl overflow-hidden border-2 border-white/20 shadow-2xl z-10">
                                 <video
-                                  ref={localVideoRef}
+                                  ref={localVideoCornerRef}
                                   autoPlay
                                   playsInline
                                   muted
