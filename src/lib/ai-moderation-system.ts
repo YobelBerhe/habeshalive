@@ -42,14 +42,16 @@ export class AIContentModeration {
   private violationHistory: Violation[] = [];
   private frameCount = 0;
   
-  // Configuration
+  // Configuration - tuned for real-world use
   private config = {
     checkInterval: 200, // Check every 200ms (5 FPS)
-    nudityThreshold: 0.7,
-    objectThreshold: 0.6,
-    maxViolations: 3,
+    nudityThreshold: 0.85, // Increased from 0.7 to reduce false positives
+    objectThreshold: 0.7, // Increased from 0.6
+    nsfwThreshold: 0.75, // Higher threshold for NSFW
+    maxViolations: 5, // Increased from 3 to be more forgiving
     evidenceBufferSeconds: 30,
-    culturalMode: 'habesha' as 'habesha' | 'western' | 'conservative'
+    culturalMode: 'western' as 'habesha' | 'western' | 'conservative', // Default to western for less strict modesty
+    skipModestyCheck: true // Skip modesty checks - they cause too many false positives
   };
 
   // Evidence buffer (last 30 seconds)
@@ -113,7 +115,7 @@ export class AIContentModeration {
       const ctx = canvas.getContext('2d')!;
       ctx.drawImage(videoElement, 0, 0);
 
-      // 🔍 RUN ALL CHECKS IN PARALLEL
+      // 🔍 RUN ALL CHECKS IN PARALLEL (skip modesty if configured)
       const [
         nudityResult,
         objectResult,
@@ -122,7 +124,7 @@ export class AIContentModeration {
       ] = await Promise.all([
         this.checkNudity(videoElement),
         this.checkDangerousObjects(videoElement),
-        this.checkModesty(videoElement),
+        this.config.skipModestyCheck ? Promise.resolve(null) : this.checkModesty(videoElement),
         this.checkNSFW(canvas)
       ]);
 
@@ -299,9 +301,9 @@ export class AIContentModeration {
     try {
       const predictions = await this.nsfwModel.classify(canvas);
       
-      // Check for explicit content
+      // Check for explicit content - use higher threshold to reduce false positives
       const explicit = predictions.find((p: any) => 
-        (p.className === 'Porn' || p.className === 'Hentai') && p.probability > 0.6
+        (p.className === 'Porn' || p.className === 'Hentai') && p.probability > this.config.nsfwThreshold
       );
 
       if (explicit) {

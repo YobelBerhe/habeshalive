@@ -354,9 +354,12 @@ export default function VideoChat() {
       if (localVideoCornerRef.current && localVideoCornerRef.current.srcObject !== localStream) {
         localVideoCornerRef.current.srcObject = localStream;
       }
-      // Set AI monitoring ref to local stream video
+      // Set AI monitoring ref to local stream video (ONLY monitor local camera, not remote)
       if (localVideoRef.current) {
         videoRef.current = localVideoRef.current;
+      } else if (localVideoCornerRef.current) {
+        // Use corner ref if half ref not available (for corner mode)
+        videoRef.current = localVideoCornerRef.current;
       }
     }
     if (remoteStream) {
@@ -368,9 +371,10 @@ export default function VideoChat() {
         remoteVideoCornerRef.current.srcObject = remoteStream;
       }
     }
-  }, [localStream, remoteStream, videoPosition]);
+  }, [localStream, remoteStream, videoPosition, connectionState]);
 
-
+  // 🤖 AI CONTENT MODERATION (Real Implementation)
+  // IMPORTANT: Only monitors LOCAL camera - not remote partner video
   useEffect(() => {
     // Skip if AI not initialized (graceful degradation)
     if (!aiInitialized || connectionState !== 'connected' || !safetyFeatures.aiBlur) {
