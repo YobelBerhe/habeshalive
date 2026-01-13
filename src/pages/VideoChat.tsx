@@ -41,9 +41,13 @@ import { AIContentModeration } from "@/lib/ai-moderation-system";
 import { VideoWatermarkingSystem, ScreenshotDetectionSystem } from "@/lib/watermarking-system";
 import RespectScoreEngine, { type UserScore } from "@/lib/respect-score-system";
 import { webrtcService } from "@/lib/webrtc-service";
+import { mockWebRTCService } from "@/lib/mock-webrtc-service";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import type { User, Session } from "@supabase/supabase-js";
+
+// Toggle for development/production
+const USE_MOCK_WEBRTC = true;
 
 type OnboardingStep = 'birthday' | 'gender' | 'ethnicity' | 'name' | 'purpose' | 'safety' | 'preferences' | 'complete';
 type ConnectionState = 'onboarding' | 'ready' | 'searching' | 'connected';
@@ -256,8 +260,12 @@ export default function VideoChat() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [aiInitialized, setAiInitialized] = useState(false);
-const [aiInitializing, setAiInitializing] = useState(false);
-  const [videoPosition, setVideoPosition] = useState<'half' | 'corner'>('half'); // Add video position state
+  const [aiInitializing, setAiInitializing] = useState(false);
+  const [aiLoadProgress, setAiLoadProgress] = useState(0);
+  const [aiLoadError, setAiLoadError] = useState<string | null>(null);
+  const [aiLoadStage, setAiLoadStage] = useState<string>('');
+  const blurTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const [videoPosition, setVideoPosition] = useState<'half' | 'corner'>('half');
   const callStartTimeRef = useRef<number | null>(null);
   
   // WebRTC video refs
@@ -281,29 +289,49 @@ const [aiInitializing, setAiInitializing] = useState(false);
   const [showManageAccountDialog, setShowManageAccountDialog] = useState(false);
   const [showContactUsDialog, setShowContactUsDialog] = useState(false);
 
-  // 🤖 AI SYSTEM INITIALIZATION
+  // 🤖 AI SYSTEM INITIALIZATION with progress tracking
   useEffect(() => {
     const initializeAI = async () => {
       if (aiInitializing || aiInitialized) return;
       
       setAiInitializing(true);
+      setAiLoadProgress(0);
+      setAiLoadError(null);
+      setAiLoadStage('Starting AI systems...');
       console.log('🤖 Initializing AI systems...');
       
       try {
-        // Initialize AI moderation
+        // Stage 1: Initialize moderation
+        setAiLoadStage('Loading content moderation...');
+        setAiLoadProgress(20);
+        
         aiModerationRef.current = new AIContentModeration();
+        
+        setAiLoadProgress(40);
+        setAiLoadStage('Loading TensorFlow models...');
+        
         await aiModerationRef.current.initialize();
         
+        setAiLoadProgress(80);
+        setAiLoadStage('Finalizing...');
+        
+        // Small delay for smooth UX
+        await new Promise(resolve => setTimeout(resolve, 300));
+        
+        setAiLoadProgress(100);
         setAiInitialized(true);
         console.log('✅ AI systems ready!');
         toast.success('AI Safety Systems Active', {
           description: 'Real-time content moderation enabled'
         });
-      } catch (error) {
+      } catch (error: any) {
         console.error('❌ Failed to initialize AI:', error);
-        toast.error('AI systems initialization failed', {
-          description: 'Safety features may be limited'
+        setAiLoadError(error.message || 'Failed to load AI systems');
+        toast.warning('AI systems unavailable', {
+          description: 'App will continue without AI moderation'
         });
+        // Allow app to continue without AI
+        setAiInitialized(false);
       } finally {
         setAiInitializing(false);
       }
@@ -314,7 +342,10 @@ const [aiInitializing, setAiInitializing] = useState(false);
 
   // 🤖 AI CONTENT MODERATION (Real Implementation)
   useEffect(() => {
-    if (connectionState !== 'connected' || !safetyFeatures.aiBlur || !aiInitialized) return;
+    // Skip if AI not initialized (graceful degradation)
+    if (!aiInitialized || connectionState !== 'connected' || !safetyFeatures.aiBlur) {
+      return;
+    }
     if (!aiModerationRef.current || !videoRef.current) return;
     
     const interval = setInterval(async () => {
@@ -335,10 +366,16 @@ const [aiInitializing, setAiInitializing] = useState(false);
               break;
               
             case 'blur':
-              // Blur is applied via state
-              setTimeout(() => {
+              // Clear any existing timeout first
+              if (blurTimeoutRef.current) {
+                clearTimeout(blurTimeoutRef.current);
+              }
+              
+              // Set new timeout
+              blurTimeoutRef.current = setTimeout(() => {
                 setAiDetectedIssue(false);
                 setBlurLevel(0);
+                blurTimeoutRef.current = null;
               }, 3000);
               break;
               
@@ -418,9 +455,17 @@ const [aiInitializing, setAiInitializing] = useState(false);
             description: 'All frames are watermarked for security'
           });
           
-          // Temporary blur
+          // Clear existing timeout
+          if (blurTimeoutRef.current) {
+            clearTimeout(blurTimeoutRef.current);
+          }
+          
+          // Temporary blur with proper timeout management
           setBlurLevel(60);
-          setTimeout(() => setBlurLevel(0), 3000);
+          blurTimeoutRef.current = setTimeout(() => {
+            setBlurLevel(0);
+            blurTimeoutRef.current = null;
+          }, 3000);
         },
         onMultipleAttempts: (count) => {
           console.error('🚨 Multiple screenshot attempts:', count);
@@ -474,63 +519,94 @@ const [aiInitializing, setAiInitializing] = useState(false);
     setTimeout(async () => {
       const matchedPartner = findMatch();
       setPartner(matchedPartner);
-      setConnectionState('connected');
+      // Don't set connected yet - wait for WebRTC
       
-      // Initialize WebRTC for real video connection
+      // Initialize WebRTC for video connection
       if (user && matchedPartner) {
         try {
-          const sessionId = `session-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-          const isInitiator = Math.random() > 0.5; // Randomly assign initiator
-          
-          await webrtcService.initialize(
-            sessionId,
-            user.id,
-            matchedPartner.name, // Using name as partner ID for mock
-            isInitiator,
-            
-            // On remote stream received
-            (remoteStream) => {
-              console.log('🎥 Remote stream received!');
-              if (remoteVideoRef.current) {
-                remoteVideoRef.current.srcObject = remoteStream;
-              }
-              setWebrtcConnected(true);
-              toast.success('Video Connected!', {
-                description: 'You can now see each other'
-              });
-            },
-            
-            // On connection state change
-            (state) => {
-              console.log('🔄 WebRTC connection state:', state);
-              if (state === 'connected') {
+          if (USE_MOCK_WEBRTC) {
+            // Use mock WebRTC for development
+            await mockWebRTCService.initialize(
+              // On remote stream received
+              (remoteStream) => {
+                console.log('🎥 Mock remote stream received!');
+                if (remoteVideoRef.current) {
+                  remoteVideoRef.current.srcObject = remoteStream;
+                }
+                setConnectionState('connected');
                 setWebrtcConnected(true);
-              } else if (state === 'failed' || state === 'disconnected') {
-                setWebrtcConnected(false);
-                toast.error('Connection Lost', {
-                  description: 'Video connection was interrupted'
+                toast.success('Video Connected!', {
+                  description: 'You can now see each other'
+                });
+              },
+              // On connection state change
+              (state) => {
+                console.log('🔄 Mock WebRTC state:', state);
+                if (state === 'connected') {
+                  setWebrtcConnected(true);
+                }
+              },
+              // On error
+              (error) => {
+                console.error('Mock WebRTC error:', error);
+                toast.error('Connection Error', {
+                  description: error.message
                 });
               }
-            },
+            );
             
-            // On error
-            (error) => {
-              console.error('WebRTC error:', error);
-              toast.error('Connection Error', {
-                description: error.message
-              });
+            // Set local stream to video element
+            const localStream = mockWebRTCService.getLocalStream();
+            if (localVideoRef.current && localStream) {
+              localVideoRef.current.srcObject = localStream;
+              // AI should monitor the SAME element
+              videoRef.current = localVideoRef.current;
             }
-          );
-          
-          // Set local stream to video element
-          const localStream = webrtcService.getLocalStream();
-          if (localVideoRef.current && localStream) {
-            localVideoRef.current.srcObject = localStream;
-          }
-          
-          // Also set to the AI monitoring ref
-          if (videoRef.current && localStream) {
-            videoRef.current.srcObject = localStream;
+          } else {
+            // Use real WebRTC for production
+            const sessionId = `session-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+            const isInitiator = Math.random() > 0.5;
+            
+            await webrtcService.initialize(
+              sessionId,
+              user.id,
+              matchedPartner.name,
+              isInitiator,
+              (remoteStream) => {
+                console.log('🎥 Remote stream received!');
+                if (remoteVideoRef.current) {
+                  remoteVideoRef.current.srcObject = remoteStream;
+                }
+                setConnectionState('connected');
+                setWebrtcConnected(true);
+                toast.success('Video Connected!', {
+                  description: 'You can now see each other'
+                });
+              },
+              (state) => {
+                console.log('🔄 WebRTC connection state:', state);
+                if (state === 'connected') {
+                  setWebrtcConnected(true);
+                } else if (state === 'failed' || state === 'disconnected') {
+                  setWebrtcConnected(false);
+                  toast.error('Connection Lost', {
+                    description: 'Video connection was interrupted'
+                  });
+                }
+              },
+              (error) => {
+                console.error('WebRTC error:', error);
+                toast.error('Connection Error', {
+                  description: error.message
+                });
+              }
+            );
+            
+            const localStream = webrtcService.getLocalStream();
+            if (localVideoRef.current && localStream) {
+              localVideoRef.current.srcObject = localStream;
+              videoRef.current = localVideoRef.current;
+            }
           }
           
         } catch (error: any) {
@@ -538,7 +614,11 @@ const [aiInitializing, setAiInitializing] = useState(false);
           toast.error('Video Setup Failed', {
             description: 'Could not access camera/microphone'
           });
+          // Still show connected state even if WebRTC fails
+          setConnectionState('connected');
         }
+      } else {
+        setConnectionState('connected');
       }
     }, 2500);
   };
@@ -559,7 +639,11 @@ const [aiInitializing, setAiInitializing] = useState(false);
     }
     
     // Cleanup only the peer connection, keep local stream active
-    webrtcService.closePeerConnection();
+    if (USE_MOCK_WEBRTC) {
+      mockWebRTCService.closePeerConnection();
+    } else {
+      webrtcService.closePeerConnection();
+    }
     
     // Reset AI states
     setAiDetectedIssue(false);
@@ -569,50 +653,77 @@ const [aiInitializing, setAiInitializing] = useState(false);
     setShowChat(false);
     setMessages([]);
     setPartner(null);
+    setWebrtcConnected(false);
     
     setTimeout(async () => {
       const matchedPartner = findMatch();
       setPartner(matchedPartner);
-      setConnectionState('connected');
       callStartTimeRef.current = Date.now();
       
-      // Initialize WebRTC for new call
+      // Reinitialize WebRTC for new call
       if (user && matchedPartner) {
         try {
-          const sessionId = `session-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-          const isInitiator = Math.random() > 0.5;
-          
-          await webrtcService.initialize(
-            sessionId,
-            user.id,
-            matchedPartner.name,
-            isInitiator,
-            (remoteStream) => {
-              if (remoteVideoRef.current) {
-                remoteVideoRef.current.srcObject = remoteStream;
-              }
-              setWebrtcConnected(true);
-            },
-            (state) => {
-              if (state === 'connected') {
+          if (USE_MOCK_WEBRTC) {
+            // Reinitialize mock remote stream
+            await mockWebRTCService.reinitializeRemote(
+              (remoteStream) => {
+                if (remoteVideoRef.current) {
+                  remoteVideoRef.current.srcObject = remoteStream;
+                }
+                setConnectionState('connected');
                 setWebrtcConnected(true);
+              },
+              (state) => {
+                if (state === 'connected') {
+                  setWebrtcConnected(true);
+                }
               }
-            },
-            (error) => {
-              console.error('WebRTC error:', error);
+            );
+            
+            // Ensure local stream is still set
+            const localStream = mockWebRTCService.getLocalStream();
+            if (localVideoRef.current && localStream) {
+              localVideoRef.current.srcObject = localStream;
+              videoRef.current = localVideoRef.current;
             }
-          );
-          
-          const localStream = webrtcService.getLocalStream();
-          if (localVideoRef.current && localStream) {
-            localVideoRef.current.srcObject = localStream;
-          }
-          if (videoRef.current && localStream) {
-            videoRef.current.srcObject = localStream;
+          } else {
+            const sessionId = `session-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+            const isInitiator = Math.random() > 0.5;
+            
+            await webrtcService.initialize(
+              sessionId,
+              user.id,
+              matchedPartner.name,
+              isInitiator,
+              (remoteStream) => {
+                if (remoteVideoRef.current) {
+                  remoteVideoRef.current.srcObject = remoteStream;
+                }
+                setConnectionState('connected');
+                setWebrtcConnected(true);
+              },
+              (state) => {
+                if (state === 'connected') {
+                  setWebrtcConnected(true);
+                }
+              },
+              (error) => {
+                console.error('WebRTC error:', error);
+              }
+            );
+            
+            const localStream = webrtcService.getLocalStream();
+            if (localVideoRef.current && localStream) {
+              localVideoRef.current.srcObject = localStream;
+              videoRef.current = localVideoRef.current;
+            }
           }
         } catch (error) {
           console.error('Error restarting WebRTC:', error);
+          setConnectionState('connected');
         }
+      } else {
+        setConnectionState('connected');
       }
     }, 2500);
   };
@@ -630,14 +741,24 @@ const [aiInitializing, setAiInitializing] = useState(false);
   };
 
   const handleEndChat = () => {
-    // Cleanup WebRTC
-    webrtcService.cleanup();
+    // Cleanup WebRTC based on mode
+    if (USE_MOCK_WEBRTC) {
+      mockWebRTCService.cleanup();
+    } else {
+      webrtcService.cleanup();
+    }
     setWebrtcConnected(false);
     
     // Cleanup AI systems
     aiModerationRef.current?.reset();
     watermarkingRef.current?.stop();
     screenshotDetectionRef.current?.stop();
+    
+    // Clear any blur timeouts
+    if (blurTimeoutRef.current) {
+      clearTimeout(blurTimeoutRef.current);
+      blurTimeoutRef.current = null;
+    }
     
     // Sign out and return to home
     supabase.auth.signOut().then(() => {
@@ -712,6 +833,67 @@ const [aiInitializing, setAiInitializing] = useState(false);
       age--;
     }
     return age;
+  };
+
+  // AI Loading Overlay
+  const renderAILoadingOverlay = () => {
+    if (!aiInitializing) return null;
+    
+    return (
+      <div className="fixed inset-0 z-50 bg-black/90 backdrop-blur-sm flex items-center justify-center">
+        <div className="max-w-md w-full mx-4 bg-gradient-to-br from-gray-900 to-black p-8 rounded-3xl border border-gray-800 shadow-2xl">
+          {/* Header */}
+          <div className="text-center mb-6">
+            <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-blue-500/20 flex items-center justify-center">
+              <Shield className="w-8 h-8 text-blue-400 animate-pulse" />
+            </div>
+            <h2 className="text-2xl font-bold text-white mb-2">Loading AI Safety</h2>
+            <p className="text-gray-400 text-sm">{aiLoadStage || 'Initializing...'}</p>
+          </div>
+          
+          {/* Progress Bar */}
+          <div className="mb-6">
+            <div className="h-2 bg-gray-800 rounded-full overflow-hidden">
+              <div 
+                className="h-full bg-gradient-to-r from-blue-500 to-green-500 transition-all duration-300 ease-out"
+                style={{ width: `${aiLoadProgress}%` }}
+              />
+            </div>
+            <p className="text-center text-sm text-gray-500 mt-2">{aiLoadProgress}%</p>
+          </div>
+          
+          {/* Features Being Loaded */}
+          <div className="space-y-2 mb-6">
+            <div className={`flex items-center gap-2 text-sm ${aiLoadProgress >= 20 ? 'text-green-400' : 'text-gray-500'}`}>
+              <CheckCircle2 className="w-4 h-4" />
+              <span>Content moderation</span>
+            </div>
+            <div className={`flex items-center gap-2 text-sm ${aiLoadProgress >= 40 ? 'text-green-400' : 'text-gray-500'}`}>
+              <CheckCircle2 className="w-4 h-4" />
+              <span>TensorFlow models</span>
+            </div>
+            <div className={`flex items-center gap-2 text-sm ${aiLoadProgress >= 80 ? 'text-green-400' : 'text-gray-500'}`}>
+              <CheckCircle2 className="w-4 h-4" />
+              <span>Safety systems</span>
+            </div>
+          </div>
+          
+          {/* Skip Option */}
+          <button
+            onClick={() => {
+              setAiInitializing(false);
+              setAiLoadError('Skipped by user');
+              toast.warning('AI Safety Skipped', {
+                description: 'Some safety features may be unavailable'
+              });
+            }}
+            className="w-full text-center text-sm text-gray-500 hover:text-gray-400 underline"
+          >
+            Skip (not recommended)
+          </button>
+        </div>
+      </div>
+    );
   };
 
   // Onboarding Modals Render
@@ -1341,6 +1523,30 @@ const [aiInitializing, setAiInitializing] = useState(false);
 
   return (
     <div className="min-h-screen bg-black text-white relative">
+      {/* AI Loading Overlay */}
+      {renderAILoadingOverlay()}
+      
+      {/* AI Error Banner */}
+      {aiLoadError && !aiInitializing && (
+        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-40 max-w-md w-full mx-4">
+          <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-3 backdrop-blur-sm">
+            <div className="flex items-center gap-2">
+              <AlertTriangle className="w-5 h-5 text-yellow-400 flex-shrink-0" />
+              <div className="flex-1">
+                <p className="text-sm text-yellow-300 font-medium">AI Safety Limited</p>
+                <p className="text-xs text-gray-400">Some moderation features may be unavailable</p>
+              </div>
+              <button
+                onClick={() => setAiLoadError(null)}
+                className="text-gray-400 hover:text-white"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      
       {renderOnboarding()}
 
       {/* Only show main UI if not in onboarding */}
