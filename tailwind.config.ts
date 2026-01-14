@@ -48,12 +48,16 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        // Habesha cultural colors
-        "habesha-gold": "hsl(var(--habesha-gold))",
-        "habesha-cream": "hsl(var(--habesha-cream))",
-        "habesha-hover-gold": "hsl(var(--habesha-hover-gold))",
-        "habesha-dark": "hsl(var(--habesha-dark))",
-        "habesha-bg": "hsl(var(--habesha-bg))",
+        // Premium Tech colors
+        "espresso": "hsl(var(--espresso))",
+        "gold": "hsl(var(--gold))",
+        "parchment": "hsl(var(--parchment))",
+        "parchment-dark": "hsl(var(--parchment-dark))",
+      },
+      boxShadow: {
+        "elevated": "var(--shadow-elevated)",
+        "elevated-lg": "3px 3px 0px hsl(var(--espresso))",
+        "card": "var(--shadow-card)",
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -98,11 +102,7 @@ export default {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic": "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
-      boxShadow: {
-        glow: "0 0 40px hsl(var(--habesha-gold) / 0.4)",
-        "glow-gold": "0 0 40px hsl(var(--habesha-gold) / 0.4)",
-        "glow-cream": "0 0 20px hsl(var(--habesha-cream) / 0.2)",
-      },
+      // Legacy shadows removed - using elevated system now
     },
   },
   plugins: [require("tailwindcss-animate")],

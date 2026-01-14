@@ -8,71 +8,105 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* Gold & Cream Luxury Theme */
-    --background: 0 34% 8%;
-    --foreground: 45 100% 95%;
+    /* Premium Tech Theme - Parchment Cream Background */
+    --background: 37 72% 97%;
+    --foreground: 18 41% 13%;
 
-    --card: 0 0% 5%;
-    --card-foreground: 45 100% 95%;
+    --card: 37 60% 95%;
+    --card-foreground: 18 41% 13%;
 
-    --popover: 0 0% 5%;
-    --popover-foreground: 45 100% 95%;
+    --popover: 37 72% 97%;
+    --popover-foreground: 18 41% 13%;
 
-    /* Rich Gold Primary */
-    --primary: 45 69% 52%;
-    --primary-foreground: 0 34% 8%;
+    /* Gold Primary */
+    --primary: 45 72% 52%;
+    --primary-foreground: 18 41% 13%;
 
-    /* Hover Gold Secondary */
-    --secondary: 42 69% 68%;
-    --secondary-foreground: 0 34% 8%;
+    /* Deep Espresso Secondary */
+    --secondary: 18 41% 13%;
+    --secondary-foreground: 37 72% 97%;
 
-    --muted: 0 0% 15%;
-    --muted-foreground: 45 50% 70%;
+    --muted: 37 30% 90%;
+    --muted-foreground: 18 30% 40%;
 
     /* Gold Accent */
-    --accent: 45 69% 52%;
-    --accent-foreground: 0 34% 8%;
+    --accent: 45 72% 52%;
+    --accent-foreground: 18 41% 13%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 45 100% 95%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 37 72% 97%;
 
-    --border: 45 20% 20%;
-    --input: 0 0% 10%;
-    --ring: 45 69% 52%;
+    --border: 18 20% 80%;
+    --input: 37 40% 92%;
+    --ring: 45 72% 52%;
 
-    --radius: 1rem;
+    --radius: 0.75rem;
     
-    /* Habesha Cultural Colors */
-    --habesha-gold: 45 69% 52%;
-    --habesha-cream: 45 100% 95%;
-    --habesha-hover-gold: 42 69% 68%;
-    --habesha-dark: 0 0% 5%;
-    --habesha-bg: 0 34% 8%;
+    /* Premium Tech Colors */
+    --espresso: 18 41% 13%;
+    --gold: 45 72% 52%;
+    --parchment: 37 72% 97%;
+    --parchment-dark: 37 40% 92%;
     
-    /* Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(45 69% 52%), hsl(42 69% 68%));
-    --gradient-accent: linear-gradient(135deg, hsl(15 34% 23%), hsl(0 34% 8%));
-    --gradient-hero: linear-gradient(180deg, hsl(0 34% 8%), hsl(0 0% 5%));
+    /* Flat shadows for elevated look */
+    --shadow-elevated: 2px 2px 0px hsl(18 41% 13%);
+    --shadow-card: 0 4px 12px hsl(18 41% 13% / 0.08);
+
+    --sidebar-background: 37 72% 97%;
+    --sidebar-foreground: 18 41% 13%;
+    --sidebar-primary: 45 72% 52%;
+    --sidebar-primary-foreground: 18 41% 13%;
+    --sidebar-accent: 37 40% 92%;
+    --sidebar-accent-foreground: 18 41% 13%;
+    --sidebar-border: 18 20% 80%;
+    --sidebar-ring: 45 72% 52%;
+  }
+
+  .dark {
+    /* Premium Tech Dark Mode - Deep Espresso Background */
+    --background: 18 41% 8%;
+    --foreground: 37 72% 97%;
     
-    /* Shadows */
-    --shadow-glow: 0 0 40px hsl(45 69% 52% / 0.3);
-    --shadow-card: 0 10px 30px -10px hsl(45 69% 52% / 0.2);
+    --card: 18 35% 12%;
+    --card-foreground: 37 72% 97%;
 
-    --sidebar-background: 0 0% 98%;
+    --popover: 18 35% 12%;
+    --popover-foreground: 37 72% 97%;
 
-    --sidebar-foreground: 240 5.3% 26.1%;
+    /* Gold Primary */
+    --primary: 45 72% 52%;
+    --primary-foreground: 18 41% 8%;
 
-    --sidebar-primary: 240 5.9% 10%;
+    /* Parchment Secondary */
+    --secondary: 37 40% 85%;
+    --secondary-foreground: 18 41% 8%;
 
-    --sidebar-primary-foreground: 0 0% 98%;
+    --muted: 18 25% 18%;
+    --muted-foreground: 37 40% 70%;
 
-    --sidebar-accent: 240 4.8% 95.9%;
+    /* Gold Accent */
+    --accent: 45 72% 52%;
+    --accent-foreground: 18 41% 8%;
 
-    --sidebar-accent-foreground: 240 5.9% 10%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 37 72% 97%;
 
-    --sidebar-border: 220 13% 91%;
+    --border: 18 25% 25%;
+    --input: 18 30% 15%;
+    --ring: 45 72% 52%;
+    
+    /* Flat shadows for dark mode */
+    --shadow-elevated: 2px 2px 0px hsl(0 0% 0%);
+    --shadow-card: 0 4px 12px hsl(0 0% 0% / 0.3);
 
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-background: 18 41% 8%;
+    --sidebar-foreground: 37 72% 97%;
+    --sidebar-primary: 45 72% 52%;
+    --sidebar-primary-foreground: 18 41% 8%;
+    --sidebar-accent: 18 30% 15%;
+    --sidebar-accent-foreground: 37 72% 97%;
+    --sidebar-border: 18 25% 25%;
+    --sidebar-ring: 45 72% 52%;
   }
 
   .dark {
